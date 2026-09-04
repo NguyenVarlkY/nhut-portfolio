@@ -1,0 +1,38 @@
+---
+title: "Deep Dive: Tối ưu hóa Database chuyên sâu"
+date: "2026-08-08"
+excerpt: "Tối ưu hóa Database từ cấp độ Page, B-Tree internals đến Query Planning."
+---
+
+# Deep Dive: Tối ưu hóa Database chuyên sâu
+
+Tối ưu hóa Database không phải là "thử và sai". Đó là khoa học về cách dữ liệu được lưu trữ, truy xuất và khóa (locking) trên đĩa cứng. Dưới đây là phân tích kỹ thuật chuyên sâu.
+
+## 1. B-Tree Internals: Hiểu cấu trúc dữ liệu
+Index không chỉ là một danh sách.
+- **B-Tree Structure:** Là cây cân bằng, giúp tìm kiếm, chèn, xóa trong thời gian $O(\log n)$.
+- **Page Splits:** Khi một node đầy, database phải chia tách (split) node đó, tốn tài nguyên I/O. Tránh sử dụng primary key là `UUID` ngẫu nhiên nếu không cần thiết vì nó gây ra phân mảnh index cao hơn so với `Integer Auto-increment`.
+- **Fill Factor:** Tinh chỉnh tỷ lệ lấp đầy trang để tối ưu hóa hiệu năng ghi/đọc.
+
+## 2. Query Planner & Execution Plan
+Luôn luôn sử dụng `EXPLAIN (ANALYZE, BUFFERS)` để xem:
+- **Sequential Scan vs Index Scan:** Seq scan trên bảng triệu dòng là thảm họa.
+- **Cost Estimation:** PostgreSQL/Oracle dùng thống kê (statistics) để đoán định hướng đi. Nếu bảng bị stale (chưa update stats), Planner sẽ chọn sai hướng.
+- **Nested Loop vs Hash Join:** Với tập dữ liệu lớn, Hash Join thường nhanh hơn Nested Loop, nhưng tốn memory hơn.
+
+## 3. Advanced SQL Techniques
+### 3.1. Handling Large Data
+- **Pagination:** Không bao giờ dùng `OFFSET/LIMIT` cho dữ liệu cực lớn (hàng triệu dòng) vì `OFFSET` phải scan qua tất cả các dòng trước đó. Hãy dùng **Keyset Pagination** (dựa trên giá trị của cột cuối cùng của page trước).
+- **Partitioning:** Với bảng khổng lồ, chia bảng theo thời gian (ví dụ: partition theo tháng) để tăng tốc độ truy vấn và quản lý dữ liệu cũ.
+
+### 3.2. Concurrency Control
+- **Locking:** Hiểu về `Row-level locking` vs `Table-level locking`.
+- **Deadlocks:** Luôn luôn sắp xếp thứ tự update các tài nguyên theo một thứ tự nhất định để tránh deadlock trong môi trường high-concurrency.
+
+## 4. Full-Text Search (FTS)
+Đừng dùng `LIKE '%keyword%'`.
+- **Tại sao?** Nó không thể dùng Index thông thường (B-Tree).
+- **Giải pháp:** Sử dụng **GIN/GiST Index** (trong Postgres) hoặc tích hợp **ElasticSearch** nếu cần khả năng mở rộng cực lớn và tìm kiếm phức tạp (fuzzy search, stemming).
+
+---
+*Kiến thức này là sự kết hợp giữa lý thuyết khoa học máy tính và kinh nghiệm thực chiến với hàng triệu record. Hiểu rõ database internals giúp bạn trở thành một kỹ sư thực thụ.*

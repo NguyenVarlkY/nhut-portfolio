@@ -1,0 +1,29 @@
+---
+title: "Kiến trúc hệ thống tài chính: Banking & Fintech Core"
+date: "2026-08-13"
+excerpt: "Phân tích kiến trúc hệ thống lõi trong tài chính, yêu cầu khắt khe về ACID và tính nhất quán dữ liệu."
+---
+
+# Kiến trúc hệ thống tài chính (Fintech Core)
+
+Trong các hệ thống tài chính, **tính nhất quán (Consistency)** là quan trọng nhất. Một giao dịch tiền tệ bị lỗi có thể dẫn đến thất thoát hàng tỷ đồng.
+
+## 1. ACID - Nền tảng của Fintech Core
+Bất kỳ hệ thống nào tuân thủ nguyên tắc này mới đủ tư cách làm Core Banking:
+- **Atomicity (Tính nguyên tử):** Hoặc thành công tất cả, hoặc không có gì xảy ra.
+- **Consistency (Tính nhất quán):** Dữ liệu luôn ở trạng thái hợp lệ.
+- **Isolation (Tính cô lập):** Các giao dịch đồng thời không ảnh hưởng lẫn nhau.
+- **Durability (Tính bền vững):** Dữ liệu đã cam kết (committed) thì không bao giờ mất.
+
+## 2. Hệ thống Ledger (Sổ cái)
+Đây là trái tim của mọi ứng dụng tài chính.
+- **Double-Entry Bookkeeping:** Hệ thống sổ kép (ghi Nợ - ghi Có), tổng Nợ luôn bằng tổng Có.
+- **Audit Log:** Mọi thay đổi phải có dấu vết (immutable audit trail).
+
+## 3. Thách thức kỹ thuật
+- **Concurrency:** Làm sao để tránh hiện tượng "double spending" khi có hàng triệu giao dịch cùng lúc? (Sử dụng Optimistic locking hoặc pessimistic locking ở mức database).
+- **ISO 8583:** Tiêu chuẩn cho giao dịch thẻ tài chính.
+- **Security:** Mã hóa ở mức transport và storage, hardware security modules (HSM) cho khóa bảo mật.
+
+---
+*Việc làm trong Fintech yêu cầu kỹ sư không chỉ giỏi kỹ thuật, mà còn phải có tư duy cực kỳ cẩn trọng với từng dòng code.*

@@ -1,0 +1,25 @@
+---
+title: "Kubernetes & Cloud Native: Tương lai của triển khai ứng dụng"
+date: "2026-08-09"
+excerpt: "Từ Monolith đến Microservices với Docker và K8s trên AWS/Azure/GCP."
+---
+
+# Kubernetes & Cloud Native
+
+Triển khai ứng dụng trên máy chủ truyền thống đã là quá khứ. Trong môi trường doanh nghiệp hiện đại, **Kubernetes (K8s)** là chuẩn mực cho việc orchestration container.
+
+## Tại sao tôi chọn K8s?
+1. **Self-healing:** Tự động khởi động lại container khi gặp lỗi.
+2. **Auto-scaling:** Tự động tăng/giảm số lượng pod dựa trên traffic.
+3. **Rollout/Rollback:** Triển khai tính năng mới mà không gây gián đoạn dịch vụ.
+
+## Tư duy Cloud Agnostic
+Dù bạn chọn AWS, Azure hay GCP, cốt lõi của Cloud Native vẫn là **Containers (Docker)** và **Infrastructure as Code (Terraform)**.
+- Đừng phụ thuộc quá nhiều vào các dịch vụ đặc thù của một nhà cung cấp (vendor lock-in) nếu không cần thiết.
+- Hãy thiết kế ứng dụng theo hướng 12-Factor App để dễ dàng di chuyển giữa các Cloud provider.
+
+## Lời khuyên cho Fresher
+Đừng vội học hết tất cả các dịch vụ cloud. Hãy bắt đầu bằng cách:
+1. Docker hóa ứng dụng của bạn.
+2. Viết Docker Compose.
+3. Học cách quản lý k8s cơ bản (Deployment, Service, Ingress).

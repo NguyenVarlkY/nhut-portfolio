@@ -1,0 +1,568 @@
+---
+title: "Khóa Học Sâu Kubernetes: Triển Khai Ứng Dụng Trên Đám Mây"
+date: "2026-08-04"
+excerpt: "Hướng dẫn thực tế về Kubernetes từ cơ bản đến nâng cao - triển khai, quản lý và mở rộng ứng dụng container."
+---
+
+# Khóa Học Sâu Kubernetes: Triển Khai Ứng Dụng Trên Đám Mây
+
+Kubernetes (K8s) đã trở thành nền tảng tiêu chuẩn cho việc orchestration container trong môi trường sản xuất. Khóa học này sẽ hướng dẫn bạn từ概念 cơ bản đến các kỹ thuật triển khai nâng cao trên Kubernetes.
+
+## Phần 1: Các Khái Niệm Cơ Bản Của Kubernetes
+
+### 1.1. Cluster, Node và Pod
+- **Cluster**: Tập hợp các máy (nodes) làm việc cùng nhau
+- **Node**: Máy riêng lẻ trong cluster (có thể là VM hoặc bare metal)
+- **Pod**: Đơn vị triển khai nhỏ nhất trong K8s, chứa một hoặc nhiều container
+
+### 1.2. Các Thành Phần Quan Trọng
+- **API Server**: Giao diện chính để tương tác với cluster
+- **etcd**: Kho lưu trữ phân tán để lưu trữ trạng thái cluster
+- **Scheduler**: Quyết định pod sẽ chạy trên node nào
+- **Controller Manager**: Quản lý các controller (replica set, deployment, etc.)
+- **Kubelet**: Agent chạy trên mỗi node, tương tác với container runtime
+- **Kube-proxy**: Quản lý network rules và service discovery
+
+### 1.3. Các Đối Tượng K8s Quan Trọng
+- **Pod**: Đơn vị triển khai cơ bản
+- **Deployment**: Quản lý replica set và cung cấp cập nhật có thể rollback
+- **Service**: Cung cấp network endpoint ổn định để truy cập pods
+- **ConfigMap & Secret**: Lưu trữ cấu hình và dữ liệu nhạy cảm
+- **Volume & PersistentVolume**: Quản lý lưu trữ持久化
+- **Namespace**: Phân chia logic trong cluster
+- **Ingress**: Quản lý truy cập từ bên ngoài vào cluster
+
+## Phần 2: Triển Khai Ứng Dụng Đầu Tiên
+
+### 2.1. Chuẩn Bị Môi Trường
+```bash
+# Cài đặt kubectl
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+chmod +x kubectl
+sudo mv kubectl /usr/local/bin/
+
+# Cài đặt Minikube (cho phát triển local)
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
+
+# Khởi động cluster local
+minikube start
+```
+
+### 2.2. Tạo Ứng Dụng Web Đơn Giản
+```yaml
+# deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-app
+  labels:
+    app: web-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web-app
+  template:
+    metadata:
+      labels:
+        app: web-app
+    spec:
+      containers:
+      - name: web
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+```
+
+### 2.3. Tạo Service Để Truy Cập Ứng Dụng
+```yaml
+# service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app-service
+spec:
+  selector:
+    app: web-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
+```
+
+### 2.4. Triển Khai và Kiểm Tra
+```bash
+# Áp dụng các manifest
+kubectl apply -f deployment.yaml
+kubectl apply -f service.yaml
+
+# Kiểm tra trạng thái
+kubectl get deployments
+kubectl get pods
+kubectl get services
+
+# Truy cập ứng dụng (trên Minikube)
+minikube service web-app-service
+```
+
+## Phần 3: Cấu Hình và Quản Lý Ứng Dụng
+
+### 3.1. Sử Dụng ConfigMap và Secret
+```yaml
+# configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  APP_ENV: "production"
+  LOG_LEVEL: "info"
+  DATABASE_URL: "postgres://user:pass@db:5432/myapp"
+
+# secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: app-secret
+type: Opaque
+data:
+  # Giá trị cần được encode bằng base64
+  DB_USERNAME: "dXNlcg=="  # "user"
+  DB_PASSWORD: "cGFzc3dvcmQ="  # "password"
+```
+
+### 3.2. Tham Chiếu ConfigMap và Secret Trong Deployment
+```yaml
+# Cập nhật deployment.yaml
+spec:
+  template:
+    spec:
+      containers:
+      - name: web
+        image: myapp:latest
+        env:
+        - name: APP_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: APP_ENV
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: LOG_LEVEL
+        - name: DATABASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: DATABASE_URL
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: app-secret
+              key: DB_USERNAME
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: app-secret
+              key: DB_PASSWORD
+        ports:
+        - containerPort: 80
+```
+
+### 3.3. Sử Dụng Volume Cho Lưu Trữ持久化
+```yaml
+# persistent-volume.yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: app-pv
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data"
+
+# persistent-volume-claim.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: app-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 3Gi
+
+# Cập nhật deployment để sử dụng PVC
+spec:
+  template:
+    spec:
+      containers:
+      - name: web
+        # ... (các phần khác giữ nguyên)
+        volumeMounts:
+        - name: app-storage
+          mountPath: "/app/data"
+      volumes:
+      - name: app-storage
+        persistentVolumeClaim:
+          claimName: app-pvc
+```
+
+## Phần 4: Mở Rộng và Tối ƯU Hiệu Suất
+
+### 4.1. Horizontal Pod Autoscaler (HPA)
+```yaml
+# hpa.yaml
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: web-app-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: web-app
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+```
+
+### 4.2. Resource Limits và Requests
+```yaml
+# Trong container spec của deployment
+resources:
+  requests:
+    memory: "256Mi"
+    cpu: "500m"
+  limits:
+    memory: "512Mi"
+    cpu: "1000m"
+```
+
+### 4.3. Node Selector và Affinity
+```yaml
+# Để chạy pod trên node cụ thể
+spec:
+  template:
+    spec:
+      nodeSelector:
+        disktype: ssd
+      # Hoặc sử dụng affinity
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/e2e-az-name
+                operator: In
+                values:
+                - us-east-1a
+                - us-east-1b
+```
+
+## Phần 5: Cập Nhật và Rollback Ứng Dụng
+
+### 5.1. Chiến Lược Cập Nhật
+Kubernetes Deployment hỗ trợ nhiều chiến lược cập nhật:
+- **Rolling Update** (mặc định): Cập nhật dần dần các pod
+- **Recreate**: Xóa tất cả pod cũ trước khi tạo pod mới
+
+```yaml
+# Cập nhật chiến lược trong deployment
+spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+```
+
+### 5.2. Thực Hiện Cập Nhật
+```bash
+# Cập nhật image trong deployment
+kubectl set image deployment/web-app web=myapp:v2
+
+# Kiểm tra tiến trình cập nhật
+kubectl rollout status deployment/web-app
+
+# Xem lịch sử cập nhật
+kubectl rollout history deployment/web-app
+```
+
+### 5.3. Rollback Khi Cần Thiết
+```bash
+# Rollback về phiên bản trước đó
+kubectl rollout undo deployment/web-app
+
+# Rollback về phiên bản cụ thể
+kubectl rollout undo deployment/web-app --to-revision=3
+```
+
+## Phần 6: Giám Sát và Nhật Ký
+
+### 6.1. Cơ Bản Về Giám Sát trong K8s
+- **Metrics Server**: Thu thập tài nguyên sử dụng (CPU, memory)
+- **kubectl top**: Xem tài nguyên sử dụng hiện tại
+- **Dashboard**: Giao diện web để giám sát cluster
+
+### 6.2. Thu Nhật Ký Ứng Dụng
+```yaml
+# Thêm logging vào container
+spec:
+  template:
+    spec:
+      containers:
+      - name: web
+        image: myapp:latest
+        # ... (các phần khác)
+        volumeMounts:
+        - name: app-logs
+          mountPath: "/var/log/app"
+      volumes:
+      - name: app-logs
+        emptyDir: {}
+```
+
+### 6.3. Sử Dụng Sidecar Container Cho Logging
+```yaml
+spec:
+  template:
+    spec:
+      containers:
+      - name: web
+        image: myapp:latest
+        # ... (các phần khác)
+      - name: log-agent
+        image: fluent/fluentd:v1.14-debian-1
+        volumeMounts:
+        - name: app-logs
+          mountPath: "/var/log/app"
+      volumes:
+      - name: app-logs
+        emptyDir: {}
+```
+
+## Phần 7: Bảo Mật Trong Kubernetes
+
+### 7.1. Role-Based Access Control (RBAC)
+```yaml
+# Tạo role
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: default
+  name: pod-reader
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "watch", "list"]
+
+# Gán role cho user hoặc service account
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: read-pods
+  namespace: default
+subjects:
+- kind: User
+  name: jane  # Tên là "name" của user
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: pod-reader
+  apiGroup: rbac.authorization.k8s.io
+```
+
+### 7.2. Network Policies
+```yaml
+# Chặn tất cả truy cập vào pod
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: deny-all
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+
+# Cho phép truy cập từ namespace cụ thể
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-frontend
+spec:
+  podSelector:
+    matchLabels:
+      role: backend
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          role: frontend
+    ports:
+    - protocol: TCP
+      port: 8080
+```
+
+### 7.3. Image Security
+- Sử dụng images từ nguồn tin cậy
+- Quét images để tìm lỗ hổng bảo mật
+- Chạy containers với quyền hạn tối thiểu
+- Sử dụng read-only root filesystem khi có thể
+
+## Phần 8: Các Mẫu Triển Khai Thực Tế
+
+### 8.1. Blue-Green Deployment
+```yaml
+# Blue service (phiên bản hiện tại)
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app
+spec:
+  selector:
+    app: web-app
+    version: blue
+  ports:
+  - port: 80
+    targetPort: 80
+
+# Green service (phiên bản mới)
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app-green
+spec:
+  selector:
+    app: web-app
+    version: green
+  ports:
+  - port: 80
+    targetPort: 80
+```
+
+### 8.2. Canary Release
+```yaml
+# Main service (95% traffic)
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app
+spec:
+  selector:
+    app: web-app
+  ports:
+  - port: 80
+    targetPort: 80
+
+# Canary service (5% traffic)
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app-canary
+spec:
+  selector:
+    app: web-app
+    version: canary
+  ports:
+  - port: 80
+    targetPort: 80
+```
+
+## Phần 9: Khắc Phục Sự Cố Thông Thường
+
+### 9.1. Pod Không Khởi Động Được
+```bash
+# Kiểm tra sự kiện pod
+kubectl describe pod <pod-name>
+
+# Xem logs của container
+kubectl logs <pod-name>
+
+# Kiểm tra trạng thái container
+kubectl get pod <pod-name> -o yaml
+```
+
+### 9.2. Service Không Truy Cập Được
+```bash
+# Kiểm tra service
+kubectl get svc <service-name>
+
+# Kiểm tra endpoints
+kubectl get endpoints <service-name>
+
+# Kiểm tra pod có đang chạy không
+kubectl get pods -l <selector>
+```
+
+### 9.3. Hiệu Suất Thấp
+```bash
+# Kiểm tra tài nguyên sử dụng
+kubectl top pods
+kubectl top nodes
+
+# Kiểm tra events
+kubectl get events --sort-by='.lastTimestamp'
+
+# Kiểm tra resource limits
+kubectl describe pod <pod-name> | grep -A 10 -B 5 "Limits\|Requests"
+```
+
+## Phần 10: Các Nâng Cao và Xu Hướng Tương Lai
+
+### 10.1. Service Mesh (Istio, Linkerd)
+- Quản lý traffic giữa các microservices
+- Cung cấp bảo mật, giám sát và tracing
+- Tính năng như circuit breaking, retries, timeouts
+
+### 10.2. GitOps (Argo CD, Flux)
+- Quản lý cluster thông qua Git repository
+- Tự động hóa triển khai và sync
+- Tăng tính khả thi và khả năng kiểm tra
+
+### 10.3. Serverless trên K8s (Knative)
+- Triển khai ứng dụng mà không quản lý server
+- Tự động mở rộng dựa trên traffic
+- Thanh toán dựa trên sử dụng thực tế
+
+### 10.4. AI/ML trên K8s (Kubeflow)
+- Nền tảng cho quy trình học máy end-to-end
+- Quản lý experiment, training và serving
+- Tích hợp với các framework phổ biến như TensorFlow, PyTorch
+
+## Kết Luận
+
+Kubernetes là nền tảng mạnh mẽ để triển khai và quản lý ứng dụng container trong môi trường sản xuất. Mặc dù có độ phức tạp ban đầu, nhưng việc đầu tư thời gian để học K8s sẽ mang lại lợi ích lớn về:
+
+- **Khả Năng Mở Rộng**: Dễ dàng mở rộng từ vài pods đến hàng nghìn pods
+- **Tính Ổn Định**: Tự động khôi phục từ lỗi, cân bằng tải
+- **Tính Di Chuyển**: Có thể chạy trên bất kỳ infrastructure nào (on-prem, cloud, edge)
+- **Hệ Sinh Thái Phú Hợp**: Nhiều công cụ và dịch vụ hỗ trợ
+- **Tiêu Chuẩn Ngành**: Được sử dụng rộng rãi trong công nghiệp
+
+Bắt đầu từ những概念 cơ bản và thực hành thường xuyên. Sử dụng Minikube hoặc kind để phát triển local trước khi triển khai lên môi trường sản xuất. Luôn nhớ rằng K8h là công cụ - mục tiêu là cung cấp giá trị cho người dùng thông qua các ứng dụng ổn định, hiệu quả và dễ bảo trì.
+
+Hãy tham gia cộng đồng K8h, tham gia các meetup, và tiếp tục học hỏi vì hệ sinh thái này đang phát triển rất nhanh. Chúc bạn thành công trên hành trình trở thành chuyên gia Kubernetes!

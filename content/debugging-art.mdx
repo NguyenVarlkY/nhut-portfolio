@@ -1,0 +1,52 @@
+---
+title: "Nghệ thuật Debugging: Phương pháp khoa học để tìm lỗi"
+date: "2026-08-15"
+excerpt: "Debug không phải là tìm lỗi, mà là loại trừ các khả năng để tìm ra sự thật. Học cách tiếp cận có hệ thống."
+---
+
+# Nghệ thuật Debugging: Phương pháp khoa học để tìm lỗi
+
+Bất kỳ ai cũng có thể viết code, nhưng Senior Engineer khác biệt ở khả năng **giải quyết sự cố (troubleshooting)**. Debugging chuyên nghiệp không phải là may mắn hay linh cảm, mà là một **quy trình có hệ thống** được xây dựng trên phương pháp khoa học.
+
+## 1. Phương pháp khoa học trong Debugging
+
+### 1.1 Quan sát (Observation)
+Bước đầu tiên và quan trọng nhất: **phải tái hiện được lỗi** (reproduce bug). Nếu bạn không thể tái hiện lỗi, bạn không thể sửa được nó.
+
+- Ghi lại chính xác các bước dẫn đến lỗi.
+- Ghi lại input, output, trạng thái hệ thống.
+- Xác định môi trường: trình duyệt nào, phiên bản nào, thiết bị nào.
+
+### 1.2 Giả thuyết (Hypothesis)
+Đưa ra các dự đoán có căn cứ về **tại sao** lỗi xảy ra. Đừng đoán mò — hãy dựa trên:
+
+- Kiến thức về codebase.
+- Thông báo lỗi (error message).
+- Logs và stack trace.
+- Hiểu biết về luồng dữ liệu.
+
+### 1.3 Thí nghiệm (Experiment)
+Kiểm chứng giả thuyết bằng cách:
+- Thêm **logs** chi tiết tại các điểm nghi ngờ.
+- Sử dụng **debugger** để đặt breakpoint và quan sát từng bước.
+- **Isolate** phần code: tạm comment, tách biến, thử với input đơn giản.
+- **Binary search** trong code: chia đôi phạm vi nghi ngờ.
+
+### 1.4 Kết luận (Conclusion)
+Tìm ra nguyên nhân gốc rễ, sửa lỗi, và **viết test** để đảm bảo lỗi không bao giờ quay lại (**Regression Testing**).
+
+## 2. Các kỹ thuật Debugging nâng cao
+
+- **Rubber Duck Debugging:** Giải thích code của bạn cho một "con vịt cao su" — quá trình nói to vấn đề thường làm bật ra lời giải.
+- **Debugging bằng cách đọc lại code:** Đọc lại từng dòng với tư duy "điều này thực sự làm gì?" thay vì "điều này nên làm gì?".
+- **Sử dụng Git Bisect:** Tìm commit gây ra lỗi bằng cách chia đôi lịch sử commit.
+- **Check version và dependency:** Nhiều lỗi đến từ thay đổi phiên bản thư viện, không phải code của bạn.
+
+## 3. Công cụ Debugging thiết yếu
+
+- **Browser DevTools:** Network tab, Console, Sources, Performance.
+- **Server-side:** Log files, APM tools (Datadog, Sentry), monitoring.
+- **Database:** Query logs, EXPLAIN, index analysis.
+- **API:** Postman, curl, mock servers.
+
+> *"Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it."* — Brian Kernighan

@@ -1,0 +1,36 @@
+---
+title: "Tối ưu hóa hiệu năng Next.js"
+date: "2026-08-06"
+excerpt: "Những kỹ thuật thực tế để đạt điểm số Lighthouse 100/100 với Next.js."
+---
+
+# Tối ưu hóa hiệu năng Next.js
+
+Next.js đã nhanh, nhưng nếu không biết cách cấu hình, bạn có thể vô tình làm chậm ứng dụng của mình. Dưới đây là những kỹ thuật tôi áp dụng.
+
+## 1. Tối ưu hóa hình ảnh (Next/Image)
+Sử dụng component `next/image` là bắt buộc. Nó tự động:
+- Resize hình ảnh theo thiết bị.
+- Lazy load hình ảnh ngoài viewport.
+- Chuyển đổi định dạng sang WebP (nếu browser hỗ trợ).
+
+## 2. Tối ưu hóa Font
+Sử dụng `next/font` để tự động tối ưu hóa font chữ, tránh tình trạng Layout Shift (CLS - Cumulative Layout Shift).
+
+## 3. Data Fetching chiến lược
+* **Static Site Generation (SSG):** Cho nội dung ít thay đổi (Ví dụ: Trang chủ, Blog).
+* **Incremental Static Regeneration (ISR):** Cho nội dung cần cập nhật định kỳ mà không cần rebuild toàn bộ.
+* **Server-Side Rendering (SSR):** Chỉ dùng khi dữ liệu cần cập nhật theo thời gian thực mỗi request.
+
+```javascript
+// Ví dụ ISR
+export async function getStaticProps() {
+  const posts = await getPosts();
+  return {
+    props: { posts },
+    revalidate: 60, // Cập nhật lại mỗi 60 giây
+  };
+}
+```
+
+Hãy luôn đo lường bằng Lighthouse để biết chính xác bottleneck nằm ở đâu!

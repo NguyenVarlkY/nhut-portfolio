@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NGUYEN BUI NHUT Y — Software Engineer (Fresher)</title>
+  <meta name="description" content="Full-stack developer portfolio of Nguyen Bui Nhut Y — React, TypeScript, Node.js, MongoDB. End-to-end feature delivery, REST API design, authentication and RBAC." />
+  <meta name="keywords" content="Nguyen Bui Nhut Y, Software Engineer, Full-stack, React, Node.js, TypeScript, Portfolio" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="NGUYEN BUI NHUT Y — Software Engineer" />
+  <meta property="og:description" content="Full-stack developer portfolio — React, TypeScript, Node.js, MongoDB." />
+  <meta property="og:type" content="website" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Background FX -->
+  <div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+  <div class="grid-overlay"></div>
+
+  <!-- ============ NAVBAR ============ -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="#home" class="nav-logo">NY<span class="accent-dot">.</span></a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home" class="nav-link active">Home</a></li>
+        <li><a href="#about" class="nav-link">About</a></li>
+        <li><a href="#skills" class="nav-link">Skills</a></li>
+        <li><a href="#experience" class="nav-link">Experience</a></li>
+        <li><a href="#projects" class="nav-link">Projects</a></li>
+        <li><a href="#contact" class="nav-link">Contact</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="assets/resume.pdf" class="btn btn-ghost btn-sm" target="_blank" rel="noopener">
+          <i class="fa-solid fa-file-arrow-down"></i> Resume
+        </a>
+        <button class="hamburger" id="hamburger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ============ HERO ============ -->
+  <header id="home" class="hero">
+    <div class="hero-inner">
+      <div class="hero-badge">
+        <span class="pulse-dot"></span> Open to Fresher / Junior opportunities
+      </div>
+      <h1 class="hero-name">
+        <span class="greet">Hi, I'm</span>
+        <span class="name-gradient" id="typedName">NGUYEN BUI NHUT Y</span>
+      </h1>
+      <p class="hero-role" id="typewriter"></p>
+      <p class="hero-desc">
+        Full-stack developer with hands-on experience building production web
+        applications using <strong>React</strong>, <strong>TypeScript</strong>,
+        <strong>Node.js</strong> &amp; <strong>MongoDB</strong>. I deliver
+        end-to-end features — from REST API design and authentication to
+        polished, responsive UIs.
+      </p>
+      <div class="hero-cta">
+        <a href="#projects" class="btn btn-primary">
+          <i class="fa-solid fa-briefcase"></i> View My Work
+        </a>
+        <a href="#contact" class="btn btn-ghost">
+          <i class="fa-solid fa-envelope"></i> Contact Me
+        </a>
+      </div>
+      <div class="hero-meta">
+        <span><i class="fa-solid fa-location-dot"></i> District 7, HCMC</span>
+        <span><i class="fa-solid fa-envelope"></i> y2002bt@gmail.com</span>
+        <span><i class="fa-solid fa-phone"></i> 0825 400 965</span>
+      </div>
+    </div>
+    <a href="#about" class="scroll-hint" aria-label="Scroll down">
+      <i class="fa-solid fa-chevron-down"></i>
+    </a>
+  </header>
+
+  <main>
+    <!-- ============ ABOUT ============ -->
+    <section id="about" class="section">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-tag">// about</span>
+          <h2 class="section-title">A developer who ships <span class="grad">real products</span></h2>
+        </div>
+        <div class="about-grid">
+          <div class="about-card glass">
+            <div class="about-icon"><i class="fa-solid fa-user-astronaut"></i></div>
+            <h3>Who I am</h3>
+            <p>
+              Software Engineer (Fresher) based in District 7, HCMC. I enjoy
+              turning business requirements into clean, maintainable code —
+              from database schema to the final pixel on screen.
+            </p>
+          </div>
+          <div class="about-card glass">
+            <div class="about-icon"><i class="fa-solid fa-code-branch"></i></div>
+            <h3>What I do</h3>
+            <p>
+              Full-stack web development: React / Next.js frontends, Node.js /
+              NestJS backends, REST &amp; GraphQL APIs, auth &amp; RBAC,
+              MongoDB &amp; SQL databases, deployed with Docker &amp; AWS.
+            </p>
+          </div>
+          <div class="about-card glass">
+            <div class="about-icon"><i class="fa-solid fa-rocket"></i></div>
+            <h3>What drives me</h3>
+            <p>
+              Building tools people actually use. I care about clean
+              architecture, UX-focused flows, and shipping features that are
+              fast, secure, and reliable.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SKILLS ============ -->
+    <section id="skills" class="section alt">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-tag">// skills</span>
+          <h2 class="section-title">My <span class="grad">tech stack</span></h2>
+        </div>
+        <div class="skills-grid" id="skillsGrid">
+          <!-- populated by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ EXPERIENCE ============ -->
+    <section id="experience" class="section">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-tag">// experience</span>
+          <h2 class="section-title">Work <span class="grad">experience</span></h2>
+        </div>
+        <div class="timeline" id="timeline">
+          <!-- populated by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PROJECTS ============ -->
+    <section id="projects" class="section alt">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-tag">// projects</span>
+          <h2 class="section-title">Featured <span class="grad">projects</span></h2>
+        </div>
+        <div class="projects-grid" id="projectsGrid">
+          <!-- populated by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CERTIFICATIONS & EDUCATION ============ -->
+    <section id="education" class="section">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-tag">// credentials</span>
+          <h2 class="section-title">Certifications &amp; <span class="grad">education</span></h2>
+        </div>
+        <div class="cred-grid">
+          <div class="cred-card glass">
+            <h3><i class="fa-solid fa-award"></i> Certifications</h3>
+            <ul class="cred-list">
+              <li><strong>Cybersecurity</strong> — Google <span class="muted">(Mar 2024)</span></li>
+              <li><strong>Project Manager</strong> (6/7 courses) — Google <span class="muted">(Sep 2023)</span></li>
+              <li><strong>UX Design</strong> — Google <span class="muted">(Jan 2023)</span></li>
+            </ul>
+            <h3 style="margin-top:1.6rem"><i class="fa-solid fa-language"></i> Languages</h3>
+            <ul class="cred-list">
+              <li><strong>English B1</strong> — TOEIC: 450 <span class="muted">(Professional working proficiency)</span></li>
+              <li><strong>Vietnamese</strong> — Native</li>
+            </ul>
+          </div>
+          <div class="cred-card glass">
+            <h3><i class="fa-solid fa-graduation-cap"></i> Education</h3>
+            <div class="edu-item">
+              <h4>Information Technology Engineer</h4>
+              <p class="muted">Saigon Technology University — Oct 2020 to Dec 2026</p>
+              <ul class="cred-list">
+                <li>Excellent grade in <strong>Information System Analysis &amp; Design</strong> (2023)</li>
+                <li>Excellent grade in <strong>Software Engineering System Design</strong> (2022)</li>
+                <li>Talent Student Scholarship + Dual Degree Scholarship (TDTU &amp; LTU — 2020)</li>
+              </ul>
+            </div>
+            <h3 style="margin-top:1.6rem"><i class="fa-solid fa-book-open"></i> Self-Directed Training</h3>
+            <p class="muted" style="line-height:1.7">
+              Structured paths on Udemy, Microsoft Learn &amp; FreeCodeCamp covering
+              React.js, Node.js/Express, TypeScript, REST APIs, GraphQL, MongoDB &amp; Socket.IO.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CONTACT ============ -->
+    <section id="contact" class="section alt">
+      <div class="container">
+        <div class="contact-card glass">
+          <h2 class="section-title" style="text-align:center">Let's build something <span class="grad">great</span> together</h2>
+          <p style="text-align:center;color:var(--text-muted);max-width:560px;margin:1rem auto 2rem">
+            I'm currently open to Fresher / Junior Full-stack roles and freelance
+            projects. If you have an opportunity or a project in mind — let's talk.
+          </p>
+          <div class="contact-actions">
+            <a href="mailto:y2002bt@gmail.com" class="btn btn-primary">
+              <i class="fa-solid fa-envelope"></i> y2002bt@gmail.com
+            </a>
+            <a href="tel:0825400965" class="btn btn-ghost">
+              <i class="fa-solid fa-phone"></i> 0825 400 965
+            </a>
+            <a href="https://github.com/NguyenNhutY" target="_blank" rel="noopener" class="btn btn-ghost">
+              <i class="fa-brands fa-github"></i> GitHub
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-logo">NY<span class="accent-dot">.</span></div>
+      <p>© <span id="year"></span> Nguyen Bui Nhut Y. Built with React ❤ and a lot of coffee.</p>
+      <div class="footer-social">
+        <a href="https://github.com/NguyenNhutY" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+        <a href="mailto:y2002bt@gmail.com" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
+

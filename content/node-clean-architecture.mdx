@@ -1,0 +1,43 @@
+---
+title: "Xây dựng Clean Architecture với Node.js"
+date: "2026-08-05"
+excerpt: "Hướng dẫn chi tiết cách tổ chức dự án Node.js theo tư tưởng Clean Architecture để dễ bảo trì và mở rộng."
+---
+
+# Xây dựng Clean Architecture với Node.js
+
+Trong thế giới phần mềm, khả năng bảo trì là yếu tố sống còn. Clean Architecture giúp tách biệt logic nghiệp vụ khỏi các thành phần phụ thuộc bên ngoài.
+
+## Tại sao cần Clean Architecture?
+Khi dự án lớn dần, nếu code bị trộn lẫn giữa logic database, thư viện bên thứ ba và logic nghiệp vụ (business logic), dự án sẽ rất khó kiểm thử và nâng cấp.
+
+## Nguyên tắc cốt lõi
+1. **Dependency Rule:** Các dependency chỉ được hướng vào trong (vào phía core logic).
+2. **Entities:** Chứa các quy tắc nghiệp vụ cốt lõi.
+3. **Use Cases:** Định nghĩa các hành động cụ thể của hệ thống.
+4. **Interface Adapters:** Convert dữ liệu giữa Use Cases và các thành phần ngoài (API, Database).
+5. **Frameworks & Drivers:** Nơi đặt Database, Express/NestJS, v.v.
+
+## Triển khai ví dụ
+```javascript
+// Entities
+class User {
+  constructor(id, name) {
+    this.id = id;
+    this.name = name;
+  }
+}
+
+// Use Case
+class RegisterUser {
+  constructor(userRepository) {
+    this.userRepository = userRepository;
+  }
+  execute(userData) {
+    // Business logic ở đây
+    return this.userRepository.save(userData);
+  }
+}
+```
+
+Việc tách biệt này giúp bạn có thể đổi từ MongoDB sang PostgreSQL mà không cần sửa dòng code nào trong `Use Case`.

@@ -1,0 +1,58 @@
+---
+title: "Mindset của Kỹ sư Cấp cao: Tư duy và thái độ tạo nên sự khác biệt"
+date: "2026-08-16"
+excerpt: "Kỹ năng technical chỉ là một nửa. Tư duy đúng đắn và thái độ chuyên nghiệp mới là thứ tạo nên Senior Engineer."
+---
+
+# Mindset của Kỹ sư Cấp cao: Tư duy và thái độ tạo nên sự khác biệt
+
+Kỹ năng technical có thể học được từ sách vở và khóa học, nhưng **mindset** (tư duy) và **thái độ** là thứ khó học nhất và cũng là thứ tạo nên sự khác biệt lớn nhất giữa một Junior và một Senior Engineer.
+
+## 1. Mindset quan trọng trong công việc
+
+### 1.1 Đừng vội vàng sửa lỗi
+Nếu bạn không biết **tại sao** nó lỗi, đừng sửa nó — bạn sẽ chỉ tạo ra lỗi mới. Nguyên tắc này nghe đơn giản nhưng cực kỳ quan trọng.
+
+- Sửa lỗi mà không hiểu nguyên nhân gốc rễ chỉ là "che giấu" triệu chứng.
+- Luôn đi từ **chẩn đoán** đến **điều trị**, không bao giờ ngược lại.
+
+### 1.2 Tư duy "Tại sao" (5 Whys)
+Phương pháp **5 Whys** đến từ Toyota Production System: hỏi "tại sao" 5 lần liên tiếp để tìm **nguyên nhân gốc rễ (Root Cause)** thay vì chỉ xử lý bề mặt.
+
+**Ví dụ:**
+- Lỗi: Hệ thống sập lúc 2 giờ sáng.
+- Tại sao? → Server hết RAM.
+- Tại sao? → Có memory leak trong service.
+- Tại sao? → Cache không được dọn.
+- Tại sao? → Không có cơ chế TTL.
+- Tại sao? → Không ai thiết kế nó từ đầu.
+
+=> Giải pháp tốt hơn là **thiết kế lại cache** với TTL, không phải chỉ restart server.
+
+### 1.3 Trách nhiệm với sản phẩm
+Một Senior Engineer không chỉ "làm xong task" mà còn quan tâm:
+- Code có chạy ổn định ở production không?
+- Có monitor và alert không?
+- Có docs và test không?
+- Người sau có thể tiếp tục bảo trì không?
+
+## 2. Thái độ chuyên nghiệp
+
+### 2.1 Tự học trọn đời (Lifelong Learning)
+Công nghệ thay đổi mỗi ngày. Khả năng **học cách học** quan trọng hơn khả năng thuộc lòng syntax.
+
+- Dành 1-2 giờ mỗi tuần để học công nghệ mới.
+- Đọc source code của thư viện bạn dùng.
+- Viết blog/tài liệu để củng cố kiến thức.
+
+### 2.2 Giao tiếp và tinh thần đồng đội
+- Trình bày vấn đề kỹ thuật phức tạp một cách đơn giản.
+- Code review với tinh thần xây dựng, không phán xét.
+- Chủ động nhận việc khó và giúp đỡ đồng đội.
+
+### 2.3 Khiêm tốn và cởi mở
+- Sẵn sàng thừa nhận khi mình sai.
+- Học hỏi từ mọi người, kể cả Junior.
+- Không ngại hỏi khi không hiểu.
+
+> *"Một kỹ sư giỏi không phải là người không bao giờ mắc lỗi, mà là người biết cách sửa lỗi nhanh nhất và đảm bảo nó không lặp lại."*

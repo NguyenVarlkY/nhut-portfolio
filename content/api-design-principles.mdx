@@ -1,0 +1,36 @@
+---
+title: "Thiết kế REST API vững chắc"
+date: "2026-08-07"
+excerpt: "Xây dựng các API tuân thủ tiêu chuẩn, an toàn và dễ mở rộng."
+---
+
+# Thiết kế REST API vững chắc
+
+API là "xương sống" của hầu hết các ứng dụng hiện đại. Thiết kế API tồi sẽ khiến frontend làm việc cực khổ và khó bảo trì.
+
+## 1. Nguyên tắc thiết kế
+*   **Sử dụng Danh từ:** `/users` thay vì `/getUsers`.
+*   **HTTP Methods đúng cách:**
+    *   `GET`: Lấy dữ liệu.
+    *   `POST`: Tạo mới.
+    *   `PUT/PATCH`: Cập nhật.
+    *   `DELETE`: Xóa.
+*   **HTTP Status Codes chuẩn:** 200 (OK), 201 (Created), 400 (Bad Request), 401 (Unauthorized), 403 (Forbidden), 404 (Not Found), 500 (Server Error).
+
+## 2. Bảo mật và Quản lý
+*   **Authentication:** Sử dụng JWT hoặc Sessions.
+*   **Rate Limiting:** Rất quan trọng để tránh bị tấn công DoS.
+*   **Validation:** Luôn validate đầu vào ở cả Frontend và Backend (server-side validation là bắt buộc).
+*   **API Versioning:** Luôn định nghĩa phiên bản API ngay từ đầu (ví dụ: `/api/v1/...`).
+
+```json
+// Ví dụ JSON Response chuẩn
+{
+  "status": "success",
+  "data": {
+    "user": { "id": 1, "name": "Nhut Y" }
+  }
+}
+```
+
+Việc dành thời gian thiết kế kỹ API ngay từ đầu sẽ giúp bạn tiết kiệm hàng trăm giờ code và sửa lỗi sau này.

@@ -1,0 +1,101 @@
+---
+title: "SOLID & Design Patterns: Viết code dễ mở rộng, khó phá vỡ"
+date: "2026-08-14"
+excerpt: "SOLID và Design Patterns là nền tảng của kiến trúc phần mềm tốt. Học cách áp dụng đúng lúc, không lạm dụng."
+---
+
+# SOLID & Design Patterns: Nền tảng kiến trúc phần mềm
+
+SOLID và Design Patterns là những nguyên tắc giúp code **dễ mở rộng, khó phá vỡ**. Đây là kiến thức cốt lõi mà mọi kỹ sư nên nắm vững.
+
+## 1. SOLID Principles
+
+### S — Single Responsibility (Trách nhiệm đơn nhất)
+Mỗi class/function chỉ nên có **một lý do duy nhất để thay đổi**.
+
+- Tách class "làm quá nhiều" thành các class nhỏ, mỗi class một trách nhiệm.
+- Ví dụ: tách `UserService` thành `UserRepository` (lưu trữ), `UserValidator` (kiểm tra), `EmailService` (gửi mail).
+
+### O — Open/Closed (Mở rộng / Đóng sửa)
+Mở cho **mở rộng** nhưng đóng cho **sửa đổi**. Muốn thêm tính năng mới, thêm code mới, không sửa code cũ.
+
+- Dùng inheritance, composition, polymorphism.
+- Ví dụ: thêm loại báo cáo mới bằng cách thêm class mới, không sửa switch case cũ.
+
+### L — Liskov Substitution (Thay thế Liskov)
+Các class con phải **thay thế được** class cha mà không gây lỗi.
+
+- Nếu class con thay đổi hành vi cơ bản của class cha, đó là vi phạm LSP.
+- Ví dụ: class `Square` không nên kế thừa `Rectangle` nếu nó làm sai logic setWidth/setHeight.
+
+### I — Interface Segregation (Tách giao diện)
+Không nên ép client phụ thuộc vào các interface chúng **không dùng**.
+
+- Tách interface lớn thành các interface nhỏ, chuyên biệt.
+- Ví dụ: tách `Bird` interface thành `Flyable`, `Swimmable`, `Walkable`.
+
+### D — Dependency Inversion (Đảo ngược phụ thuộc)
+Phụ thuộc vào **abstraction**, không phụ thuộc vào **concrete implementation**.
+
+- Dùng interface để giảm coupling giữa các module.
+- Dùng **Dependency Injection** để truyền dependency từ ngoài vào.
+
+## 2. Design Patterns
+
+### 2.1 Không lạm dụng
+Design Patterns là công cụ, **không phải mục tiêu**. Chỉ dùng khi cần thiết:
+- Hiểu rõ vấn đề trước khi chọn pattern.
+- Đừng ép buộc một pattern vào mọi tình huống.
+- Over-engineering khiến code phức tạp không cần thiết.
+
+### 2.2 Các pattern thường dùng
+
+**Creational (Tạo object):**
+- **Singleton:** Đảm bảo chỉ có một instance (database connection, config).
+- **Factory:** Tạo object mà không cần chỉ định class cụ thể.
+- **Builder:** Xây dựng object phức tạp từng bước.
+
+**Structural (Cấu trúc):**
+- **Adapter:** Chuyển đổi interface để tương thích.
+- **Decorator:** Thêm hành vi cho object mà không sửa class gốc.
+
+**Behavioral (Hành vi):**
+- **Observer:** Thông báo thay đổi trạng thái đến các subscriber (event system).
+- **Strategy:** Chọn thuật toán tại runtime (thay đổi hành vi linh hoạt).
+- **Repository:** Tách logic truy cập dữ liệu khỏi business logic.
+
+## 3. Ví dụ thực tế
+
+**Trước khi áp dụng SOLID:**
+```javascript
+class UserService {
+  save(user) { /* DB */ }
+  validate(user) { /* validation */ }
+  sendEmail(user) { /* email */ }
+  generateReport(user) { /* report */ }
+}
+```
+
+**Sau khi áp dụng SOLID:**
+```javascript
+class UserRepository { save(user) { /* DB */ } }
+class UserValidator { validate(user) { /* validation */ } }
+class EmailService { send(user) { /* email */ } }
+class ReportGenerator { generate(user) { /* report */ } }
+
+class UserService {
+  constructor(repo, validator, email, report) {
+    this.repo = repo; // Dependency Injection
+    this.validator = validator;
+    this.email = email;
+    this.report = report;
+  }
+  create(user) {
+    this.validator.validate(user);
+    this.repo.save(user);
+    this.email.send(user);
+  }
+}
+```
+
+> *"Code là công cụ, nhưng tư duy và sự hiểu biết đa ngành mới là thứ tạo nên giá trị của một Senior Engineer."*

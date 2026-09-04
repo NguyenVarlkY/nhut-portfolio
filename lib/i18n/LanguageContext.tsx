@@ -40,6 +40,12 @@ const TRANSLATIONS: Record<Lang, Record<string, any>> = {
   fr,
 };
 
+const LOCALE_OVERRIDES: Partial<Record<Lang, Record<string, string>>> = {
+  zh: {
+    "nav.tools": "工具",
+  },
+};
+
 const STORAGE_KEY = "ny-portfolio-lang";
 
 interface LanguageContextValue {
@@ -78,6 +84,9 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   const t = useCallback(
     (path: string): string => {
+      const override = LOCALE_OVERRIDES[lang]?.[path];
+      if (override) return override;
+
       const keys = path.split(".");
       let result: any = TRANSLATIONS[lang];
       for (const k of keys) {

@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import {
   Trash2, Check, Edit, Plus, ListTodo, Target, CalendarDays, BarChart3, ClipboardList,
-  Flag, X, ChevronRight,
+  Flag, X, ChevronRight, Search, CalendarClock, AlertCircle, CheckCircle2,
 } from 'lucide-react';
 import { useTranslation } from '@/lib/i18n/LanguageContext';
 
@@ -15,6 +15,7 @@ interface TodoItem {
   createdAt: number;
   priority: 'low' | 'medium' | 'high';
   dueDate?: string;
+  category?: string;
 }
 
 interface Goal {
@@ -50,6 +51,7 @@ const SCHEDULE_KEY = 'nhut-todo-schedule';
 type Tab = 'tasks' | 'goals' | 'plans' | 'schedule' | 'analytics';
 
 const uid = () => Math.random().toString(36).substr(2, 9);
+const CATEGORIES = ['Work', 'Study', 'Personal', 'Health'];
 
 /* ================= Charts (pure SVG) ================= */
 function Donut({ pct, color = '#8b5cf6' }: { pct: number; color?: string }) {
@@ -90,7 +92,11 @@ export default function TestTodo() {
   const [todos, setTodos] = useState<TodoItem[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [priority, setPriority] = useState<TodoItem['priority']>('medium');
-  const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
+  const [filter, setFilter] = useState<'all' | 'active' | 'completed' | 'today' | 'overdue'>('all');
+  const [search, setSearch] = useState('');
+  const [dueDate, setDueDate] = useState('');
+  const [category, setCategory] = useState(CATEGORIES[0]);
+  const [categoryFilter, setCategoryFilter] = useState('all');
   const [editId, setEditId] = useState<string | null>(null);
   const [editText, setEditText] = useState('');
 
@@ -128,8 +134,9 @@ export default function TestTodo() {
   const addTodo = useCallback(() => {
     const trimmed = inputValue.trim();
     if (!trimmed) return;
-    setTodos([...todos, { id: uid(), text: trimmed, completed: false, createdAt: Date.now(), priority }]);
+    setTodos([...todos, { id: uid(), text: trimmed, completed: false, createdAt: Date.now(), priority, dueDate: dueDate || undefined, category }]);
     setInputValue('');
+    setDueDate('');
   }, [inputValue, todos, priority]);
 
   const toggleTodo = (id: string) =>
@@ -147,13 +154,19 @@ export default function TestTodo() {
   };
   const clearCompleted = () => setTodos(todos.filter(t => !t.completed));
 
+  const todayKey = new Date().toISOString().slice(0, 10);
   const filteredTodos = todos.filter(t => {
     if (filter === 'active') return !t.completed;
     if (filter === 'completed') return t.completed;
+    if (filter === 'today') return t.dueDate === todayKey;
+    if (filter === 'overdue') return Boolean(t.dueDate && t.dueDate < todayKey && !t.completed);
     return true;
-  });
+  }).filter(t => t.text.toLowerCase().includes(search.trim().toLowerCase()))
+    .filter(t => categoryFilter === 'all' || (t.category ?? 'Work') === categoryFilter);
   const activeCount = todos.filter(t => !t.completed).length;
   const completedCount = todos.filter(t => t.completed).length;
+  const todayCount = todos.filter(t => t.dueDate === todayKey && !t.completed).length;
+  const overdueCount = todos.filter(t => Boolean(t.dueDate && t.dueDate < todayKey && !t.completed)).length;
 
   const prioColor: Record<TodoItem['priority'], string> = {
     low: 'text-green-400', medium: 'text-amber-400', high: 'text-red-400',
@@ -227,6 +240,20 @@ export default function TestTodo() {
             {t('tools.todo.title')} <span className="grad-text">{t('tools.todo.titleHighlight')}</span>
           </h1>
           <p className="text-muted max-w-lg">{t('tools.todo.description')}</p>
+
+          <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {[
+              { label: 'Active', value: activeCount, icon: <ListTodo size={16} />, color: 'text-primary-light' },
+              { label: 'Completed', value: completedCount, icon: <CheckCircle2 size={16} />, color: 'text-green-400' },
+              { label: 'Today', value: todayCount, icon: <CalendarClock size={16} />, color: 'text-accent' },
+              { label: 'Overdue', value: overdueCount, icon: <AlertCircle size={16} />, color: 'text-red-400' },
+            ].map(card => (
+              <div key={card.label} className="glass flex items-center gap-3 p-3">
+                <span className={card.color}>{card.icon}</span>
+                <div><p className="font-mono text-lg font-bold text-body">{card.value}</p><p className="text-[11px] text-muted">{card.label}</p></div>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Tabs */}
@@ -251,7 +278,7 @@ export default function TestTodo() {
           {tab === 'tasks' && (
             <>
               {/* Input */}
-              <div className="p-5 border-b border-subtle">
+          <div className="p-5 border-b border-subtle">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                   <input
                     type="text"
@@ -261,6 +288,17 @@ export default function TestTodo() {
                     placeholder={editId ? t('tools.todo.editPlaceholder') : t('tools.todo.placeholder')}
                     className="flex-1 rounded-xl bg-surface px-4 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary-light/40"
                   />
+                  {!editId && (
+                    <label className="flex items-center gap-2 rounded-xl bg-surface px-3 py-2.5 text-xs text-muted sm:w-[145px]">
+                      <CalendarDays size={15} aria-hidden="true" />
+                      <input type="date" value={dueDate} onChange={e => setDueDate(e.target.value)} aria-label="Due date" className="min-w-0 bg-transparent text-xs text-body outline-none" />
+                    </label>
+                  )}
+                  {!editId && (
+                    <select value={category} onChange={e => setCategory(e.target.value)} aria-label="Task category" className="rounded-xl bg-surface px-3 py-2.5 text-xs text-body outline-none focus:ring-2 focus:ring-primary-light/40 sm:w-[120px]">
+                      {CATEGORIES.map(item => <option key={item} value={item}>{item}</option>)}
+                    </select>
+                  )}
                   {/* Priority chips */}
                   {!editId && (
                     <div className="flex gap-1.5">
@@ -294,20 +332,27 @@ export default function TestTodo() {
               </div>
 
               {/* Filter bar */}
-              <div className="flex items-center justify-between p-4 border-b border-subtle">
-                <div className="flex gap-2">
-                  {(['all', 'active', 'completed'] as const).map(f => (
+              <div className="flex flex-col gap-3 p-4 border-b border-subtle sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex flex-wrap gap-2">
+                  {(['all', 'active', 'completed', 'today', 'overdue'] as const).map(f => (
                     <button
                       key={f} onClick={() => setFilter(f)}
                       className={`rounded-lg px-3 py-1 text-xs font-medium transition-all ${
                         filter === f ? 'bg-primary-light/10 text-primary-light' : 'text-muted hover:text-body'
                       }`}
                     >
-                      {f === 'all' ? t('tools.todo.filterAll') : f === 'active' ? t('tools.todo.filterActive') : t('tools.todo.filterCompleted')}
+                      {f === 'all' ? t('tools.todo.filterAll') : f === 'active' ? t('tools.todo.filterActive') : f === 'completed' ? t('tools.todo.filterCompleted') : f === 'today' ? 'Today' : 'Overdue'}
                     </button>
                   ))}
                 </div>
-                <span className="text-xs text-muted">{activeCount} {t('tools.todo.itemsLeft')}</span>
+                <label className="flex items-center gap-2 rounded-lg border border-subtle bg-surface px-3 py-1.5 text-xs text-muted sm:w-48">
+                  <Search size={14} aria-hidden="true" />
+                  <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search tasks" aria-label="Search tasks" className="min-w-0 flex-1 bg-transparent text-body outline-none placeholder:text-muted" />
+                </label>
+                <select value={categoryFilter} onChange={e => setCategoryFilter(e.target.value)} aria-label="Filter by category" className="rounded-lg border border-subtle bg-surface px-3 py-1.5 text-xs text-body outline-none focus:ring-2 focus:ring-primary-light/40">
+                  <option value="all">All categories</option>
+                  {CATEGORIES.map(item => <option key={item} value={item}>{item}</option>)}
+                </select>
               </div>
 
               {/* List */}
@@ -321,6 +366,7 @@ export default function TestTodo() {
                     <div key={todo.id} className="flex items-start gap-3 rounded-xl border border-transparent p-3 hover:border-primary-light/20 hover:bg-surface-hover transition-all">
                       <button
                         onClick={() => toggleTodo(todo.id)}
+                        aria-label={todo.completed ? `Mark ${todo.text} as active` : `Complete ${todo.text}`}
                         className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-all ${
                           todo.completed ? 'border-primary-light bg-primary-light/20' : 'border-subtle'
                         }`}
@@ -338,15 +384,19 @@ export default function TestTodo() {
                         ) : (
                           <div className="flex items-center gap-2">
                             <span className={`flex-1 text-sm break-words ${todo.completed ? 'line-through text-muted' : 'text-body'}`}>{todo.text}</span>
-                            <Flag size={13} className={`shrink-0 ${prioColor[todo.priority]}`} />
+                            <Flag size={13} aria-label={`${todo.priority} priority`} className={`shrink-0 ${prioColor[todo.priority]}`} />
                           </div>
                         )}
+                        <div className="mt-1 flex flex-wrap items-center gap-2 text-[11px]">
+                          {todo.category && <span className="rounded-md bg-primary-light/10 px-1.5 py-0.5 text-primary-light">{todo.category}</span>}
+                          {todo.dueDate && <span className={`flex items-center gap-1 ${todo.dueDate < todayKey && !todo.completed ? 'text-red-400' : 'text-muted'}`}><CalendarDays size={12} aria-hidden="true" /> {todo.dueDate}</span>}
+                        </div>
                       </div>
                       <div className="flex gap-1">
-                        <button onClick={() => startEdit(todo.id)} className="rounded-lg p-1.5 text-muted hover:bg-surface-hover hover:text-body">
+                        <button onClick={() => startEdit(todo.id)} aria-label={`Edit ${todo.text}`} className="rounded-lg p-1.5 text-muted hover:bg-surface-hover hover:text-body">
                           <Edit size={15} />
                         </button>
-                        <button onClick={() => deleteTodo(todo.id)} className="rounded-lg p-1.5 text-muted hover:bg-red-500/10 hover:text-red-400">
+                        <button onClick={() => deleteTodo(todo.id)} aria-label={`Delete ${todo.text}`} className="rounded-lg p-1.5 text-muted hover:bg-red-500/10 hover:text-red-400">
                           <Trash2 size={15} />
                         </button>
                       </div>

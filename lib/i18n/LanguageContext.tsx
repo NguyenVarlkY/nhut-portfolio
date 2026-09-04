@@ -165,26 +165,12 @@ function isLang(v: string | null): v is Lang {
   return v !== null && LANGS.includes(v as Lang);
 }
 
-export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [lang, setLang] = useState<Lang>("en");
-
-  // Hydrate from localStorage once mounted (avoid SSR mismatch)
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (isLang(saved)) setLang(saved);
-    } catch {
-      /* ignore */
-    }
-  }, []);
+export function LanguageProvider({ children, lang: initialLang }: { children: ReactNode, lang: Lang }) {
+  const [lang, setLang] = useState<Lang>(initialLang);
 
   const changeLang = useCallback((l: Lang) => {
+    // Logic to redirect is handled by Navbar/Navigation component
     setLang(l);
-    try {
-      localStorage.setItem(STORAGE_KEY, l);
-    } catch {
-      /* ignore */
-    }
   }, []);
 
   const t = useCallback(

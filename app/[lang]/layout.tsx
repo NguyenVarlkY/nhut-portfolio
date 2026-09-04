@@ -29,7 +29,7 @@ export default function RootLayout({
     <html lang={params.lang} suppressHydrationWarning className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrains.variable}`}>
       <body className="bg-base text-body font-body antialiased">
         <ThemeProvider>
-          <LanguageProvider>
+          <LanguageProvider lang={params.lang}>
             <ScrollProgress />
             <CommandPalette />
             <Navbar lang={params.lang} />

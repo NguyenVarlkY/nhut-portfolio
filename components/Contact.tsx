@@ -180,13 +180,16 @@ export default function Contact() {
                   type="text"
                   required
                   value={form.name}
+                  autoComplete="name"
+                  aria-invalid={Boolean(sanitizeErrors.name)}
+                  aria-describedby={sanitizeErrors.name ? "c-name-error" : undefined}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
                   className={`${inputCls} ${sanitizeErrors.name ? "border-red-500/50 focus:border-red-500 focus:ring-red-500/20" : ""}`}
                   placeholder={t("contact.formName")}
                   maxLength={100}
                 />
                 {sanitizeErrors.name?.map((err, i) => (
-                  <p key={i} className="mt-1 flex items-center gap-1 text-xs text-red-400">
+                  <p id={i === 0 ? "c-name-error" : undefined} key={i} role="alert" className="mt-1 flex items-center gap-1 text-xs text-red-400">
                     <AlertTriangle size={12} /> {err}
                   </p>
                 ))}
@@ -200,13 +203,16 @@ export default function Contact() {
                   type="email"
                   required
                   value={form.email}
+                  autoComplete="email"
+                  aria-invalid={Boolean(sanitizeErrors.email)}
+                  aria-describedby={sanitizeErrors.email ? "c-email-error" : undefined}
                   onChange={(e) => setForm({ ...form, email: e.target.value })}
                   className={`${inputCls} ${sanitizeErrors.email ? "border-red-500/50 focus:border-red-500 focus:ring-red-500/20" : ""}`}
                   placeholder={t("contact.formEmail")}
                   maxLength={254}
                 />
 {sanitizeErrors.email?.map((err, i) => (
-                  <p key={i} className="mt-1 flex items-center gap-1 text-xs text-red-400">
+                  <p id={i === 0 ? "c-email-error" : undefined} key={i} role="alert" className="mt-1 flex items-center gap-1 text-xs text-red-400">
                     <AlertTriangle size={12} /> {err}
                   </p>
                 ))}
@@ -221,13 +227,15 @@ export default function Contact() {
                 required
                 rows={4}
                 value={form.message}
+                aria-invalid={Boolean(sanitizeErrors.message)}
+                aria-describedby={sanitizeErrors.message ? "c-message-error" : undefined}
                 onChange={(e) => setForm({ ...form, message: e.target.value })}
                 className={`${inputCls} resize-none ${sanitizeErrors.message ? "border-red-500/50 focus:border-red-500 focus:ring-red-500/20" : ""}`}
                 placeholder={t("contact.formMessage")}
                 maxLength={5000}
               />
               {sanitizeErrors.message?.map((err, i) => (
-                <p key={i} className="mt-1 flex items-center gap-1 text-xs text-red-400">
+                <p id={i === 0 ? "c-message-error" : undefined} key={i} role="alert" className="mt-1 flex items-center gap-1 text-xs text-red-400">
                   <AlertTriangle size={12} /> {err}
                 </p>
               ))}
@@ -253,12 +261,12 @@ export default function Contact() {
             </button>
 
             {status === "success" && (
-              <p className="mt-4 rounded-xl border border-accent/30 bg-accent/10 px-4 py-3 text-center text-sm text-accent">
+              <p role="status" aria-live="polite" className="mt-4 rounded-xl border border-accent/30 bg-accent/10 px-4 py-3 text-center text-sm text-accent">
                 {t("contact.formSuccess")}
               </p>
             )}
             {status === "error" && !sanitizeErrors.name && !sanitizeErrors.email && !sanitizeErrors.message && (
-              <p className="mt-4 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-center text-sm text-red-400">
+              <p role="alert" aria-live="assertive" className="mt-4 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-center text-sm text-red-400">
                 {t("contact.formError")}
               </p>
             )}

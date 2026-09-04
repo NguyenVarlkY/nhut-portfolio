@@ -1,6 +1,6 @@
  "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
 Hotel, ShoppingCart, Car, Github, X, ExternalLink, Calendar, Tag,
@@ -35,7 +35,7 @@ monitor: Monitor,
 
 export default function Projects() {
   const { t } = useTranslation();
-  const [activeProj, setActiveProj] = useState<number | null>(null);
+  const [activeProj, setActiveProj] = useState<string | null>(null);
   const [filter, setFilter] = useState<string | null>(null);
 
   const allTags = useMemo(() => {
@@ -48,6 +48,28 @@ export default function Projects() {
     if (!filter) return projects;
     return projects.filter((p) => p.tags.includes(filter));
   }, [filter]);
+
+  const activeProject = useMemo(
+    () => projects.find((project) => project.title === activeProj) ?? null,
+    [activeProj]
+  );
+
+  useEffect(() => {
+    if (!activeProj) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setActiveProj(null);
+    };
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [activeProj]);
 
   return (
     <section id="projects" className="section-pad border-y border-subtle bg-base-alt">
@@ -96,18 +118,27 @@ export default function Projects() {
         </motion.div>
 
         <div className="grid gap-7 md:grid-cols-2 lg:grid-cols-3">
-          {filteredProjects.map((proj, pi) => {
+          {filteredProjects.map((proj) => {
             const Icon = ICONS[proj.icon] ?? Hotel;
             return (
               <motion.div
                 key={proj.title}
                 layout
-                className="group flex cursor-pointer flex-col overflow-hidden rounded-xl border border-subtle bg-surface backdrop-blur-xl transition-all hover:-translate-y-1.5 hover:border-primary-light/45 hover:shadow-card"
+                role="button"
+                tabIndex={0}
+                aria-label={`Open case study: ${proj.title}`}
+                className="group flex cursor-pointer flex-col overflow-hidden rounded-xl border border-subtle bg-surface backdrop-blur-xl transition-all hover:-translate-y-1.5 hover:border-primary-light/45 hover:shadow-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.5 }}
-                onClick={() => setActiveProj(pi)}
+                onClick={() => setActiveProj(proj.title)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    setActiveProj(proj.title);
+                  }
+                }}
               >
                 <div
                   className="flex h-[130px] items-center justify-center text-white text-4xl"
@@ -155,7 +186,7 @@ export default function Projects() {
 
       {/* Project detail modal */}
       <AnimatePresence>
-        {activeProj !== null && (
+        {activeProject && (
           <motion.div
             className="fixed inset-0 z-[250] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
             initial={{ opacity: 0 }}
@@ -180,7 +211,7 @@ export default function Projects() {
               </button>
 
               {(() => {
-                const proj = projects[activeProj];
+                const proj = activeProject;
                 const Icon = ICONS[proj.icon] ?? Hotel;
                 return (
                   <>
@@ -302,7 +333,7 @@ export default function Projects() {
                       </div>
                     </div>
 
-                    <div className="mt-6 flex flex-wrap gap-3 border-t border-subtle pt-5">
+                    <div className="mt-6 border-t border-subtle pt-5">
                       <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-body">
                         <Code size={15} className="text-accent" /> {t("projects.techHighlight")}
                       </div>
@@ -313,17 +344,6 @@ export default function Projects() {
                           </span>
                         ))}
                       </div>
-                    </div>
-
-                    <div className="mt-6 flex flex-wrap gap-3 border-t border-subtle pt-5">
-                      <a
-                        href={profile.github}
-                        target="_blank"
-                        rel="noopener"
-                        className="btn-ghost"
-                      >
-                        <Github size={16} /> {t("projects.source")}
-                      </a>
                     </div>
                   </>
                 );

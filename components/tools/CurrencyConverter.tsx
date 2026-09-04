@@ -79,7 +79,7 @@ export default function CurrencyConverter() {
             placeholder={t('currencyConverter.placeholder')}
             className="flex-1 min-w-0 rounded-lg border border-subtle bg-transparent px-3 py-2 text-sm text-right focus:outline-none focus:ring-2 focus:ring-primary-light/50"
           />
-          <select value={fromCurrency} onChange={e => setFromCurrency(e.target.value)} className={selectCls}>
+          <select aria-label="From currency" value={fromCurrency} onChange={e => setFromCurrency(e.target.value)} className={selectCls}>
             {Object.entries(CURRENCY_NAMES).map(([code, name]) => (
               <option key={code} value={code}>{name}</option>
             ))}
@@ -107,7 +107,7 @@ export default function CurrencyConverter() {
             placeholder="—"
             className="flex-1 min-w-0 rounded-lg border border-subtle bg-transparent px-3 py-2 text-sm font-medium focus:outline-none"
           />
-          <select value={toCurrency} onChange={e => setToCurrency(e.target.value)} className={selectCls}>
+          <select aria-label="To currency" value={toCurrency} onChange={e => setToCurrency(e.target.value)} className={selectCls}>
             {Object.entries(CURRENCY_NAMES).map(([code, name]) => (
               <option key={code} value={code}>{name}</option>
             ))}

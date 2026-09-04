@@ -15,8 +15,24 @@ export default async function PostPage({ params }: { params: { slug: string } })
   const { data: frontmatter, content } = matter(fileContent);
   const readingTime = await calculateReadingTime(content);
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: frontmatter.title,
+    datePublished: frontmatter.date,
+    author: {
+      "@type": "Person",
+      name: "Nguyen Bui Nhut Y",
+    },
+    description: frontmatter.excerpt,
+  };
+
   return (
     <div className="container-port section-pad max-w-[800px]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Link 
         href="/blog" 
         className="inline-flex items-center gap-2 text-sm text-muted hover:text-primary transition-colors mb-8 group"

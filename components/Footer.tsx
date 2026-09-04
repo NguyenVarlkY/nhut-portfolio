@@ -3,6 +3,7 @@
 import { Github, Mail, Linkedin, Facebook } from "lucide-react";
 import { profile } from "@/lib/data";
 import { useTranslation } from "@/lib/i18n/LanguageContext";
+import ViewCounter from "@/components/ViewCounter";
 
 export default function Footer() {
   const { t } = useTranslation();
@@ -12,9 +13,10 @@ export default function Footer() {
         <div className="font-display font-bold text-xl">
           NY<span className="text-primary-light">.</span>
         </div>
-        <p className="text-sm text-muted">
-          © {new Date().getFullYear()} {profile.name}. {t("footer.builtWith")}.
-        </p>
+        <div className="flex flex-wrap items-center gap-4 text-sm text-muted">
+          <p>© {new Date().getFullYear()} {profile.name}. {t("footer.builtWith")}.</p>
+          <ViewCounter />
+        </div>
         <div className="flex gap-3">
           <a
             href={profile.github}

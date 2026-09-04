@@ -121,7 +121,7 @@ export default function Hero() {
           <Link href="#contact" className="btn-ghost">
             <Mail size={16} /> {t("hero.contactMe")}
           </Link>
-          <a href="/assets/resume.pdf" target="_blank" rel="noopener" className="btn-ghost">
+          <a href="/assets/resume.pdf" download="Nguyen-Bui-Nhut-Y-CV.pdf" target="_blank" rel="noopener" className="btn-ghost">
             <FileDown size={16} /> CV
           </a>
         </motion.div>

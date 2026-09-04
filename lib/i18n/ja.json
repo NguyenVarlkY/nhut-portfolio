@@ -6,6 +6,7 @@
     "services": "サービス",
     "experience": "経験",
     "projects": "プロジェクト",
+    "tools": "ツール",
     "blog": "ブログ",
     "contact": "コンタクト",
     "resume": "履歴書"
@@ -14,6 +15,7 @@
     "greeting": "こんにちは、私は",
     "available": "フリーランス / ジュニアの機会にオープン",
     "description": "フルスタック開発者として、React、TypeScript、Node.js & MongoDBを使用した本番ウェブアプリケーションの構築経験があります。REST APIの設計と認証から洗練されたレスポンシブUIまで、エンドツーエンドの機能を提供します。",
+    "subDescription": "API設計から洗練されたUIまで、ビジネスへの価値、クリーンなコード、実用性を重視した拡張可能なWeb製品を構築します。",
     "viewWork": "私の作品を見る",
     "contactMe": "連絡する"
   },

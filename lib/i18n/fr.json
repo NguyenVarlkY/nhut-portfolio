@@ -6,6 +6,8 @@
     "services": "Services",
     "experience": "Expérience",
     "projects": "Projets",
+    "blog": "Blog",
+    "tools": "Outils",
     "contact": "Contact",
     "resume": "CV"
   },
@@ -13,6 +15,7 @@
     "greeting": "Bonjour, je suis",
     "available": "Ouvert aux opportunités Freelance / Junior",
     "description": "Développeur full-stack avec une expérience pratique de la création d'applications web de production avec React, TypeScript, Node.js & MongoDB. Je livre des fonctionnalités de bout en bout — de la conception d'API REST et de l'authentification à des interfaces utilisateur soignées et responsives.",
+    "subDescription": "Je construis des produits web évolutifs, de la conception d'API aux interfaces soignées, avec un focus sur l'impact métier, le code propre et l'utilité concrète.",
     "viewWork": "Voir mon travail",
     "contactMe": "Me contacter"
   },
@@ -25,7 +28,20 @@
     "whatTitle": "Ce que je fais",
     "whatDesc": "Développement web full-stack : fronts React / Next.js, backends Node.js / NestJS, API REST & GraphQL, authentification & RBAC, bases de données MongoDB & SQL, déployés avec Docker & AWS.",
     "driveTitle": "Ce qui me motive",
-    "driveDesc": "Construire des outils que les gens utilisent vraiment. Je tiens à une architecture propre, des parcours orientés UX, et la livraison de fonctionnalités rapides, sécurisées et fiables."
+    "driveDesc": "Construire des outils que les gens utilisent vraiment. Je tiens à une architecture propre, des parcours orientés UX, et la livraison de fonctionnalités rapides, sécurisées et fiables.",
+    "availabilityTag": "// disponibilité",
+    "availabilityTitle": "Ouvert aux opportunités freelance et à temps plein",
+    "availabilityDesc": "J'aide les équipes à créer des produits web modernes, des outils internes, des tableaux de bord et des MVP, avec un focus sur l'architecture, l'UX et la fiabilité en production.",
+    "availabilityAction": "Échangeons",
+    "helpTitle": "Ce que je peux apporter",
+    "help1Title": "Interfaces produit frontend",
+    "help1Desc": "Interfaces responsives en React / Next.js, avec une UX claire et un design cohérent.",
+    "help2Title": "Backend et API",
+    "help2Desc": "API REST, logique métier, intégration de bases de données, authentification et architectures backend évolutives.",
+    "help3Title": "Systèmes sécurisés",
+    "help3Desc": "Contrôle d'accès par rôles, validation, protection des environnements et processus de production fiables.",
+    "help4Title": "MVP et outils internes",
+    "help4Desc": "Validation rapide de produits, tableaux de bord, systèmes opérationnels et applications web orientées conversion."
   },
   "skills": {
     "tag": "// compétences",

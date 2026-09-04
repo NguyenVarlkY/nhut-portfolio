@@ -84,7 +84,14 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
         if (result == null) return path;
         result = result[k];
       }
-      return typeof result === "string" ? result : path;
+      if (typeof result === "string") return result;
+
+      let fallback: any = en;
+      for (const k of keys) {
+        if (fallback == null) return path;
+        fallback = fallback[k];
+      }
+      return typeof fallback === "string" ? fallback : path;
     },
     [lang]
   );

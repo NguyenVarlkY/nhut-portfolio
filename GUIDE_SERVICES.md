@@ -28,11 +28,11 @@ Trong mỗi file JSON, nội dung dịch vụ nằm trong đối tượng `"serv
     "title": "Dịch vụ",
     "titleHighlight": "Freelance & Bảng giá",
     "hourlyTitle": "Giá thuê theo giờ",
-    "hourlyPrice": "$12/giờ",
+    "hourlyPrice": "$6.99/giờ",
     "hourlyDesc": "Linh hoạt cho các tác vụ nhỏ, sửa lỗi, review code, hoặc thêm tính năng vào dự án hiện tại của bạn.",
     "packagesTitle": "Các gói dự án",
     "package1Title": "Landing Page",
-    "package1Price": "từ $100",
+    "package1Price": "từ $249",
     "package1Time": "3–5 ngày",
     "package1Features": [
       "Trang React / Next.js responsive",
@@ -41,7 +41,7 @@ Trong mỗi file JSON, nội dung dịch vụ nằm trong đối tượng `"serv
       "Thiết kế mobile-first"
     ],
     "package2Title": "Web App / MVP",
-    "package2Price": "từ $550",
+    "package2Price": "từ $499",
     "package2Time": "2–4 tuần",
     "package2Features": [
       "Full-stack React + Node.js",

@@ -7,6 +7,7 @@ import {
   Gauge, Plug, Info, Lock, Building2, MemoryStick as RamIcon, Disc3, Bug
 } from 'lucide-react';
 import { useTranslation } from '@/lib/i18n/LanguageContext';
+import GameRequirementsCheck from '@/components/tools/GameRequirementsCheck';
 
 interface SystemInfo {
   userAgent: string;
@@ -353,6 +354,9 @@ const devices = await nav.mediaDevices.enumerateDevices();
                 <InfoRow icon={<Languages size={15} />} label={t('tools.ycpu.maxTouch')} value={`${info.maxTouchPoints}`} />
               </div>
             </div>
+
+            {/* Game system requirements check */}
+            <GameRequirementsCheck cores={info.cores} deviceMemoryGB={info.deviceMemory} />
 
             {/* System-level info (not available in browser) */}
             <div className="glass border-amber-500/30 p-6">

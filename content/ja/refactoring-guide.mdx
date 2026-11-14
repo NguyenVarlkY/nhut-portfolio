@@ -1,0 +1,284 @@
+---
+title: "リファクタリングガイド：コード品質を改善する"
+date: "2026-08-04"
+excerpt: "外部から見た振る舞いを変えずにソースコードを改善する技術、リファクタリングの総合ガイド。"
+---
+
+# リファクタリングガイド：コード品質を改善する
+
+リファクタリングとは、既存のコードの外部から見た振る舞いを変えずに、その構造を作り直すプロセスです。目的は、ソフトウェアの設計を改善し、コードを理解しやすくし、保守コストを下げることです。
+
+## なぜリファクタリングが必要なのか？
+
+### 1. 複雑さを減らす
+- 複雑なコードは理解しにくく、保守しにくく、バグを生みやすい
+- リファクタリングはロジックを単純化し、コードをより明確にする
+
+### 2. 読みやすさを高める
+- 良いコードは物語のように読めるべき
+- リファクタリングは変数、関数、クラスに意味のある名前を付ける助けになる
+
+### 3. 新機能に備える
+- きれいなコードは拡張しやすい
+- 新機能を追加する前にリファクタリングすれば、バグのリスクを減らせる
+
+### 4. 保守作業を減らす
+- 良いコードは、バグを見つけて直す時間を短縮する
+- リファクタリングは技術的負債（technical debt）を減らす助けになる
+
+## リファクタリングの原則
+
+### 1. 常にテストを用意する
+- リファクタリングの前に、十分なテストスイートがあることを確認する
+- テストは、リファクタリング後も振る舞いが変わっていないことを確かめてくれる
+
+### 2. 少しずつリファクタリングする
+- 小さな変更の方がコントロールしやすい
+- 問題があればすぐに元に戻せる
+
+### 3. 継続的に行う
+- リファクタリングは一度きりの作業ではない
+- 開発の全期間を通じて継続的に行うべき
+
+## 基本的なリファクタリング手法
+
+### 1. Extract Method（メソッドの抽出）
+```javascript
+// 変更前
+function printOwing(invoice) {
+  let outstanding = 0;
+  console.log(`*************************`);
+  console.log(`**** Customer Owes ****`);
+  console.log(`*************************`);
+  
+  // 未払い額を計算
+  for (const border of invoice.borders) {
+    outstanding += border.amount;
+  }
+  
+  // 支払期日を記録
+  const today = Date.now();
+  invoice.dueDate = new Date(today + 30 * 24 * 60 * 60 * 1000);
+  
+  console.log(`Customer name: ${invoice.customer}`);
+  console.log(`Amount owed: ${outstanding}`);
+  console.log(`Due date: ${invoice.dueDate.toLocaleDateString()}`);
+}
+
+// 変更後
+function printOwing(invoice) {
+  printBanner();
+  const outstanding = calculateOutstanding(invoice);
+  recordDueDate(invoice);
+  printDetails(invoice, outstanding);
+}
+
+function printBanner() {
+  console.log(`*************************`);
+  console.log(`**** Customer Owes ****`);
+  console.log(`*************************`);
+}
+
+function calculateOutstanding(invoice) {
+  return invoice.borders.reduce((sum, border) => sum + border.amount, 0);
+}
+
+function recordDueDate(invoice) {
+  const today = Date.now();
+  invoice.dueDate = new Date(today + 30 * 24 * 60 * 60 * 1000);
+}
+
+function printDetails(invoice, outstanding) {
+  console.log(`Customer name: ${invoice.customer}`);
+  console.log(`Amount owed: ${outstanding}`);
+  console.log(`Due date: ${invoice.dueDate.toLocaleDateString()}`);
+}
+```
+
+### 2. Rename Variable（変数名の変更）
+```javascript
+// 変更前
+function getTotalPrice() {
+  let t = 0;
+  for (let i = 0; i < items.length; i++) {
+    t += items[i].price * items[i].quantity;
+  }
+  return t;
+}
+
+// 変更後
+function getTotalPrice() {
+  let totalPrice = 0;
+  for (let i = 0; i < items.length; i++) {
+    totalPrice += items[i].price * items[i].quantity;
+  }
+  return totalPrice;
+}
+```
+
+### 3. Replace Temp with Query（一時変数を問い合わせに置き換える）
+```javascript
+// 変更前
+function getDistanceTraveled(time) {
+  const result = 2 * Math.PI * radius;
+  return result * time;
+}
+
+// 変更後
+function getDistanceTraveled(time) {
+  return getBaseCircumference() * time;
+}
+
+function getBaseCircumference() {
+  return 2 * Math.PI * radius;
+}
+```
+
+## 効果的なリファクタリングのプロセス
+
+### ステップ 1：分析と計画
+- リファクタリングが必要な箇所を特定する
+- 具体的な目標を決める（読みやすさの向上、複雑さの削減など）
+- 小さなステップに分けて計画する
+
+### ステップ 2：環境の準備
+- 十分なテストスイートを用意する
+- すべてのテストを実行し、安定した状態であることを確認する
+
+### ステップ 3：小さなリファクタリングを行う
+- 一度に 1 つの手法だけを適用する
+- 変更のたびにテストを実行する
+
+### ステップ 4：テストと検証
+- テストスイート全体を実行する
+- 振る舞いが変わっていないか確認する
+
+### ステップ 5：繰り返す
+- 次の箇所に進む
+- コード品質を改めて評価する
+
+## よく使われるリファクタリングの種類
+
+### 1. Composing Methods（メソッドの構成）
+- Extract Method
+- Inline Method
+- Inline Temp
+- Replace Temp with Query
+- Split Temporary Variable
+- Remove Assignments to Parameters
+- Replace Method with Method Object
+- Substitute Algorithm
+
+### 2. Moving Features Between Objects（オブジェクト間での機能の移動）
+- Move Method
+- Move Field
+- Extract Class
+- Inline Class
+- Hide Delegate
+- Remove Middle Man
+- Introduce Foreign Method
+- Introduce Local Extension
+
+### 3. Organizing Data（データの整理）
+- Self Encapsulate Field
+- Replace Data Value with Object
+- Change Value to Reference
+- Change Reference to Value
+- Replace Array with Object
+- Duplicate Observed Data
+- Change Unidirectional Association to Bidirectional
+- Change Bidirectional Association to Unidirectional
+- Replace Magic Number with Symbolic Constant
+- Encapsulate Field
+- Encapsulate Collection
+- Replace Record with Data Class
+- Replace Type Code with Class
+- Replace Type Code with Subclasses
+- Replace Type Code with State/Strategy
+- Replace Subclass with Fields
+
+### 4. Simplifying Conditional Expressions（条件式の単純化）
+- Decompose Conditional
+- Consolidate Conditional Expression
+- Consolidate Duplicate Conditional Fragments
+- Remove Control Flag
+- Replace Nested Conditional with Guard Clauses
+- Conditional to Polymorphism
+- Introduce Null Object
+- Introduce Assertion
+
+### 5. Simplifying Method Calls（メソッド呼び出しの単純化）
+- Rename Method
+- Add Parameter
+- Remove Parameter
+- Separate Query from Modifier
+- Parameterize Method
+- Replace Parameter with Explicit Methods
+- Preserve Whole Object
+- Replace Parameter with Methods
+- Hide Method
+- Replace Constructor with Factory Function
+- Replace Error Code with Exception
+- Replace Exception with Test
+
+## リファクタリングのベストプラクティス
+
+### 1. 一度に 1 つのことに集中する
+- 一度に多くのことをやろうとしない
+- 各コミットは、1 つの具体的なリファクタリング目的だけを持つべき
+
+### 2. 理由を記録する
+- コミットメッセージに、なぜリファクタリングするのかを書く
+- チームが変更の価値を理解する助けになる
+
+### 3. ツールを活用する
+- ほとんどの最新 IDE はリファクタリングをサポートしている
+- Rename や Extract Method などの機能を活用する
+
+### 4. 必要のないリファクタリングはしない
+- コードが問題なく動いているなら、「きれいにする」ためだけにリファクタリングしない
+- リファクタリングは実際の価値をもたらすべき
+
+### 5. 学び続ける
+- Martin Fowler の『Refactoring: Improving the Design of Existing Code』を読む
+- チーム内の勉強会に参加する
+
+## リファクタリングを避けるべきとき
+
+### 1. 締め切りに追われているとき
+- 緊急のバグ修正中なら、まずバグを直す
+- リファクタリングは状況が落ち着いてからでよい
+
+### 2. 十分なテストがないとき
+- テストなしのリファクタリングは非常に危険
+- まず十分なテストを書いてからリファクタリングする
+
+### 3. コードがすぐに変わるとき
+- 近いうちにそのコードが完全に書き換えられるとわかっているなら
+- リファクタリングする価値はないかもしれない
+
+## リファクタリングを支えるツール
+
+### IDE 組み込みツール
+- Visual Studio Code：リファクタリングメニュー、IntelliSense
+- IntelliJ IDEA：最も強力なリファクタリングツール
+- WebStorm：JavaScript/TypeScript に最適化
+
+### 専用ツール
+- リファクタリング用ルールを備えた ESLint
+- JSCodeshift：ソースコード変換ツール
+- CodeClimate：コード品質の分析
+
+## まとめ
+
+リファクタリングは独立した作業ではなく、ソフトウェア開発と切り離せない一部です。正しく行えば、リファクタリングは次のことに役立ちます：
+
+- コード品質の向上
+- バグのリスクの低減
+- 長期的な開発スピードの向上
+- チームの満足度の向上
+- 保守コストの削減
+
+リファクタリングはスキルであると同時に技芸でもあることを忘れないでください。忍耐、細部への注意、そしてソフトウェア設計への深い理解が必要です。小さく滑らかな変更から始め、正しさを守るために常にテストを用意しましょう。
+
+リファクタリングに慣れてくると、コードの「におい（code smell）」に気づき、それをどう扱えばよいかが正確にわかるようになります。それこそが熟練した開発者のしるしです。動くコードを書くだけでなく、うまく動くコードを書くことです。

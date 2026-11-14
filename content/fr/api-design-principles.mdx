@@ -1,0 +1,36 @@
+---
+title: "Concevoir des API REST solides"
+date: "2026-08-07"
+excerpt: "Construire des API conformes aux standards, sécurisées et faciles à faire évoluer."
+---
+
+# Concevoir des API REST solides
+
+Les API sont la « colonne vertébrale » de la plupart des applications modernes. Une API mal conçue complique la vie du frontend et devient difficile à maintenir.
+
+## 1. Principes de conception
+*   **Utiliser des noms :** `/users` plutôt que `/getUsers`.
+*   **Bien utiliser les méthodes HTTP :**
+    *   `GET` : lire des données.
+    *   `POST` : créer.
+    *   `PUT/PATCH` : mettre à jour.
+    *   `DELETE` : supprimer.
+*   **Codes de statut HTTP standard :** 200 (OK), 201 (Created), 400 (Bad Request), 401 (Unauthorized), 403 (Forbidden), 404 (Not Found), 500 (Server Error).
+
+## 2. Sécurité et gestion
+*   **Authentication :** utiliser JWT ou des sessions.
+*   **Rate Limiting :** indispensable pour se protéger des attaques DoS.
+*   **Validation :** toujours valider les entrées côté frontend et côté backend (la validation côté serveur est obligatoire).
+*   **API Versioning :** définir la version de l'API dès le départ (par exemple : `/api/v1/...`).
+
+```json
+// Exemple de réponse JSON standard
+{
+  "status": "success",
+  "data": {
+    "user": { "id": 1, "name": "Nhut Y" }
+  }
+}
+```
+
+Prendre le temps de bien concevoir son API dès le départ vous fera économiser des centaines d'heures de code et de correction de bugs.

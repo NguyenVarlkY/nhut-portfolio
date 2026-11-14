@@ -1,0 +1,236 @@
+---
+title: "Maîtriser GitLens : optimiser son travail avec Git"
+date: "2026-08-04"
+excerpt: "Un guide détaillé de GitLens, l'extension VS Code puissante qui vous aide à comprendre, explorer et exploiter plus efficacement vos dépôts Git."
+---
+
+# Maîtriser GitLens : optimiser son travail avec Git
+
+GitLens est l'une des extensions les plus populaires de Visual Studio Code. Elle enrichit considérablement l'intégration Git de l'IDE et fait de VS Code un outil puissant pour comprendre l'historique du code, suivre les modifications et travailler efficacement en équipe.
+
+## Pourquoi GitLens ?
+
+### 1. Comprendre instantanément l'historique du code
+- Voir qui a modifié chaque ligne de code (annotations blame)
+- Comprendre le contexte et les raisons de chaque modification
+- Suivre l'évolution d'un fichier dans le temps
+
+### 2. Travailler plus efficacement
+- Accéder rapidement à l'historique des commits sans quitter l'éditeur
+- Comparer différentes versions d'un fichier
+- Rechercher et parcourir l'historique Git de façon visuelle
+
+### 3. Mieux collaborer en équipe
+- Savoir clairement qui travaille sur quelle partie du code
+- Repérer les problèmes potentiels pendant la revue de code
+- Obtenir un contexte essentiel lorsqu'on travaille sur du code inconnu
+
+## Installer et configurer GitLens
+
+### 1. Installation de base
+- Ouvrez VS Code
+- Allez dans Extensions (Ctrl+Shift+X)
+- Recherchez « GitLens »
+- Cliquez sur Install
+
+### 2. Configuration de base
+GitLens se configure via Settings (Ctrl+,) → recherche « GitLens »
+
+#### Configuration recommandée :
+```json
+{
+  "gitlens.blame.toggleModeKey": "alt+ctrl+b",
+  "gitlens.hovers.currentLine.over": "line",
+  "gitlens.hovers.currentLine.enabled": true,
+  "gitlens.advanced.blame": {
+    "toggleModeKey": "alt+ctrl+b"
+  },
+  "gitlens.codeLens.authors.enabled": true,
+  "gitlens.codeLens.recentChange.enabled": true,
+  "gitlens.codeLens.recentChange.location": "after",
+  "gitlens.keymap": "alternate"
+}
+```
+
+## Les principales fonctionnalités de GitLens
+
+### 1. Les annotations blame
+- Affichent directement dans l'éditeur qui a modifié chaque ligne en dernier
+- Survolez pour voir le détail du commit
+- Cliquez pour ouvrir le commit dans l'historique
+
+#### Comment les utiliser :
+- Activer/désactiver blame : `Alt+Ctrl+B`
+- Changer de mode blame : via la barre d'état en bas
+- Personnaliser l'affichage dans les paramètres
+
+### 2. Code Lens
+- Affiche les informations du dernier commit sur chaque fonction/classe
+- Indique combien d'auteurs ont contribué au fichier
+- Propose des actions rapides comme afficher un commit ou créer une nouvelle branche
+
+#### Les types de Code Lens :
+- **Authors** : liste les auteurs ayant contribué au fichier
+- **Recent Change** : indique le dernier commit ayant modifié ce code
+- **Revisions** : indique combien de fois la fonction/classe a été modifiée
+
+### 3. Historique des commits et recherche
+- Accès rapide à l'historique des commits du dépôt
+- Recherche de commits par mot-clé, auteur ou date
+- Filtrage des commits par branche, tag ou autres critères
+
+#### Comment y accéder :
+- Ouvrez la vue GitLens : `Ctrl+Shift+P` → « GitLens: Focus on Repository View »
+- Ou cliquez sur l'icône GitLens dans la barre latérale gauche
+
+### 4. Comparer des versions
+- Comparer le fichier actuel avec n'importe quelle version de son historique
+- Comparer deux branches différentes
+- Voir les différences entre deux commits précis
+
+#### Comment faire :
+- Clic droit sur un fichier dans l'explorateur → « GitLens: Open Changes »
+- Ou depuis la vue GitLens → sélectionnez un commit → « Compare with Working Tree »
+
+### 5. Explorer l'historique (History Exploration)
+- Rechercher des commits par leur contenu, pas seulement par leurs métadonnées
+- Trouver quand une ligne de code précise a été ajoutée, supprimée ou modifiée
+- Suivre le code lorsqu'il est déplacé d'un fichier à l'autre
+
+#### Comment faire :
+- Depuis la vue GitLens → cliquez sur l'icône de recherche (loupe)
+- Saisissez le mot-clé recherché
+- GitLens affiche les commits qui le contiennent
+
+### 6. Marqueurs et favoris
+- Marquer les commits importants pour y accéder rapidement
+- Créer des favoris sur les emplacements importants du code
+- Suivre les modifications sur des branches précises
+
+### 7. Intégration avec GitHub/GitLab/Bitbucket
+- Consulter les pull requests directement dans VS Code
+- Créer et relire des pull requests sans quitter l'éditeur
+- Voir les commentaires et discussions des PR
+
+## Techniques avancées
+
+### 1. Collaboration en temps réel
+- Voir qui modifie le même fichier en temps réel
+- Être notifié quand quelqu'un pousse des modifications sur le dépôt distant
+- Prise en charge de fonctionnalités comme Live Share
+
+### 2. Décorations personnalisables
+- Personnaliser l'apparence des annotations blame (couleur, police, position)
+- Créer des règles pour mettre en évidence certains types de commits
+- Afficher des informations comme le nombre de lignes modifiées, les fichiers concernés, etc.
+
+### 3. Filtrage et recherche avancés
+- Rechercher des commits avec plusieurs critères à la fois (auteur + date + mot-clé)
+- Filtrer par attributs, comme les commits de merge ou ceux qui portent un numéro d'issue
+- Utiliser des expressions régulières dans la recherche
+
+### 4. Intégration avec d'autres outils
+- Fonctionne bien avec d'autres extensions comme Prettier et ESLint
+- S'intègre aux outils de gestion de tâches comme Jira et Trello
+- Prend en charge des workflows comme GitFlow et GitHub Flow
+
+## Bonnes pratiques avec GitLens
+
+### 1. Utiliser blame pour comprendre, pas pour blâmer
+- Le but de blame est de comprendre le contexte, pas de trouver un coupable
+- Face à une ligne étrange, demandez-vous « pourquoi a-t-elle été écrite ainsi ? » plutôt que « qui a écrit ça ? »
+
+### 2. L'associer à la revue de code
+- Avant une revue, utilisez GitLens pour comprendre les modifications apportées
+- Vérifiez qui est l'auteur des modifications importantes
+- Utilisez blame pour poser des questions précises pendant la revue
+
+### 3. S'en servir pour déboguer
+- Face à un bug, utilisez blame pour savoir quand le code fautif a été ajouté
+- Suivez l'évolution d'une fonction ou d'une variable dans le temps
+- Trouvez le commit qui a introduit le bug pour en comprendre la cause
+
+### 4. Optimiser les performances
+- Désactivez les fonctionnalités inutiles sur les très gros dépôts
+- Utilisez le cache pour réduire la charge avec les dépôts distants
+- Configurez GitLens pour ne charger que l'historique nécessaire plutôt que tout le dépôt
+
+### 5. Des paramètres propres à chaque projet
+- Enregistrez les paramètres spécifiques au projet dans le fichier `.vscode/settings.json` de l'espace de travail
+- Partagez la configuration avec l'équipe pour une expérience homogène
+- Ajustez les réglages selon la taille et la complexité du dépôt
+
+## Exemples concrets
+
+### Exemple 1 : comprendre l'historique d'une fonction importante
+```javascript
+// Voir qui a modifié calculateTotalPrice en dernier
+// et pourquoi la modification a été faite ainsi
+function calculateTotalPrice(items) {
+  return items.reduce((total, item) => total + item.price * item.quantity, 0);
+}
+```
+- Utilisez blame pour voir le dernier commit qui a modifié cette fonction
+- Lisez le message de commit pour comprendre la raison du changement
+- Vérifiez s'il est lié à une issue ou à une PR
+
+### Exemple 2 : repérer du code mort
+- Utilisez la recherche dans l'historique pour savoir quand une fonction a été appelée pour la dernière fois
+- Si une fonction n'est plus appelée depuis longtemps, il s'agit peut-être de code mort
+- Vérifiez s'il est prévu de la réutiliser à l'avenir
+
+### Exemple 3 : comprendre l'évolution d'une fonctionnalité
+- Suivez tous les commits liés à une fonctionnalité précise
+- Observez comment cette fonctionnalité a évolué dans le temps
+- Comprenez les choix de conception qui ont été faits, et pourquoi
+
+## Résoudre les problèmes courants
+
+### 1. GitLens n'affiche aucune information
+- Vérifiez que Git est correctement installé et configuré
+- Assurez-vous de travailler dans un dépôt Git
+- Essayez de recharger la fenêtre (Ctrl+Shift+P → « Reload Window »)
+
+### 2. Lenteurs sur les gros dépôts
+- Désactivez les fonctionnalités inutiles dans les paramètres
+- Concentrez-vous sur l'historique d'un commit ou d'un fichier précis plutôt que de tout charger
+- Configurez GitLens pour ne charger que l'historique de la branche courante plutôt que de toutes les branches
+
+### 3. Annotations blame incorrectes
+- Vérifiez que vous avez récupéré (pull) les dernières modifications du dépôt distant
+- Vérifiez s'il y a un problème de fins de ligne (CRLF vs LF)
+- Essayez `git add --renormalize .` pour normaliser les fins de ligne
+
+### 4. Impossible d'accéder au dépôt distant
+- Vérifiez votre connexion Internet et vos droits d'accès au dépôt distant
+- Assurez-vous que vos identifiants sont correctement configurés
+- Lancez `git fetch` manuellement pour tester la connexion
+
+## GitLens face aux autres outils Git
+
+### GitLens Free vs GitLens Pro
+- **GitLens Free** : fournit la plupart des fonctionnalités nécessaires au développement quotidien
+- **GitLens Pro** (payant) : ajoute des fonctionnalités comme :
+  - Une visualisation blame avancée
+  - Des modèles de commit
+  - Des statistiques d'équipe
+  - Un outil de résolution des conflits de merge
+  - Un séquenceur de rebase
+
+### Comparé aux autres extensions Git
+- **Git History** : centrée sur l'affichage de l'historique des commits, avec moins de fonctionnalités en ligne
+- **Git Graph** : excellente pour visualiser le graphe des branches, mais sans blame ni code lens
+- **Git intégré à VS Code** : couvre les opérations Git de base, mais sans les fonctionnalités avancées de GitLens
+
+## Conclusion
+
+GitLens n'est pas une simple extension Git de plus : c'est un outil qui approfondit votre compréhension du code et augmente votre productivité. Bien utilisé, GitLens vous aide à :
+
+- **Passer moins de temps à chercher le contexte** : au lieu de fouiller pour comprendre l'origine d'un bout de code, vous le voyez directement dans l'éditeur
+- **Améliorer la qualité des revues de code** : il fournit le contexte nécessaire pour des retours constructifs
+- **Gagner en efficacité personnelle** : il vous aide à travailler plus efficacement et à faire preuve de professionnalisme dans l'équipe
+- **Continuer à apprendre** : c'est un excellent moyen d'apprendre les bonnes pratiques de gestion de versions et de développement logiciel
+
+Commencez par activer les annotations blame et par explorer les fonctionnalités de base. Une fois à l'aise avec GitLens, vous constaterez que vous vous appuyez dessus pour comprendre le code, collaborer avec votre équipe et maintenir un haut niveau de qualité au quotidien.
+
+Souvenez-vous : l'objectif n'est pas de connaître toutes les fonctionnalités de GitLens, mais de savoir utiliser celles qui correspondent le mieux au workflow et aux besoins de votre équipe et de vous-même.

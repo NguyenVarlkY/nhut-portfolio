@@ -1,0 +1,58 @@
+---
+title: "The Senior Engineer Mindset: The Thinking and Attitude That Make the Difference"
+date: "2026-08-16"
+excerpt: "Technical skill is only half of it. The right mindset and a professional attitude are what make a Senior Engineer."
+---
+
+# The Senior Engineer Mindset: The Thinking and Attitude That Make the Difference
+
+Technical skills can be learned from books and courses, but **mindset** and **attitude** are the hardest to learn, and they make the biggest difference between a Junior and a Senior Engineer.
+
+## 1. The mindset that matters at work
+
+### 1.1 Don't rush to fix bugs
+If you don't know **why** something is broken, don't fix it; you'll just create new bugs. This principle sounds simple but is extremely important.
+
+- Fixing a bug without understanding its root cause only "hides" the symptom.
+- Always go from **diagnosis** to **treatment**, never the other way around.
+
+### 1.2 The "why" mindset (5 Whys)
+The **5 Whys** method comes from the Toyota Production System: ask "why" five times in a row to find the **root cause** instead of patching the surface.
+
+**Example:**
+- Bug: The system went down at 2 a.m.
+- Why? → The server ran out of RAM.
+- Why? → There's a memory leak in a service.
+- Why? → The cache is never cleared.
+- Why? → There's no TTL mechanism.
+- Why? → Nobody designed one in the first place.
+
+=> The better fix is to **redesign the cache** with a TTL, not just restart the server.
+
+### 1.3 Ownership of the product
+A Senior Engineer doesn't just "finish the task". They also care about:
+- Does the code run reliably in production?
+- Is there monitoring and alerting?
+- Are there docs and tests?
+- Can the next person keep maintaining it?
+
+## 2. A professional attitude
+
+### 2.1 Lifelong learning
+Technology changes every day. The ability to **learn how to learn** matters more than memorizing syntax.
+
+- Spend 1-2 hours a week learning new technology.
+- Read the source code of the libraries you use.
+- Write blog posts and docs to consolidate what you know.
+
+### 2.2 Communication and teamwork
+- Explain complex technical problems simply.
+- Do code reviews constructively, not judgmentally.
+- Take on hard work proactively and help your teammates.
+
+### 2.3 Humility and openness
+- Be willing to admit when you're wrong.
+- Learn from everyone, including Juniors.
+- Don't be afraid to ask when you don't understand.
+
+> *"A great engineer isn't someone who never makes mistakes, but someone who knows how to fix them fastest and make sure they don't happen again."*

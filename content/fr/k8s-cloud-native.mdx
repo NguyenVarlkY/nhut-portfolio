@@ -1,0 +1,25 @@
+---
+title: "Kubernetes et Cloud Native : l'avenir du déploiement d'applications"
+date: "2026-08-09"
+excerpt: "Du monolithe aux microservices avec Docker et K8s sur AWS/Azure/GCP."
+---
+
+# Kubernetes et Cloud Native
+
+Déployer des applications sur des serveurs traditionnels appartient au passé. Dans les environnements d'entreprise modernes, **Kubernetes (K8s)** est la référence pour l'orchestration de conteneurs.
+
+## Pourquoi j'ai choisi K8s
+1. **Self-healing :** redémarre automatiquement les conteneurs en cas d'erreur.
+2. **Auto-scaling :** augmente ou réduit automatiquement le nombre de pods selon le trafic.
+3. **Rollout/Rollback :** déploie de nouvelles fonctionnalités sans interruption de service.
+
+## Penser « cloud agnostic »
+Que vous choisissiez AWS, Azure ou GCP, le cœur du Cloud Native reste les **conteneurs (Docker)** et l'**Infrastructure as Code (Terraform)**.
+- Ne dépendez pas trop des services propriétaires d'un fournisseur (vendor lock-in) si ce n'est pas nécessaire.
+- Concevez votre application selon les principes de la 12-Factor App pour pouvoir passer facilement d'un fournisseur cloud à l'autre.
+
+## Conseils pour les débutants
+Ne vous précipitez pas pour apprendre tous les services cloud. Commencez par :
+1. Dockeriser votre application.
+2. Écrire un fichier Docker Compose.
+3. Apprendre les bases de l'administration K8s (Deployment, Service, Ingress).

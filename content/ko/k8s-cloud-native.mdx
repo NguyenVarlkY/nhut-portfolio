@@ -1,0 +1,25 @@
+---
+title: "Kubernetes와 클라우드 네이티브: 애플리케이션 배포의 미래"
+date: "2026-08-09"
+excerpt: "AWS/Azure/GCP 위에서 Docker와 K8s로 모놀리스에서 마이크로서비스로."
+---
+
+# Kubernetes와 클라우드 네이티브
+
+전통적인 서버에 애플리케이션을 배포하던 시대는 지났습니다. 현대 기업 환경에서 **Kubernetes**(K8s)는 컨테이너 오케스트레이션의 표준입니다.
+
+## 왜 K8s를 선택했나?
+1. **Self-healing:** 컨테이너에 오류가 나면 자동으로 재시작합니다.
+2. **Auto-scaling:** 트래픽에 따라 pod 수를 자동으로 늘리거나 줄입니다.
+3. **Rollout/Rollback:** 서비스 중단 없이 새 기능을 배포합니다.
+
+## 클라우드 중립적(Cloud Agnostic) 사고
+AWS, Azure, GCP 중 무엇을 선택하든 클라우드 네이티브의 핵심은 여전히 **컨테이너**(Docker)와 **Infrastructure as Code**(Terraform)입니다.
+- 꼭 필요하지 않다면 특정 공급자의 고유 서비스에 지나치게 의존하지 마세요(vendor lock-in).
+- 클라우드 공급자 간 이동이 쉽도록 12-Factor App 원칙에 따라 애플리케이션을 설계하세요.
+
+## 신입 개발자를 위한 조언
+모든 클라우드 서비스를 한꺼번에 배우려 서두르지 마세요. 다음부터 시작하세요:
+1. 애플리케이션을 Docker화하기.
+2. Docker Compose 작성하기.
+3. 기본적인 K8s 관리 배우기(Deployment, Service, Ingress).

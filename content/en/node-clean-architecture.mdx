@@ -1,0 +1,43 @@
+---
+title: "Building Clean Architecture with Node.js"
+date: "2026-08-05"
+excerpt: "A detailed guide to organizing a Node.js project around Clean Architecture so it stays easy to maintain and extend."
+---
+
+# Building Clean Architecture with Node.js
+
+In software, maintainability is a matter of survival. Clean Architecture separates business logic from external dependencies.
+
+## Why Clean Architecture?
+As a project grows, code that mixes database logic, third-party libraries, and business logic becomes very hard to test and upgrade.
+
+## Core principles
+1. **Dependency Rule:** Dependencies may only point inward (toward the core logic).
+2. **Entities:** Hold the core business rules.
+3. **Use Cases:** Define the specific actions the system performs.
+4. **Interface Adapters:** Convert data between use cases and external components (API, database).
+5. **Frameworks & Drivers:** Where the database, Express/NestJS, etc. live.
+
+## Example implementation
+```javascript
+// Entities
+class User {
+  constructor(id, name) {
+    this.id = id;
+    this.name = name;
+  }
+}
+
+// Use Case
+class RegisterUser {
+  constructor(userRepository) {
+    this.userRepository = userRepository;
+  }
+  execute(userData) {
+    // Business logic goes here
+    return this.userRepository.save(userData);
+  }
+}
+```
+
+This separation lets you switch from MongoDB to PostgreSQL without touching a single line of code in the `Use Case`.

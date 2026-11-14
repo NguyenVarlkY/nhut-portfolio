@@ -1,0 +1,101 @@
+---
+title: "SOLID와 디자인 패턴: 확장하기 쉽고 깨지기 어려운 코드"
+date: "2026-08-14"
+excerpt: "SOLID와 디자인 패턴은 좋은 소프트웨어 아키텍처의 기반입니다. 남용하지 않고 적절한 때에 적용하는 법을 배워 봅시다."
+---
+
+# SOLID와 디자인 패턴: 소프트웨어 아키텍처의 기반
+
+SOLID와 디자인 패턴은 코드를 **확장하기 쉽고 깨지기 어렵게** 만드는 원칙입니다. 모든 엔지니어가 반드시 익혀야 할 핵심 지식입니다.
+
+## 1. SOLID 원칙
+
+### S — Single Responsibility (단일 책임)
+각 클래스/함수는 **변경되어야 할 이유가 단 하나**여야 합니다.
+
+- "너무 많은 일을 하는" 클래스를 각자 하나의 책임만 가진 작은 클래스로 나누세요.
+- 예: `UserService`를 `UserRepository`(저장), `UserValidator`(검증), `EmailService`(메일 발송)로 분리.
+
+### O — Open/Closed (개방/폐쇄)
+**확장**에는 열려 있고 **수정**에는 닫혀 있어야 합니다. 새 기능을 추가할 때는 기존 코드를 고치지 말고 새 코드를 추가하세요.
+
+- 상속, 합성, 다형성을 활용하세요.
+- 예: 기존 switch 문을 수정하지 않고, 새 클래스를 추가해 새로운 보고서 유형을 지원.
+
+### L — Liskov Substitution (리스코프 치환)
+하위 클래스는 오류 없이 상위 클래스를 **대체할 수 있어야** 합니다.
+
+- 하위 클래스가 상위 클래스의 기본 동작을 바꾼다면 LSP 위반입니다.
+- 예: `Square`가 setWidth/setHeight 로직을 깨뜨린다면 `Rectangle`을 상속해서는 안 됩니다.
+
+### I — Interface Segregation (인터페이스 분리)
+클라이언트가 **사용하지 않는** 인터페이스에 의존하도록 강요해서는 안 됩니다.
+
+- 큰 인터페이스를 작고 특화된 인터페이스로 나누세요.
+- 예: `Bird` 인터페이스를 `Flyable`, `Swimmable`, `Walkable`로 분리.
+
+### D — Dependency Inversion (의존성 역전)
+**구체적인 구현**이 아니라 **추상화**에 의존하세요.
+
+- 인터페이스를 사용해 모듈 간 결합도를 낮추세요.
+- **의존성 주입(Dependency Injection)** 으로 외부에서 의존성을 전달하세요.
+
+## 2. 디자인 패턴
+
+### 2.1 남용하지 말 것
+디자인 패턴은 도구이지 **목표가 아닙니다**. 필요할 때만 사용하세요:
+- 패턴을 고르기 전에 문제를 정확히 이해하세요.
+- 모든 상황에 패턴을 억지로 끼워 넣지 마세요.
+- 과도한 설계(over-engineering)는 코드를 불필요하게 복잡하게 만듭니다.
+
+### 2.2 자주 쓰이는 패턴
+
+**생성(Creational):**
+- **Singleton:** 인스턴스가 하나만 존재하도록 보장(데이터베이스 연결, 설정).
+- **Factory:** 구체적인 클래스를 지정하지 않고 객체를 생성.
+- **Builder:** 복잡한 객체를 단계적으로 생성.
+
+**구조(Structural):**
+- **Adapter:** 호환되도록 인터페이스를 변환.
+- **Decorator:** 원본 클래스를 수정하지 않고 객체에 동작을 추가.
+
+**행위(Behavioral):**
+- **Observer:** 상태 변화를 구독자에게 알림(이벤트 시스템).
+- **Strategy:** 런타임에 알고리즘을 선택(유연한 동작 변경).
+- **Repository:** 데이터 접근 로직을 비즈니스 로직과 분리.
+
+## 3. 실전 예시
+
+**SOLID 적용 전:**
+```javascript
+class UserService {
+  save(user) { /* DB */ }
+  validate(user) { /* validation */ }
+  sendEmail(user) { /* email */ }
+  generateReport(user) { /* report */ }
+}
+```
+
+**SOLID 적용 후:**
+```javascript
+class UserRepository { save(user) { /* DB */ } }
+class UserValidator { validate(user) { /* validation */ } }
+class EmailService { send(user) { /* email */ } }
+class ReportGenerator { generate(user) { /* report */ } }
+
+class UserService {
+  constructor(repo, validator, email, report) {
+    this.repo = repo; // Dependency Injection
+    this.validator = validator;
+    this.email = email;
+    this.report = report;
+  }
+  create(user) {
+    this.validator.validate(user);
+    this.repo.save(user);
+    this.email.send(user);
+  }
+}
+```
+
+> *"코드는 도구일 뿐이다. 시니어 엔지니어의 가치를 만드는 것은 사고방식과 다학제적 이해다."*

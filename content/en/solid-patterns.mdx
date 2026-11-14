@@ -1,0 +1,101 @@
+---
+title: "SOLID & Design Patterns: Code That's Easy to Extend and Hard to Break"
+date: "2026-08-14"
+excerpt: "SOLID and design patterns are the foundation of good software architecture. Learn to apply them at the right time, without overusing them."
+---
+
+# SOLID & Design Patterns: The Foundation of Software Architecture
+
+SOLID and design patterns are principles that make code **easy to extend and hard to break**. This is core knowledge every engineer should master.
+
+## 1. SOLID Principles
+
+### S — Single Responsibility
+Each class/function should have **only one reason to change**.
+
+- Split classes that "do too much" into smaller classes, each with one responsibility.
+- Example: split `UserService` into `UserRepository` (storage), `UserValidator` (validation), and `EmailService` (sending email).
+
+### O — Open/Closed
+Open for **extension** but closed for **modification**. To add a new feature, add new code instead of changing old code.
+
+- Use inheritance, composition, and polymorphism.
+- Example: add a new report type by adding a new class, not by editing an old switch statement.
+
+### L — Liskov Substitution
+Subclasses must be **substitutable** for their parent class without causing errors.
+
+- If a subclass changes the parent's fundamental behavior, it violates LSP.
+- Example: `Square` shouldn't inherit from `Rectangle` if it breaks the setWidth/setHeight logic.
+
+### I — Interface Segregation
+Clients shouldn't be forced to depend on interfaces they **don't use**.
+
+- Split large interfaces into small, specialized ones.
+- Example: split a `Bird` interface into `Flyable`, `Swimmable`, and `Walkable`.
+
+### D — Dependency Inversion
+Depend on **abstractions**, not on **concrete implementations**.
+
+- Use interfaces to reduce coupling between modules.
+- Use **Dependency Injection** to pass dependencies in from outside.
+
+## 2. Design Patterns
+
+### 2.1 Don't overuse them
+Design patterns are tools, **not goals**. Use them only when needed:
+- Understand the problem before choosing a pattern.
+- Don't force a pattern onto every situation.
+- Over-engineering makes code needlessly complex.
+
+### 2.2 Commonly used patterns
+
+**Creational:**
+- **Singleton:** Ensures there's only one instance (database connection, config).
+- **Factory:** Creates objects without specifying the concrete class.
+- **Builder:** Builds complex objects step by step.
+
+**Structural:**
+- **Adapter:** Converts an interface so it's compatible.
+- **Decorator:** Adds behavior to an object without modifying the original class.
+
+**Behavioral:**
+- **Observer:** Notifies subscribers of state changes (event systems).
+- **Strategy:** Chooses an algorithm at runtime (flexible behavior).
+- **Repository:** Separates data-access logic from business logic.
+
+## 3. A real-world example
+
+**Before applying SOLID:**
+```javascript
+class UserService {
+  save(user) { /* DB */ }
+  validate(user) { /* validation */ }
+  sendEmail(user) { /* email */ }
+  generateReport(user) { /* report */ }
+}
+```
+
+**After applying SOLID:**
+```javascript
+class UserRepository { save(user) { /* DB */ } }
+class UserValidator { validate(user) { /* validation */ } }
+class EmailService { send(user) { /* email */ } }
+class ReportGenerator { generate(user) { /* report */ } }
+
+class UserService {
+  constructor(repo, validator, email, report) {
+    this.repo = repo; // Dependency Injection
+    this.validator = validator;
+    this.email = email;
+    this.report = report;
+  }
+  create(user) {
+    this.validator.validate(user);
+    this.repo.save(user);
+    this.email.send(user);
+  }
+}
+```
+
+> *"Code is a tool, but cross-disciplinary thinking and understanding are what create a Senior Engineer's value."*

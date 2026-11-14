@@ -11,13 +11,36 @@
     "contact": "Liên hệ",
     "resume": "CV"
   },
+  "blog": {
+    "backToBlog": "Quay lại Blog",
+    "minRead": "{count} phút đọc",
+    "title": "Blog",
+    "metaTitle": "Blog — NGUYEN BUI NHUT Y",
+    "metaDescription": "Bài viết về phát triển full-stack, kiến trúc phần mềm và xây dựng sản phẩm web sẵn sàng cho production.",
+    "searchPlaceholder": "Tìm kiếm bài viết...",
+    "clear": "Xóa",
+    "noResults": "Không có kết quả",
+    "postCount": "{count} bài viết",
+    "readMore": "Đọc thêm →",
+    "noMatch": "Không tìm thấy bài viết nào phù hợp với từ khóa \"{query}\"",
+    "prev": "← Trước",
+    "next": "Sau →",
+    "pageOf": "Trang {current} / {total}",
+    "translationNotice": "Bài viết này chưa có bản tiếng Việt. Đang hiển thị bản gốc."
+  },
   "hero": {
     "greeting": "Xin chào, tôi là",
     "available": "Mở để nhận việc full-time / freelance",
     "description": "Full-stack developer tập trung vào việc xây dựng các sản phẩm web production-ready với React, Next.js, TypeScript, Node.js và MongoDB. Tôi thiết kế và triển khai các tính năng end-to-end — từ kiến trúc API và auth flows cho đến giao diện người dùng mượt mà, responsive.",
     "subDescription": "Tôi xây dựng các sản phẩm web có khả năng mở rộng, từ thiết kế API đến giao diện tinh tế, tập trung vào giá trị kinh doanh, mã nguồn sạch và tính thực dụng trong thực tế.",
     "viewWork": "Xem dự án",
-    "contactMe": "Liên hệ"
+    "contactMe": "Liên hệ",
+    "roles": [
+      "Lập trình viên Full-Stack",
+      "Kỹ sư React & Next.js",
+      "Xây dựng API với Node.js",
+      "Lập trình viên web hướng sản phẩm"
+    ]
   },
   "about": {
     "tag": "// về tôi",
@@ -46,7 +69,13 @@
   "skills": {
     "tag": "// kỹ năng",
     "title": "Công nghệ",
-    "titleHighlight": "của tôi"
+    "titleHighlight": "của tôi",
+    "groups": {
+      "frontend": "Front-end",
+      "backend": "Back-end",
+      "infra": "Hạ tầng & Công cụ",
+      "concepts": "Khái niệm kỹ thuật"
+    }
   },
   "stats": {
     "years": "Năm kinh nghiệm",
@@ -135,10 +164,54 @@
     "title": "Nơi tôi đã",
     "titleHighlight": "làm việc"
   },
+  "experienceData": [
+    {
+      "title": "Kỹ sư Phần mềm Mới ra trường",
+      "desc": [
+        "Phát triển các module CRM/ERP cho Quản lý Dữ liệu Chính (Master Data Management), bao gồm xử lý hàng loạt, cấu trúc dữ liệu phân cấp, tìm kiếm và luồng phê duyệt.",
+        "Xây dựng các tính năng quản lý người dùng và phân quyền an toàn với xác thực, kiểm tra đầu vào, lọc ngôn từ không phù hợp và kiểm soát truy cập bằng Next.js, Spring Boot, PostgreSQL và React Query.",
+        "Phát triển các module quản lý nhân sự (HR), giao diện song ngữ, phân tích dashboard và luồng chatbot AI để hỗ trợ hoạt động kinh doanh.",
+        "Cải thiện hiệu năng ứng dụng và cơ sở dữ liệu thông qua đánh chỉ mục (indexing), tối ưu truy vấn và tích hợp API.",
+        "Phối hợp với các nhóm chức năng khác nhau để triển khai các tính năng phần mềm doanh nghiệp trên cả frontend và backend."
+      ]
+    },
+    {
+      "title": "Thực tập sinh Kỹ thuật Phần mềm | Hỗ trợ Phân tích Nghiệp vụ",
+      "desc": [
+        "Tham gia phát triển tính năng end-to-end trên frontend, kiểm tra backend và luồng cơ sở dữ liệu cho 3 module ERP (kế toán, giao diện, chat nội bộ).",
+        "Thiết kế và triển khai REST API với xác thực dựa trên JWT, đảm bảo kiểm soát truy cập theo vai trò an toàn.",
+        "Cải thiện tính nhất quán giao dịch bằng cách kiểm tra các trường hợp biên và giảm bất thường dữ liệu trong luồng xử lý nội bộ.",
+        "Phối hợp với nhóm frontend, backend và AI để tích hợp API agent dựa trên Python và dịch vụ xử lý tài liệu.",
+        "Áp dụng các khái niệm cloud (tích hợp dịch vụ, cấu hình môi trường) và nền tảng cơ sở dữ liệu Oracle (thiết kế schema, mô hình hóa quan hệ)."
+      ]
+    },
+    {
+      "title": "Thực tập sinh Front-End",
+      "desc": [
+        "Phát triển các component React và Redux responsive, hỗ trợ hơn 5 luồng người dùng chính trên nhiều thiết bị.",
+        "Tích hợp REST API và hỗ trợ triển khai frontend–backend cho các bản phát hành production phục vụ khách hàng."
+      ]
+    },
+    {
+      "title": "Lập trình viên Frontend (Freelance)",
+      "desc": [
+        "Chuyển đổi thiết kế Figma thành ứng dụng web React responsive cho các dự án doanh nghiệp nhỏ và quảng bá sự kiện.",
+        "Làm việc trực tiếp với khách hàng để thu thập yêu cầu và giao giao diện người dùng sẵn sàng cho production."
+      ]
+    }
+  ],
   "projects": {
     "tag": "// dự án",
     "title": "Dự án",
     "titleHighlight": "nổi bật",
+    "subtitle": "Các dự án tiêu biểu tập trung vào việc triển khai sản phẩm thực tế, giao diện hướng tới người dùng, và các luồng nghiệp vụ hỗ trợ tăng trưởng và vận hành.",
+    "filterAll": "Tất cả",
+    "openCaseStudy": "Xem case study",
+    "caseLabel": "Case",
+    "overview": "Tổng quan",
+    "keyFeatures": "Tính năng chính",
+    "techStack": "Tech Stack",
+    "close": "Đóng",
     "source": "Mã nguồn",
     "liveDemo": "Demo",
     "businessCore": "Hành nghề chính",
@@ -147,6 +220,127 @@
     "solution": "Giải pháp",
     "techHighlight": "Điểm nổi bật kỹ thuật"
   },
+  "projectsData": [
+    {
+      "tagline": "Hệ thống đặt phòng & quản lý khách sạn sẵn sàng cho production",
+      "desc": "Một nền tảng đặt phòng khách sạn hoàn chỉnh được xây dựng cho một resort ở Phan Thiết, bao trùm toàn bộ hành trình của khách từ tìm kiếm phòng trống đến nhận email xác nhận tự động. Hệ thống có dashboard quản trị an toàn cho phép nhân viên quản lý phòng, kho phòng, đơn đặt phòng và media theo thời gian thực. Backend được triển khai với cấu hình môi trường được bảo mật chặt chẽ, tích hợp lớp CRM để quản lý quan hệ khách hàng, và sử dụng ORM để giữ việc truy cập cơ sở dữ liệu sạch và dễ bảo trì. Cloudinary được dùng để quản lý hình ảnh và media có thể mở rộng, trong khi Brevo (Sendinblue) đảm nhiệm việc gửi email giao dịch đáng tin cậy.",
+      "businessCore": "Hoạt động kinh doanh cốt lõi của khách sạn là chuyển đổi kho phòng thành các đơn đặt phòng được xác nhận, đồng thời tối đa hóa công suất phòng và mang lại trải nghiệm suôn sẻ cho khách. Hệ thống phải giữ tình trạng phòng trống chính xác theo thời gian thực, ngăn chặn đặt phòng trùng, quản lý giá và loại phòng, và cung cấp cho nhân viên một nguồn dữ liệu duy nhất đáng tin cậy để vận hành khách sạn.",
+      "flow": [
+        "Khách truy cập website và tìm kiếm phòng trống theo ngày, số khách và loại phòng",
+        "Hệ thống truy vấn kho phòng theo thời gian thực và chỉ trả về các phòng có thể đặt với giá chính xác",
+        "Khách chọn phòng và điền thông tin trên form đặt phòng",
+        "Đơn đặt phòng được tạo với kiểm tra tình trạng phòng ở phía server để ngăn chặn đặt phòng trùng",
+        "Thanh toán / đặt phòng được xác nhận và một email tự động được gửi qua Brevo",
+        "Admin đăng nhập vào dashboard để quản lý đơn đặt phòng, phòng và kho phòng theo thời gian thực"
+      ],
+      "problem": "Trước đây khách sạn quản lý đặt phòng qua điện thoại, bảng tính Excel và phối hợp thủ công. Điều này dẫn đến tình trạng đặt phòng trùng thường xuyên, dữ liệu phòng trống không được cập nhật, giao tiếp với khách chậm và không có hồ sơ đặt phòng tập trung. Nhân viên phải mất hàng giờ mỗi ngày để đối soát dữ liệu, và khách sạn mất doanh thu vì phòng hiển thị là đã hết trong khi thực tế vẫn còn trống.",
+      "solution": "Tôi đã xây dựng một hệ thống đặt phòng số tự động hóa toàn bộ luồng xử lý. Kiểm tra tình trạng phòng theo thời gian thực ngăn chặn xung đột, email xác nhận tự động loại bỏ việc giao tiếp thủ công, và dashboard quản trị cho nhân viên toàn quyền quan sát và kiểm soát phòng, đơn đặt phòng và media. Cấu hình môi trường bảo mật và lớp ORM giữ cho backend an toàn và dễ bảo trì khi đưa vào production.",
+      "features": [
+        "Tìm kiếm phòng trống theo thời gian thực theo ngày, số khách và loại phòng",
+        "Kiểm tra tình trạng phòng ở phía server để ngăn chặn đặt phòng trùng",
+        "Email xác nhận giao dịch tự động qua Brevo",
+        "Quản lý hình ảnh và media với Cloudinary",
+        "Dashboard quản trị để quản lý phòng, đơn đặt phòng và kho phòng",
+        "Lớp CRM để theo dõi khách hàng và quan hệ khách hàng",
+        "Cấu hình môi trường được bảo mật chặt chẽ cho triển khai production"
+      ]
+    },
+    {
+      "tagline": "Nền tảng thương mại điện tử thực phẩm lành mạnh sẵn sàng cho production",
+      "desc": "Một nền tảng thương mại điện tử dạng modular-monolith cho một thương hiệu thực phẩm lành mạnh, được xây dựng với frontend React theo mô hình container–presentation và React Query để lấy dữ liệu hiệu quả. Nó hỗ trợ toàn bộ hành trình mua hàng — xem sản phẩm, giỏ hàng, thanh toán và thanh toán qua Stripe — được bảo mật bằng xác thực JWT với kiểm soát truy cập theo vai trò (RBAC). Backend được tổ chức theo kiến trúc modular monolith để giữ các domain nghiệp vụ sạch và dễ kiểm thử, và toàn bộ ứng dụng được container hóa với Docker để triển khai nhất quán. Một lớp GraphQL cung cấp truy vấn linh hoạt, và Cloudinary xử lý hình ảnh sản phẩm.",
+      "businessCore": "Một doanh nghiệp thương mại điện tử cần đưa khách hàng từ việc xem sản phẩm đến hoàn tất đơn hàng đã thanh toán một cách hiệu quả nhất có thể. Cốt lõi là quản lý danh mục sản phẩm, luồng giỏ hàng và thanh toán, xử lý thanh toán an toàn, theo dõi đơn hàng, và phân quyền truy cập (khách hàng vs. admin) — tất cả trong khi vẫn giữ kho hàng và khuyến mãi nhất quán.",
+      "flow": [
+        "Khách hàng xem danh mục sản phẩm và lọc theo danh mục",
+        "Khách hàng thêm sản phẩm vào giỏ hàng với số lượng mong muốn",
+        "Khách hàng thanh toán và điền thông tin giao hàng",
+        "Thanh toán được xử lý an toàn qua Stripe",
+        "Đơn hàng được tạo và đồng bộ với kho hàng",
+        "Admin quản lý sản phẩm, đơn hàng và kho hàng qua dashboard được bảo vệ bởi RBAC"
+      ],
+      "problem": "Thương hiệu này trước đây xử lý đơn hàng thủ công và không có một cửa hàng trực tuyến thống nhất. Không có danh mục sản phẩm nhất quán, không có cách xử lý thanh toán an toàn, và không có sự phân tách giữa vai trò khách hàng và admin. Việc mở rộng doanh số là không thể vì toàn bộ quy trình đặt hàng đều thủ công và dễ xảy ra lỗi.",
+      "solution": "Tôi đã triển khai một nền tảng thương mại điện tử dạng modular-monolith tự động hóa toàn bộ hành trình mua hàng. Mô hình container–presentation giữ UI sạch và dễ bảo trì, React Query tối ưu việc lấy dữ liệu, JWT + RBAC bảo mật vai trò khách hàng và admin, và Stripe xử lý thanh toán. Việc container hóa với Docker giúp triển khai nhất quán và có thể lặp lại.",
+      "features": [
+        "Danh mục sản phẩm với tìm kiếm, lọc và xem theo danh mục",
+        "Giỏ hàng và luồng thanh toán",
+        "Tích hợp thanh toán Stripe an toàn",
+        "Xác thực JWT với kiểm soát truy cập theo vai trò (RBAC)",
+        "Truy vấn dữ liệu linh hoạt với GraphQL",
+        "Backend modular monolith giúp phân tách rõ các domain nghiệp vụ",
+        "Container hóa với Docker để triển khai nhất quán và có thể lặp lại"
+      ]
+    },
+    {
+      "tagline": "Nền tảng ôn và thi lý thuyết giấy phép lái xe",
+      "desc": "Một nền tảng web để ôn luyện và tổ chức thi lý thuyết giấy phép lái xe cho nhiều hạng bằng khác nhau. Nó có bộ câu hỏi hơn 650 câu và tạo đề thi ngẫu nhiên để mang lại trải nghiệm thi thực tế. Backend là một ASP.NET Core Web API theo kiến trúc MVVM, cung cấp các endpoint CRUD cho admin để quản lý bộ câu hỏi. Frontend React responsive cho phép người học ôn bài, làm bài thi thử và nhận phản hồi ngay lập tức. Xác thực JWT với kiểm soát truy cập theo vai trò phân tách trải nghiệm giữa người học và admin.",
+      "businessCore": "Hoạt động kinh doanh cốt lõi của một trung tâm dạy lái xe là giúp người học thi đậu phần lý thuyết. Điều này đòi hỏi một bộ câu hỏi lớn và chính xác, các bài thi thử thực tế mô phỏng kỳ thi thật, theo dõi tiến độ cho người học, và công cụ quản trị để cập nhật câu hỏi và danh mục.",
+      "flow": [
+        "Người học đăng ký và chọn hạng bằng lái (ví dụ: B1, B2, A)",
+        "Người học ôn bộ câu hỏi theo từng chủ đề",
+        "Hệ thống tạo một đề thi thử ngẫu nhiên từ bộ câu hỏi",
+        "Người học hoàn thành bài thi và nhận phản hồi ngay với đáp án đúng",
+        "Tiến độ và kết quả được theo dõi cho từng người học",
+        "Admin đăng nhập để thêm, sửa và quản lý câu hỏi theo từng danh mục"
+      ],
+      "problem": "Người học trước đây ôn bài bằng tài liệu giấy đã cũ, không có tính tương tác, không ngẫu nhiên hóa và không có cách đo lường tiến độ. Giảng viên không có công cụ tập trung để quản lý câu hỏi, và tài liệu tĩnh khiến người học khó mô phỏng trải nghiệm thi thật, dẫn đến tỷ lệ đậu thấp hơn.",
+      "solution": "Tôi đã xây dựng một nền tảng số với bộ câu hỏi hơn 650 câu, tạo đề thi ngẫu nhiên, phản hồi ngay lập tức và theo dõi tiến độ. Kiến trúc MVVM giữ cho ASP.NET Core API sạch, và JWT + RBAC phân tách rõ ràng trải nghiệm giữa người học và admin. Admin có thể quản lý bộ câu hỏi thông qua các endpoint CRUD.",
+      "features": [
+        "Bộ câu hỏi hơn 650 câu được tổ chức theo danh mục",
+        "Tạo đề thi thử ngẫu nhiên mang lại cảm giác thi thực tế",
+        "Phản hồi ngay lập tức với đáp án đúng sau mỗi bài thi",
+        "Theo dõi tiến độ cho người học",
+        "API CRUD cho admin để quản lý bộ câu hỏi",
+        "Kiến trúc MVVM với frontend React responsive",
+        "Xác thực JWT với kiểm soát truy cập theo vai trò"
+      ]
+    },
+    {
+      "tagline": "Công cụ chuyển giọng nói thành văn bản theo thời gian thực",
+      "desc": "Một ứng dụng web chuyển giọng nói thành văn bản theo thời gian thực, hỗ trợ nhiều ngôn ngữ và tải lên file âm thanh. Frontend React thu âm từ microphone và truyền trực tiếp (stream) đến backend Node.js qua WebSocket để chuyển đổi với độ trễ thấp. Kết quả xử lý được trả về giao diện ngay lập tức và có thể lưu vào MongoDB. Công cụ này hữu ích cho việc ghi chú cuộc họp, chuyển văn bản, hỗ trợ tiếp cận (accessibility) và tạo nội dung.",
+      "businessCore": "Giá trị cốt lõi của một sản phẩm chuyển giọng nói thành văn bản là biến âm thanh giọng nói thành văn bản chính xác, có thể sử dụng được với độ trễ tối thiểu. Hệ thống phải xử lý được âm thanh trực tiếp từ microphone, hỗ trợ nhiều ngôn ngữ, cho phép tải lên âm thanh đã ghi sẵn, và quản lý các bản chuyển văn bản để sử dụng sau.",
+      "flow": [
+        "Người dùng mở ứng dụng và chọn ngôn ngữ cùng chế độ nhập (microphone trực tiếp hoặc tải file lên)",
+        "Microphone trực tiếp: âm thanh được thu và truyền đến backend qua WebSocket",
+        "Backend xử lý âm thanh và trả về văn bản được chuyển đổi theo từng phần",
+        "Giao diện hiển thị bản chuyển văn bản theo thời gian thực với độ trễ thấp",
+        "Người dùng có thể xem lại, chỉnh sửa và lưu bản chuyển văn bản",
+        "Các bản chuyển văn bản được lưu trong MongoDB để truy xuất lại sau"
+      ],
+      "problem": "Việc chuyển văn bản thủ công chậm, dễ sai sót và tốn chi phí, và nhiều công cụ thiếu phản hồi theo thời gian thực hoặc hỗ trợ đa ngôn ngữ. Người dùng cần một cách nhanh chóng, dễ tiếp cận để chuyển các cuộc họp, bài giảng và buổi phỏng vấn thành văn bản mà không cần gõ tay toàn bộ.",
+      "solution": "Tôi đã xây dựng một ứng dụng chuyển giọng nói thành văn bản theo thời gian thực với truyền dữ liệu qua WebSocket để có độ trễ thấp. Hỗ trợ đa ngôn ngữ và tải file âm thanh lên giúp ứng dụng linh hoạt cho nhiều trường hợp sử dụng, và các bản chuyển văn bản được lưu trữ bền vững trong MongoDB để người dùng có thể xem lại và tái sử dụng.",
+      "features": [
+        "Chuyển văn bản theo thời gian thực qua truyền dữ liệu WebSocket",
+        "Hỗ trợ đa ngôn ngữ cho người dùng quốc tế",
+        "Tải lên file âm thanh cho nội dung đã ghi sẵn",
+        "Hiển thị bản chuyển văn bản tăng dần với độ trễ thấp",
+        "Xem lại và chỉnh sửa bản chuyển văn bản",
+        "Lưu trữ bền vững bản chuyển văn bản trong MongoDB"
+      ]
+    },
+    {
+      "tagline": "Trình giả lập kiến trúc CPU 8-bit mang tính giáo dục",
+      "desc": "Một trình giả lập CPU 8-bit tương tác, chạy ngay trên trình duyệt, dùng để học kiến trúc máy tính. Nó bao gồm một bộ lệnh tùy chỉnh, một assembler nhỏ biên dịch assembly thành các từ lệnh máy 16-bit, và một CPU ảo thực thi lệnh từng bước. Người dùng có thể quan sát thanh ghi, bộ nhớ và các cờ (flags) của CPU cập nhật theo thời gian thực, giúp các khái niệm cấp thấp như fetch/decode/execute lệnh, program counter và cờ trở nên trực quan và dễ thực hành.",
+      "businessCore": "Giá trị cốt lõi của một trình giả lập CPU là làm cho kiến trúc máy tính trở nên cụ thể, dễ hình dung. Nó phải cho phép người dùng viết và biên dịch chương trình, thực thi trên một CPU ảo, và trực quan hóa mọi thay đổi trạng thái bên trong — thanh ghi, program counter, bộ nhớ và cờ — để người học có thể kết nối các khái niệm trừu tượng với hành vi quan sát được.",
+      "flow": [
+        "Người dùng viết mã assembly trong editor tích hợp (ví dụ: LOAD, ADD, INC, CMP, JNZ)",
+        "Assembler biên dịch mã nguồn thành các lệnh máy 16-bit",
+        "Người dùng chạy từng bước hoặc chạy tự động toàn bộ chương trình",
+        "CPU ảo cập nhật thanh ghi, bộ nhớ và cờ sau mỗi lệnh",
+        "Người dùng quan sát kết quả tổng/chương trình trong bộ nhớ và trạng thái cuối cùng của CPU",
+        "Người dùng có thể reset và chạy lại để khám phá các chương trình khác"
+      ],
+      "problem": "Kiến trúc máy tính là một khái niệm trừu tượng và khó nắm bắt chỉ qua sách giáo trình và bài giảng. Sinh viên gặp khó khăn khi kết nối bộ lệnh, thanh ghi và cờ với hành vi thực thi thực tế, và họ thiếu một sandbox an toàn, tương tác để thực hành lập trình cấp thấp.",
+      "solution": "Tôi đã xây dựng một trình giả lập CPU 8-bit hoàn toàn chạy ở client-side với bộ lệnh tùy chỉnh, assembler và trực quan hóa thanh ghi/bộ nhớ/cờ theo thời gian thực. Nó cung cấp một sandbox an toàn, tương tác nơi người học có thể viết assembly, chạy từng bước thực thi, và thấy chính xác CPU hoạt động như thế nào — tất cả ngay trên trình duyệt, không cần cài đặt.",
+      "features": [
+        "Bộ lệnh 8-bit tùy chỉnh với 16 opcode",
+        "Assembler tích hợp biên dịch assembly thành từ lệnh máy",
+        "Chế độ thực thi từng bước và chạy tự động",
+        "Hiển thị trực tiếp thanh ghi (A, B, C, D) và program counter",
+        "Trực quan hóa bộ nhớ với 256 byte",
+        "Theo dõi cờ Zero và Carry",
+        "Vòng lặp và nhảy có điều kiện (JMP, JZ, JNZ)"
+      ]
+    }
+  ],
   "credentials": {
     "tag": "// chứng chỉ",
     "title": "Chứng chỉ &",
@@ -205,6 +399,57 @@
     "note": "Lưu ý",
     "noteDetail": "Tỷ giá được cập nhật định kỳ và chỉ mang tính tham khảo. Đối với giao dịch thực tế, vui lòng kiểm tra tỷ giá tại ngân hàng hoặc sàn giao dịch tiền tệ.",
     "currencies": "Các loại tiền tệ hỗ trợ"
+  },
+  "seoChecker": {
+    "tag": "// công cụ",
+    "title": "Kiểm tra SEO &",
+    "titleHighlight": "Bảo mật",
+    "description": "Quét một website để tìm lỗi SEO on-page và các header bảo mật HTTP bị thiếu.",
+    "placeholder": "Nhập URL website (https://...)",
+    "checkButton": "Kiểm tra",
+    "checking": "Đang kiểm tra...",
+    "seoScore": "Điểm SEO",
+    "securityScore": "Điểm bảo mật",
+    "noIssues": "Không tìm thấy vấn đề nào.",
+    "possiblyIncomplete": "Trang này trả về rất ít nội dung — có thể cần đăng nhập hoặc nội dung thật được render bằng JavaScript. Kết quả dưới đây có thể không phản ánh đúng những gì người dùng đã đăng nhập hoặc crawler hỗ trợ JS thấy được.",
+    "error": "Không thể kiểm tra URL này.",
+    "errors": {
+      "invalid_url": "Thiếu hoặc sai định dạng URL.",
+      "fetch_failed": "Không thể kiểm tra URL này."
+    },
+    "issues": {
+      "missing_title": "Thiếu thẻ tiêu đề (title)",
+      "missing_description": "Thiếu thẻ mô tả (description)",
+      "description_too_long": "Mô tả quá dài (nên dưới 155 ký tự)",
+      "missing_keywords": "Thiếu thẻ từ khóa (keywords)",
+      "missing_h1": "Thiếu thẻ H1",
+      "missing_robots": "Thiếu thẻ robots",
+      "images_without_alt": "Có {count} hình ảnh thiếu thẻ alt",
+      "broken_links": "Có {count} liên kết hỏng",
+      "missing_canonical": "Thiếu thẻ canonical",
+      "missing_og_title": "Thiếu thẻ Open Graph cho tiêu đề",
+      "missing_viewport": "Thiếu thẻ viewport",
+      "missing_hreflang": "Thiếu thẻ hreflang cho phiên bản ngôn ngữ khác",
+      "not_https": "Trang không sử dụng HTTPS",
+      "missing_schema": "Thiếu schema markup",
+      "content_too_short": "Nội dung quá ngắn (cần ít nhất 300 từ)",
+      "iframes_without_title": "Có {count} iframe thiếu thuộc tính title",
+      "insufficient_internal_links": "Cần thêm liên kết nội bộ để cải thiện SEO",
+      "missing_csp": "Thiếu Content-Security-Policy (bảo vệ chống XSS và các cuộc tấn công khác)",
+      "missing_frame_options": "Thiếu X-Frame-Options (chống Clickjacking)",
+      "missing_xss_protection": "Thiếu X-XSS-Protection (bảo vệ chống tấn công XSS)",
+      "missing_hsts": "Thiếu Strict-Transport-Security (đảm bảo chỉ sử dụng HTTPS)",
+      "missing_referrer_policy": "Thiếu Referrer-Policy (kiểm soát thông tin referrer gửi đi)",
+      "missing_permissions_policy": "Thiếu Permissions-Policy (hạn chế quyền truy cập trình duyệt)",
+      "missing_corp": "Thiếu Cross-Origin-Resource-Policy (ngăn chia sẻ tài nguyên không mong muốn)",
+      "missing_coop": "Thiếu Cross-Origin-Opener-Policy (giúp ngăn chặn Spectre Attack)",
+      "missing_coep": "Thiếu Cross-Origin-Embedder-Policy (bảo vệ khỏi khai thác side-channel)",
+      "missing_nosniff": "Thiếu X-Content-Type-Options (ngăn chặn tấn công MIME-sniffing)",
+      "missing_cache_control": "Thiếu Cache-Control (bảo vệ dữ liệu nhạy cảm trong bộ nhớ đệm)",
+      "missing_cors": "Thiếu CORS Policy (kiểm soát chia sẻ tài nguyên giữa các nguồn gốc)",
+      "server_info_exposed": "Header Server tiết lộ thông tin máy chủ (nên ẩn thông tin này)",
+      "missing_cookie_flags": "Thiếu cờ Secure, HttpOnly & SameSite trong cookie (giảm nguy cơ XSS & CSRF)"
+    }
   },
   "language": {
     "en": "EN",
@@ -265,7 +510,39 @@
       "analyticsTasks": "công việc",
       "analyticsWeek": "Công việc tuần này",
       "analyticsPriority": "Đang hoạt động theo ưu tiên",
-      "analyticsGoalProgress": "Tiến độ mục tiêu"
+      "analyticsGoalProgress": "Tiến độ mục tiêu",
+      "tabOverview": "Tổng quan",
+      "import": "Nhập",
+      "export": "Xuất",
+      "markAllComplete": "Hoàn thành tất cả",
+      "sortCreated": "Mới nhất",
+      "sortPriority": "Độ ưu tiên",
+      "sortDue": "Hạn chót",
+      "toastAdded": "Đã thêm",
+      "toastDeleted": "Đã xóa",
+      "toastCleared": "Đã xóa các việc hoàn thành",
+      "toastAllDone": "Đã đánh dấu hoàn thành tất cả",
+      "toastExported": "Đã xuất dữ liệu",
+      "toastImported": "Đã nhập dữ liệu",
+      "toastImportError": "File không hợp lệ — không thể nhập",
+      "overview": {
+        "todayOverdue": "Hôm nay & Quá hạn",
+        "viewAll": "Xem tất cả",
+        "noneToday": "Không có việc nào đến hạn hôm nay. Tuyệt!",
+        "upcomingEvents": "Sắp diễn ra",
+        "noUpcoming": "Không có sự kiện nào sắp diễn ra.",
+        "overallProgress": "Tiến độ tổng thể"
+      },
+      "allCategories": "Tất cả danh mục",
+      "searchPlaceholder": "Tìm kiếm (/)",
+      "metaTitle": "Bảng điều khiển công việc — Nguyen Bui Nhut Y",
+      "metaDescription": "Quản lý công việc, lập kế hoạch và phân tích hiệu suất với tích hợp GitHub.",
+      "categories": {
+        "Work": "Công việc",
+        "Study": "Học tập",
+        "Personal": "Cá nhân",
+        "Health": "Sức khỏe"
+      }
     },
     "ycpu": {
       "title": "Thông tin hệ thống",
@@ -326,7 +603,28 @@
       "wifiName": "Tên Wi-Fi (SSID)",
       "backgroundProcesses": "Tiến trình chạy nền",
       "notAvailable": "Không có trên trình duyệt",
-      "batteryTime": "Thời gian còn lại"
+      "batteryTime": "Thời gian còn lại",
+      "gameReq": {
+        "title": "Kiểm tra yêu cầu hệ thống game",
+        "description": "Tìm một game trên Steam và so sánh yêu cầu hệ thống của nó với thông số máy bạn vừa phát hiện.",
+        "placeholder": "Nhập tên game...",
+        "searchButton": "Tìm kiếm",
+        "checking": "Đang tải yêu cầu hệ thống...",
+        "noResults": "Không tìm thấy game nào.",
+        "minimum": "Tối thiểu",
+        "recommended": "Đề nghị",
+        "ramOk": "Đủ RAM yêu cầu",
+        "ramLow": "RAM có thể không đủ",
+        "deviceSpecs": "Thông số máy bạn",
+        "ramOnlyNote": "Lưu ý: chỉ so sánh RAM tự động — không thể so khớp chính xác model CPU/GPU từ trình duyệt.",
+        "error": "Không thể lấy dữ liệu game.",
+        "errors": {
+          "missing_query": "Vui lòng nhập tên game.",
+          "invalid_url": "URL game Steam không hợp lệ.",
+          "no_requirements_found": "Trang game này không có yêu cầu hệ thống.",
+          "fetch_failed": "Không thể lấy dữ liệu game."
+        }
+      }
     },
     "yspeech": {
       "title": "Yspeech",
@@ -346,5 +644,24 @@
       "words": "từ",
       "unsupported": "Trình duyệt của bạn không hỗ trợ Web Speech API. Vui lòng dùng trình duyệt được hỗ trợ (Chrome, Edge hoặc Safari)."
     }
+  },
+  "commandPalette": {
+    "placeholder": "Nhập lệnh hoặc tìm kiếm…",
+    "noResults": "Không có kết quả."
+  },
+  "credentialsData": {
+    "cert0": "An ninh mạng",
+    "cert1": "Quản lý dự án (6/7 khóa học)",
+    "cert2": "Thiết kế UX",
+    "lang0Name": "Tiếng Anh B1",
+    "lang0Detail": "Sử dụng tốt trong công việc",
+    "lang1Name": "Tiếng Việt",
+    "lang1Detail": "Bản ngữ",
+    "degree": "Kỹ sư Công nghệ Thông tin",
+    "highlights": [
+      "Điểm xuất sắc môn Phân tích & Thiết kế Hệ thống Thông tin (2023)",
+      "Điểm xuất sắc môn Thiết kế Hệ thống Kỹ thuật Phần mềm (2022)",
+      "Học bổng Sinh viên Tài năng + Học bổng Song bằng (TDTU & LTU — 2020)"
+    ]
   }
 }

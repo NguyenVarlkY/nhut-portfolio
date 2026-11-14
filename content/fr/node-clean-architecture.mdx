@@ -1,0 +1,43 @@
+---
+title: "Mettre en place une Clean Architecture avec Node.js"
+date: "2026-08-05"
+excerpt: "Un guide détaillé pour organiser un projet Node.js selon la Clean Architecture afin qu'il reste facile à maintenir et à faire évoluer."
+---
+
+# Mettre en place une Clean Architecture avec Node.js
+
+Dans le monde du logiciel, la maintenabilité est une question de survie. La Clean Architecture sépare la logique métier des dépendances externes.
+
+## Pourquoi la Clean Architecture ?
+Quand un projet grandit, un code qui mélange logique de base de données, bibliothèques tierces et logique métier devient très difficile à tester et à faire évoluer.
+
+## Principes fondamentaux
+1. **Dependency Rule :** les dépendances ne doivent pointer que vers l'intérieur (vers la logique centrale).
+2. **Entities :** contiennent les règles métier essentielles.
+3. **Use Cases :** définissent les actions concrètes du système.
+4. **Interface Adapters :** convertissent les données entre les use cases et les composants externes (API, base de données).
+5. **Frameworks & Drivers :** là où se trouvent la base de données, Express/NestJS, etc.
+
+## Exemple d'implémentation
+```javascript
+// Entities
+class User {
+  constructor(id, name) {
+    this.id = id;
+    this.name = name;
+  }
+}
+
+// Use Case
+class RegisterUser {
+  constructor(userRepository) {
+    this.userRepository = userRepository;
+  }
+  execute(userData) {
+    // La logique métier va ici
+    return this.userRepository.save(userData);
+  }
+}
+```
+
+Cette séparation vous permet de passer de MongoDB à PostgreSQL sans modifier une seule ligne du `Use Case`.

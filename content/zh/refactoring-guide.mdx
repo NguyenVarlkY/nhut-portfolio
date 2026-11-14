@@ -1,0 +1,284 @@
+---
+title: "重构指南：提升代码质量"
+date: "2026-08-04"
+excerpt: "关于重构的全面指南——在不改变外部行为的前提下改进源代码的技术。"
+---
+
+# 重构指南：提升代码质量
+
+重构是在不改变外部行为的前提下，对现有代码进行重新组织的过程。目标是改进软件设计、让代码更易理解，并降低维护成本。
+
+## 为什么需要重构？
+
+### 1. 降低复杂度
+- 复杂的代码难以理解、难以维护，而且容易出错
+- 重构能简化逻辑，让代码更清晰
+
+### 2. 提高可读性
+- 好的代码应该读起来像一个故事
+- 重构帮助你为变量、函数和类起有意义的名字
+
+### 3. 为新功能做准备
+- 整洁的代码更容易扩展
+- 在添加新功能之前重构，可以降低出错的风险
+
+### 4. 减少维护工作
+- 好的代码能缩短查找和修复 Bug 的时间
+- 重构有助于偿还技术债（technical debt）
+
+## 重构原则
+
+### 1. 始终要有测试
+- 重构之前，确保有一套足够好的测试
+- 测试能验证重构后行为没有改变
+
+### 2. 每次只做小幅重构
+- 小改动更容易掌控
+- 出了问题也容易回滚
+
+### 3. 持续进行
+- 重构不是一次性的活动
+- 应该贯穿整个开发过程
+
+## 基础重构技巧
+
+### 1. Extract Method（提炼方法）
+```javascript
+// 重构前
+function printOwing(invoice) {
+  let outstanding = 0;
+  console.log(`*************************`);
+  console.log(`**** Customer Owes ****`);
+  console.log(`*************************`);
+  
+  // 计算欠款
+  for (const border of invoice.borders) {
+    outstanding += border.amount;
+  }
+  
+  // 记录到期日
+  const today = Date.now();
+  invoice.dueDate = new Date(today + 30 * 24 * 60 * 60 * 1000);
+  
+  console.log(`Customer name: ${invoice.customer}`);
+  console.log(`Amount owed: ${outstanding}`);
+  console.log(`Due date: ${invoice.dueDate.toLocaleDateString()}`);
+}
+
+// 重构后
+function printOwing(invoice) {
+  printBanner();
+  const outstanding = calculateOutstanding(invoice);
+  recordDueDate(invoice);
+  printDetails(invoice, outstanding);
+}
+
+function printBanner() {
+  console.log(`*************************`);
+  console.log(`**** Customer Owes ****`);
+  console.log(`*************************`);
+}
+
+function calculateOutstanding(invoice) {
+  return invoice.borders.reduce((sum, border) => sum + border.amount, 0);
+}
+
+function recordDueDate(invoice) {
+  const today = Date.now();
+  invoice.dueDate = new Date(today + 30 * 24 * 60 * 60 * 1000);
+}
+
+function printDetails(invoice, outstanding) {
+  console.log(`Customer name: ${invoice.customer}`);
+  console.log(`Amount owed: ${outstanding}`);
+  console.log(`Due date: ${invoice.dueDate.toLocaleDateString()}`);
+}
+```
+
+### 2. Rename Variable（重命名变量）
+```javascript
+// 重构前
+function getTotalPrice() {
+  let t = 0;
+  for (let i = 0; i < items.length; i++) {
+    t += items[i].price * items[i].quantity;
+  }
+  return t;
+}
+
+// 重构后
+function getTotalPrice() {
+  let totalPrice = 0;
+  for (let i = 0; i < items.length; i++) {
+    totalPrice += items[i].price * items[i].quantity;
+  }
+  return totalPrice;
+}
+```
+
+### 3. Replace Temp with Query（以查询取代临时变量）
+```javascript
+// 重构前
+function getDistanceTraveled(time) {
+  const result = 2 * Math.PI * radius;
+  return result * time;
+}
+
+// 重构后
+function getDistanceTraveled(time) {
+  return getBaseCircumference() * time;
+}
+
+function getBaseCircumference() {
+  return 2 * Math.PI * radius;
+}
+```
+
+## 高效的重构流程
+
+### 第 1 步：分析与规划
+- 确定需要重构的区域
+- 设定具体目标（提高可读性、降低复杂度等）
+- 规划一系列小步骤
+
+### 第 2 步：准备环境
+- 确保有一套足够好的测试
+- 运行所有测试，确认处于稳定状态
+
+### 第 3 步：小步重构
+- 每次只应用一种重构技巧
+- 每次修改后都运行测试
+
+### 第 4 步：测试与验证
+- 运行完整的测试套件
+- 检查行为是否发生变化
+
+### 第 5 步：重复
+- 继续处理下一个区域
+- 重新评估代码质量
+
+## 常见的重构类型
+
+### 1. Composing Methods（组织方法）
+- Extract Method
+- Inline Method
+- Inline Temp
+- Replace Temp with Query
+- Split Temporary Variable
+- Remove Assignments to Parameters
+- Replace Method with Method Object
+- Substitute Algorithm
+
+### 2. Moving Features Between Objects（在对象之间搬移特性）
+- Move Method
+- Move Field
+- Extract Class
+- Inline Class
+- Hide Delegate
+- Remove Middle Man
+- Introduce Foreign Method
+- Introduce Local Extension
+
+### 3. Organizing Data（组织数据）
+- Self Encapsulate Field
+- Replace Data Value with Object
+- Change Value to Reference
+- Change Reference to Value
+- Replace Array with Object
+- Duplicate Observed Data
+- Change Unidirectional Association to Bidirectional
+- Change Bidirectional Association to Unidirectional
+- Replace Magic Number with Symbolic Constant
+- Encapsulate Field
+- Encapsulate Collection
+- Replace Record with Data Class
+- Replace Type Code with Class
+- Replace Type Code with Subclasses
+- Replace Type Code with State/Strategy
+- Replace Subclass with Fields
+
+### 4. Simplifying Conditional Expressions（简化条件表达式）
+- Decompose Conditional
+- Consolidate Conditional Expression
+- Consolidate Duplicate Conditional Fragments
+- Remove Control Flag
+- Replace Nested Conditional with Guard Clauses
+- Conditional to Polymorphism
+- Introduce Null Object
+- Introduce Assertion
+
+### 5. Simplifying Method Calls（简化方法调用）
+- Rename Method
+- Add Parameter
+- Remove Parameter
+- Separate Query from Modifier
+- Parameterize Method
+- Replace Parameter with Explicit Methods
+- Preserve Whole Object
+- Replace Parameter with Methods
+- Hide Method
+- Replace Constructor with Factory Function
+- Replace Error Code with Exception
+- Replace Exception with Test
+
+## 重构的最佳实践
+
+### 1. 一次只专注一件事
+- 不要试图同时做太多事情
+- 每次提交只应有一个具体的重构目的
+
+### 2. 记录原因
+- 在提交信息中说明你为什么要重构
+- 这能帮助团队理解这次修改的价值
+
+### 3. 善用工具
+- 大多数现代 IDE 都支持重构
+- 充分利用 Rename、Extract Method 等功能
+
+### 4. 不必要时不要重构
+- 如果代码运行良好、没有造成问题，不要仅仅为了“整洁”而重构
+- 重构应当带来实际价值
+
+### 5. 持续学习
+- 阅读 Martin Fowler 的《重构：改善既有代码的设计》（Refactoring: Improving the Design of Existing Code）
+- 参加团队内部的知识分享会
+
+## 何时应避免重构
+
+### 1. 面临截止日期压力时
+- 如果正在紧急修复 Bug，先修 Bug
+- 等系统稳定后再进行重构
+
+### 2. 没有足够好的测试时
+- 没有测试的重构非常危险
+- 先写好足够的测试，再进行重构
+
+### 3. 代码很快就会被改动时
+- 如果你知道这段代码在不久的将来会被完全重写
+- 那么可能不值得重构
+
+## 重构辅助工具
+
+### IDE 内置工具
+- Visual Studio Code：重构菜单、IntelliSense
+- IntelliJ IDEA：最强大的重构工具
+- WebStorm：针对 JavaScript/TypeScript 优化
+
+### 专用工具
+- 带有重构规则的 ESLint
+- JSCodeshift：源代码转换工具
+- CodeClimate：代码质量分析
+
+## 结语
+
+重构不是一项独立的活动，而是软件开发中不可分割的一部分。正确地进行重构可以帮助你：
+
+- 提升代码质量
+- 降低出错风险
+- 从长远来看加快开发速度
+- 提高团队满意度
+- 降低维护成本
+
+请记住，重构既是一门技能，也是一门艺术。它需要耐心、对细节的关注以及对软件设计的深刻理解。从小而顺畅的改动开始，并始终用测试来守护正确性。
+
+当你习惯了重构，就会开始察觉代码中的“坏味道”（code smell），并清楚地知道该如何处理。这正是熟练开发者的标志：不只是写出能运行的代码，而是写出运行良好的代码。

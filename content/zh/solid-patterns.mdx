@@ -1,0 +1,101 @@
+---
+title: "SOLID 与设计模式：写出易扩展、难破坏的代码"
+date: "2026-08-14"
+excerpt: "SOLID 与设计模式是良好软件架构的基础。学会在合适的时机运用，而不是滥用。"
+---
+
+# SOLID 与设计模式：软件架构的基础
+
+SOLID 与设计模式是让代码 **易于扩展、难以破坏** 的原则。这是每位工程师都应掌握的核心知识。
+
+## 1. SOLID 原则
+
+### S — Single Responsibility（单一职责）
+每个类/函数应当 **只有一个引起它变化的原因**。
+
+- 把“做得太多”的类拆分成小类，每个类只承担一项职责。
+- 例如：把 `UserService` 拆分为 `UserRepository`（存储）、`UserValidator`（校验）、`EmailService`（发送邮件）。
+
+### O — Open/Closed（开闭原则）
+对 **扩展** 开放，对 **修改** 关闭。想添加新功能时，添加新代码，而不是修改旧代码。
+
+- 使用继承、组合和多态。
+- 例如：通过新增一个类来支持新的报表类型，而不是修改旧的 switch 语句。
+
+### L — Liskov Substitution（里氏替换）
+子类必须能够 **替换** 父类而不引发错误。
+
+- 如果子类改变了父类的基本行为，就违反了 LSP。
+- 例如：如果 `Square` 会破坏 setWidth/setHeight 的逻辑，就不应继承 `Rectangle`。
+
+### I — Interface Segregation（接口隔离）
+不应强迫客户端依赖它们 **用不到** 的接口。
+
+- 把大接口拆分为小而专一的接口。
+- 例如：把 `Bird` 接口拆分为 `Flyable`、`Swimmable`、`Walkable`。
+
+### D — Dependency Inversion（依赖倒置）
+依赖于 **抽象**，而不是依赖于 **具体实现**。
+
+- 使用接口来降低模块之间的耦合。
+- 使用 **依赖注入（Dependency Injection）** 从外部传入依赖。
+
+## 2. 设计模式
+
+### 2.1 不要滥用
+设计模式是工具，**而不是目标**。只在需要时使用：
+- 在选择模式之前，先弄清楚问题。
+- 不要把某个模式硬套到所有场景中。
+- 过度设计（over-engineering）会让代码不必要地复杂。
+
+### 2.2 常用模式
+
+**创建型（Creational）：**
+- **Singleton：** 确保只有一个实例（数据库连接、配置）。
+- **Factory：** 创建对象而无需指定具体类。
+- **Builder：** 分步骤构建复杂对象。
+
+**结构型（Structural）：**
+- **Adapter：** 转换接口以实现兼容。
+- **Decorator：** 在不修改原始类的情况下为对象添加行为。
+
+**行为型（Behavioral）：**
+- **Observer：** 将状态变化通知给订阅者（事件系统）。
+- **Strategy：** 在运行时选择算法（灵活改变行为）。
+- **Repository：** 将数据访问逻辑与业务逻辑分离。
+
+## 3. 实际示例
+
+**应用 SOLID 之前：**
+```javascript
+class UserService {
+  save(user) { /* DB */ }
+  validate(user) { /* validation */ }
+  sendEmail(user) { /* email */ }
+  generateReport(user) { /* report */ }
+}
+```
+
+**应用 SOLID 之后：**
+```javascript
+class UserRepository { save(user) { /* DB */ } }
+class UserValidator { validate(user) { /* validation */ } }
+class EmailService { send(user) { /* email */ } }
+class ReportGenerator { generate(user) { /* report */ } }
+
+class UserService {
+  constructor(repo, validator, email, report) {
+    this.repo = repo; // Dependency Injection
+    this.validator = validator;
+    this.email = email;
+    this.report = report;
+  }
+  create(user) {
+    this.validator.validate(user);
+    this.repo.save(user);
+    this.email.send(user);
+  }
+}
+```
+
+> *“代码是工具，而思维方式和跨学科的理解，才是成就资深工程师价值的东西。”*

@@ -1,20 +1,22 @@
 'use client';
 
 import { useState } from 'react';
-import { ListTodo, Coins, Cpu, AudioLines, ChevronDown } from 'lucide-react';
+import { ListTodo, Coins, Cpu, AudioLines, ShieldCheck, ChevronDown } from 'lucide-react';
 import { useTranslation } from '@/lib/i18n/LanguageContext';
 import TestTodo from '@/components/tools/TestTodo';
 import CurrencyConverter from '@/components/tools/CurrencyConverter';
 import YCPUSimulator from '@/components/tools/YCPUSimulator';
 import Yspeech from '@/components/tools/Yspeech';
+import SeoSecurityChecker from '@/components/tools/SeoSecurityChecker';
 
-type ToolId = 'todo' | 'currency' | 'ycpu' | 'yspeech';
+type ToolId = 'todo' | 'currency' | 'ycpu' | 'yspeech' | 'seo-security';
 
 const TOOLS: { id: ToolId; labelKey: string; icon: React.ReactNode }[] = [
   { id: 'todo', labelKey: 'tools.todo.title', icon: <ListTodo size={16} /> },
   { id: 'currency', labelKey: 'currencyConverter.title', icon: <Coins size={16} /> },
   { id: 'ycpu', labelKey: 'tools.ycpu.title', icon: <Cpu size={16} /> },
   { id: 'yspeech', labelKey: 'tools.yspeech.title', icon: <AudioLines size={16} /> },
+  { id: 'seo-security', labelKey: 'seoChecker.title', icon: <ShieldCheck size={16} /> },
 ];
 
 export default function ToolsPage() {
@@ -53,7 +55,7 @@ export default function ToolsPage() {
         </div>
       </div>
 
-      <div className="container-port">
+      <div className={tool === 'todo' ? '' : 'container-port'}>
         {tool === 'todo' && <TestTodo />}
         {tool === 'currency' && (
           <div className="min-h-[calc(100vh-70px)] flex flex-col items-center justify-center px-6 py-16">
@@ -68,6 +70,7 @@ export default function ToolsPage() {
         )}
         {tool === 'ycpu' && <YCPUSimulator />}
         {tool === 'yspeech' && <Yspeech />}
+        {tool === 'seo-security' && <SeoSecurityChecker />}
       </div>
     </div>
   );

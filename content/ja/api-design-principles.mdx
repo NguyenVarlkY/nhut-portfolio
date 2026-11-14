@@ -1,0 +1,36 @@
+---
+title: "堅牢な REST API の設計"
+date: "2026-08-07"
+excerpt: "標準に準拠し、安全で、拡張しやすい API を構築する。"
+---
+
+# 堅牢な REST API の設計
+
+API はほとんどの現代的なアプリケーションの「背骨」です。設計の悪い API はフロントエンドを苦しめ、保守も難しくします。
+
+## 1. 設計原則
+*   **名詞を使う：** `/getUsers` ではなく `/users`。
+*   **HTTP メソッドを正しく使う：**
+    *   `GET`：データの取得。
+    *   `POST`：新規作成。
+    *   `PUT/PATCH`：更新。
+    *   `DELETE`：削除。
+*   **標準的な HTTP ステータスコード：** 200 (OK)、201 (Created)、400 (Bad Request)、401 (Unauthorized)、403 (Forbidden)、404 (Not Found)、500 (Server Error)。
+
+## 2. セキュリティと管理
+*   **Authentication：** JWT またはセッションを使用。
+*   **Rate Limiting：** DoS 攻撃を防ぐために非常に重要です。
+*   **Validation：** フロントエンドとバックエンドの両方で必ず入力を検証しましょう（サーバー側の検証は必須）。
+*   **API Versioning：** 最初から API のバージョンを定義しましょう（例：`/api/v1/...`）。
+
+```json
+// 標準的な JSON レスポンスの例
+{
+  "status": "success",
+  "data": {
+    "user": { "id": 1, "name": "Nhut Y" }
+  }
+}
+```
+
+最初に時間をかけて API を丁寧に設計すれば、後のコーディングやバグ修正にかかる何百時間もの手間を節約できます。

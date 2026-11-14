@@ -1,0 +1,36 @@
+---
+title: "Next.js のパフォーマンス最適化"
+date: "2026-08-06"
+excerpt: "Next.js で Lighthouse 100/100 を達成するための実践的なテクニック。"
+---
+
+# Next.js のパフォーマンス最適化
+
+Next.js はもともと高速ですが、設定を知らないと意図せずアプリを遅くしてしまうことがあります。ここでは私が実践しているテクニックを紹介します。
+
+## 1. 画像の最適化（next/image）
+`next/image` コンポーネントの使用は必須です。自動的に次のことを行ってくれます：
+- デバイスに合わせて画像をリサイズ。
+- ビューポート外の画像を遅延読み込み。
+- ブラウザが対応していれば WebP 形式に変換。
+
+## 2. フォントの最適化
+`next/font` を使ってフォントを自動で最適化し、レイアウトシフト（CLS - Cumulative Layout Shift）を防ぎましょう。
+
+## 3. データ取得の戦略
+* **Static Site Generation（SSG）：** あまり変わらないコンテンツ向け（例：トップページ、ブログ）。
+* **Incremental Static Regeneration（ISR）：** 全体を再ビルドせずに定期的に更新したいコンテンツ向け。
+* **Server-Side Rendering（SSR）：** リクエストごとにリアルタイムで更新が必要なデータの場合のみ使用。
+
+```javascript
+// ISR の例
+export async function getStaticProps() {
+  const posts = await getPosts();
+  return {
+    props: { posts },
+    revalidate: 60, // 60 秒ごとに再生成
+  };
+}
+```
+
+ボトルネックがどこにあるのかを正確に知るために、常に Lighthouse で計測しましょう！

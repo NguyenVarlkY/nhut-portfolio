@@ -1,0 +1,36 @@
+---
+title: "Optimizing Next.js Performance"
+date: "2026-08-06"
+excerpt: "Practical techniques for reaching a 100/100 Lighthouse score with Next.js."
+---
+
+# Optimizing Next.js Performance
+
+Next.js is already fast, but without the right configuration you can accidentally slow your app down. Here are the techniques I use.
+
+## 1. Image optimization (next/image)
+Using the `next/image` component is a must. It automatically:
+- Resizes images for each device.
+- Lazy-loads images outside the viewport.
+- Converts images to WebP (when the browser supports it).
+
+## 2. Font optimization
+Use `next/font` to optimize fonts automatically and avoid layout shift (CLS - Cumulative Layout Shift).
+
+## 3. A data-fetching strategy
+* **Static Site Generation (SSG):** For content that rarely changes (e.g. the home page, blog).
+* **Incremental Static Regeneration (ISR):** For content that needs periodic updates without a full rebuild.
+* **Server-Side Rendering (SSR):** Only when data must be fresh on every request.
+
+```javascript
+// ISR example
+export async function getStaticProps() {
+  const posts = await getPosts();
+  return {
+    props: { posts },
+    revalidate: 60, // Regenerate every 60 seconds
+  };
+}
+```
+
+Always measure with Lighthouse to find out exactly where the bottleneck is!

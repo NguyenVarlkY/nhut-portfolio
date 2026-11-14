@@ -1,0 +1,52 @@
+---
+title: "The Art of Debugging: A Scientific Method for Finding Bugs"
+date: "2026-08-15"
+excerpt: "Debugging isn't about hunting for bugs; it's about eliminating possibilities until the truth remains. Learn a systematic approach."
+---
+
+# The Art of Debugging: A Scientific Method for Finding Bugs
+
+Anyone can write code, but Senior Engineers stand out in their ability to **troubleshoot**. Professional debugging isn't luck or intuition. It is a **systematic process** built on the scientific method.
+
+## 1. The scientific method in debugging
+
+### 1.1 Observation
+The first and most important step: **you must be able to reproduce the bug**. If you can't reproduce it, you can't fix it.
+
+- Record the exact steps that lead to the bug.
+- Record the input, output, and system state.
+- Identify the environment: which browser, which version, which device.
+
+### 1.2 Hypothesis
+Make informed predictions about **why** the bug happens. Don't guess blindly; base them on:
+
+- Your knowledge of the codebase.
+- The error message.
+- Logs and stack traces.
+- Your understanding of the data flow.
+
+### 1.3 Experiment
+Test your hypothesis by:
+- Adding detailed **logs** at suspicious points.
+- Using a **debugger** to set breakpoints and step through the code.
+- **Isolating** the code: temporarily comment things out, extract variables, try simpler inputs.
+- **Binary searching** the code: halve the suspicious range each time.
+
+### 1.4 Conclusion
+Find the root cause, fix it, and **write a test** to make sure the bug never comes back (**regression testing**).
+
+## 2. Advanced debugging techniques
+
+- **Rubber duck debugging:** Explain your code to a "rubber duck". Saying the problem out loud often reveals the answer.
+- **Debugging by re-reading code:** Read each line asking "what does this actually do?" instead of "what is this supposed to do?".
+- **Use Git Bisect:** Find the commit that introduced a bug by halving the commit history.
+- **Check versions and dependencies:** Many bugs come from library version changes, not from your code.
+
+## 3. Essential debugging tools
+
+- **Browser DevTools:** Network tab, Console, Sources, Performance.
+- **Server-side:** Log files, APM tools (Datadog, Sentry), monitoring.
+- **Database:** Query logs, EXPLAIN, index analysis.
+- **API:** Postman, curl, mock servers.
+
+> *"Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it."* — Brian Kernighan

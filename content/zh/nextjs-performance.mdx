@@ -1,0 +1,36 @@
+---
+title: "Next.js 性能优化"
+date: "2026-08-06"
+excerpt: "用 Next.js 拿到 Lighthouse 100/100 分的实用技巧。"
+---
+
+# Next.js 性能优化
+
+Next.js 本身已经很快，但如果不懂得如何配置，你可能会在不知不觉中拖慢应用。下面是我常用的技巧。
+
+## 1. 图片优化（next/image）
+使用 `next/image` 组件是必须的。它会自动：
+- 根据设备调整图片尺寸。
+- 懒加载视口外的图片。
+- 在浏览器支持时转换为 WebP 格式。
+
+## 2. 字体优化
+使用 `next/font` 自动优化字体，避免布局偏移（CLS - Cumulative Layout Shift）。
+
+## 3. 数据获取策略
+* **Static Site Generation（SSG）：** 适用于很少变化的内容（例如：首页、博客）。
+* **Incremental Static Regeneration（ISR）：** 适用于需要定期更新、又不想整站重新构建的内容。
+* **Server-Side Rendering（SSR）：** 仅在每次请求都需要实时数据时使用。
+
+```javascript
+// ISR 示例
+export async function getStaticProps() {
+  const posts = await getPosts();
+  return {
+    props: { posts },
+    revalidate: 60, // 每 60 秒重新生成
+  };
+}
+```
+
+始终用 Lighthouse 进行测量，才能准确找出瓶颈所在！

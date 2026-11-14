@@ -1,0 +1,101 @@
+---
+title: "SOLID & Design Patterns: Code, der sich leicht erweitern und schwer kaputt machen lässt"
+date: "2026-08-14"
+excerpt: "SOLID und Design Patterns sind das Fundament guter Softwarearchitektur. Lerne, sie zum richtigen Zeitpunkt einzusetzen, ohne sie zu übertreiben."
+---
+
+# SOLID & Design Patterns: Das Fundament der Softwarearchitektur
+
+SOLID und Design Patterns sind Prinzipien, die Code **leicht erweiterbar und schwer zu zerbrechen** machen. Das ist Kernwissen, das jeder Engineer beherrschen sollte.
+
+## 1. Die SOLID-Prinzipien
+
+### S — Single Responsibility (Einzelverantwortung)
+Jede Klasse/Funktion sollte **nur einen einzigen Grund haben, sich zu ändern**.
+
+- Teile Klassen, die „zu viel machen“, in kleinere Klassen mit je einer Verantwortung auf.
+- Beispiel: `UserService` aufteilen in `UserRepository` (Speicherung), `UserValidator` (Validierung) und `EmailService` (E-Mail-Versand).
+
+### O — Open/Closed (Offen/Geschlossen)
+Offen für **Erweiterung**, geschlossen für **Änderung**. Für ein neues Feature fügst du neuen Code hinzu, statt alten zu ändern.
+
+- Nutze Vererbung, Komposition und Polymorphie.
+- Beispiel: Einen neuen Berichtstyp durch eine neue Klasse hinzufügen, statt ein altes switch-Statement zu bearbeiten.
+
+### L — Liskov Substitution (Liskovsches Substitutionsprinzip)
+Unterklassen müssen ihre Elternklasse **ersetzen können**, ohne Fehler zu verursachen.
+
+- Ändert eine Unterklasse das grundlegende Verhalten der Elternklasse, verletzt sie das LSP.
+- Beispiel: `Square` sollte nicht von `Rectangle` erben, wenn dadurch die Logik von setWidth/setHeight bricht.
+
+### I — Interface Segregation (Schnittstellentrennung)
+Clients sollten nicht gezwungen werden, von Schnittstellen abzuhängen, die sie **nicht nutzen**.
+
+- Teile große Interfaces in kleine, spezialisierte auf.
+- Beispiel: Ein `Bird`-Interface aufteilen in `Flyable`, `Swimmable` und `Walkable`.
+
+### D — Dependency Inversion (Abhängigkeitsumkehr)
+Hänge von **Abstraktionen** ab, nicht von **konkreten Implementierungen**.
+
+- Nutze Interfaces, um die Kopplung zwischen Modulen zu verringern.
+- Nutze **Dependency Injection**, um Abhängigkeiten von außen zu übergeben.
+
+## 2. Design Patterns
+
+### 2.1 Nicht übertreiben
+Design Patterns sind Werkzeuge, **kein Selbstzweck**. Setze sie nur ein, wenn sie gebraucht werden:
+- Verstehe das Problem, bevor du ein Pattern wählst.
+- Zwinge nicht jeder Situation ein Pattern auf.
+- Over-Engineering macht Code unnötig komplex.
+
+### 2.2 Häufig genutzte Patterns
+
+**Erzeugungsmuster (Creational):**
+- **Singleton:** Stellt sicher, dass es nur eine Instanz gibt (Datenbankverbindung, Konfiguration).
+- **Factory:** Erzeugt Objekte, ohne die konkrete Klasse anzugeben.
+- **Builder:** Baut komplexe Objekte Schritt für Schritt auf.
+
+**Strukturmuster (Structural):**
+- **Adapter:** Wandelt eine Schnittstelle um, damit sie kompatibel ist.
+- **Decorator:** Fügt einem Objekt Verhalten hinzu, ohne die ursprüngliche Klasse zu ändern.
+
+**Verhaltensmuster (Behavioral):**
+- **Observer:** Benachrichtigt Abonnenten über Zustandsänderungen (Event-Systeme).
+- **Strategy:** Wählt einen Algorithmus zur Laufzeit (flexibles Verhalten).
+- **Repository:** Trennt die Datenzugriffslogik von der Geschäftslogik.
+
+## 3. Ein Praxisbeispiel
+
+**Vor SOLID:**
+```javascript
+class UserService {
+  save(user) { /* DB */ }
+  validate(user) { /* validation */ }
+  sendEmail(user) { /* email */ }
+  generateReport(user) { /* report */ }
+}
+```
+
+**Nach SOLID:**
+```javascript
+class UserRepository { save(user) { /* DB */ } }
+class UserValidator { validate(user) { /* validation */ } }
+class EmailService { send(user) { /* email */ } }
+class ReportGenerator { generate(user) { /* report */ } }
+
+class UserService {
+  constructor(repo, validator, email, report) {
+    this.repo = repo; // Dependency Injection
+    this.validator = validator;
+    this.email = email;
+    this.report = report;
+  }
+  create(user) {
+    this.validator.validate(user);
+    this.repo.save(user);
+    this.email.send(user);
+  }
+}
+```
+
+> *„Code ist ein Werkzeug, aber Denkweise und interdisziplinäres Verständnis machen den Wert eines Senior Engineers aus.“*

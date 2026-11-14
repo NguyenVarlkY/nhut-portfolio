@@ -1,0 +1,36 @@
+---
+title: "设计稳健的 REST API"
+date: "2026-08-07"
+excerpt: "构建符合标准、安全且易于扩展的 API。"
+---
+
+# 设计稳健的 REST API
+
+API 是大多数现代应用的“脊梁”。设计糟糕的 API 会让前端苦不堪言，也难以维护。
+
+## 1. 设计原则
+*   **使用名词：** 用 `/users` 而不是 `/getUsers`。
+*   **正确使用 HTTP 方法：**
+    *   `GET`：获取数据。
+    *   `POST`：创建。
+    *   `PUT/PATCH`：更新。
+    *   `DELETE`：删除。
+*   **标准 HTTP 状态码：** 200 (OK)、201 (Created)、400 (Bad Request)、401 (Unauthorized)、403 (Forbidden)、404 (Not Found)、500 (Server Error)。
+
+## 2. 安全与管理
+*   **Authentication：** 使用 JWT 或 Session。
+*   **Rate Limiting：** 对防范 DoS 攻击至关重要。
+*   **Validation：** 始终在前端和后端同时校验输入（服务端校验是必须的）。
+*   **API Versioning：** 从一开始就定义 API 版本（例如：`/api/v1/...`）。
+
+```json
+// 标准 JSON 响应示例
+{
+  "status": "success",
+  "data": {
+    "user": { "id": 1, "name": "Nhut Y" }
+  }
+}
+```
+
+一开始就花时间认真设计 API，能为你日后节省数百小时的编码和修 bug 时间。

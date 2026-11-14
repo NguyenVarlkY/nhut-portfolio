@@ -1,0 +1,568 @@
+---
+title: "Kubernetes 深度课程：将应用部署到云端"
+date: "2026-08-04"
+excerpt: "从基础到进阶的 Kubernetes 实战指南——部署、管理和扩展容器化应用。"
+---
+
+# Kubernetes 深度课程：将应用部署到云端
+
+Kubernetes（K8s）已经成为生产环境中容器编排的标准平台。本课程将带你从基本概念一路学到 Kubernetes 上的高级部署技巧。
+
+## 第 1 部分：Kubernetes 基本概念
+
+### 1.1. Cluster、Node 和 Pod
+- **Cluster**：协同工作的一组机器（node）
+- **Node**：集群中的单台机器（可以是虚拟机或物理机）
+- **Pod**：K8s 中最小的部署单元，包含一个或多个容器
+
+### 1.2. 关键组件
+- **API Server**：与集群交互的主要接口
+- **etcd**：存储集群状态的分布式键值存储
+- **Scheduler**：决定每个 pod 运行在哪个 node 上
+- **Controller Manager**：管理各种控制器（ReplicaSet、Deployment 等）
+- **Kubelet**：运行在每个 node 上、与容器运行时交互的代理
+- **Kube-proxy**：管理网络规则和服务发现
+
+### 1.3. 重要的 K8s 对象
+- **Pod**：基本的部署单元
+- **Deployment**：管理 ReplicaSet，并提供可回滚的更新
+- **Service**：提供稳定的网络端点来访问 pod
+- **ConfigMap & Secret**：存储配置和敏感数据
+- **Volume & PersistentVolume**：管理持久化存储
+- **Namespace**：集群内的逻辑划分
+- **Ingress**：管理从外部进入集群的访问
+
+## 第 2 部分：部署你的第一个应用
+
+### 2.1. 准备环境
+```bash
+# 安装 kubectl
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+chmod +x kubectl
+sudo mv kubectl /usr/local/bin/
+
+# 安装 Minikube（用于本地开发）
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
+
+# 启动本地集群
+minikube start
+```
+
+### 2.2. 创建一个简单的 Web 应用
+```yaml
+# deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-app
+  labels:
+    app: web-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web-app
+  template:
+    metadata:
+      labels:
+        app: web-app
+    spec:
+      containers:
+      - name: web
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+```
+
+### 2.3. 创建 Service 以访问应用
+```yaml
+# service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app-service
+spec:
+  selector:
+    app: web-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
+```
+
+### 2.4. 部署与验证
+```bash
+# 应用清单文件
+kubectl apply -f deployment.yaml
+kubectl apply -f service.yaml
+
+# 检查状态
+kubectl get deployments
+kubectl get pods
+kubectl get services
+
+# 访问应用（在 Minikube 上）
+minikube service web-app-service
+```
+
+## 第 3 部分：配置与管理应用
+
+### 3.1. 使用 ConfigMap 和 Secret
+```yaml
+# configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  APP_ENV: "production"
+  LOG_LEVEL: "info"
+  DATABASE_URL: "postgres://user:pass@db:5432/myapp"
+
+# secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: app-secret
+type: Opaque
+data:
+  # 值需要使用 base64 编码
+  DB_USERNAME: "dXNlcg=="  # "user"
+  DB_PASSWORD: "cGFzc3dvcmQ="  # "password"
+```
+
+### 3.2. 在 Deployment 中引用 ConfigMap 和 Secret
+```yaml
+# 更新 deployment.yaml
+spec:
+  template:
+    spec:
+      containers:
+      - name: web
+        image: myapp:latest
+        env:
+        - name: APP_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: APP_ENV
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: LOG_LEVEL
+        - name: DATABASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: DATABASE_URL
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: app-secret
+              key: DB_USERNAME
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: app-secret
+              key: DB_PASSWORD
+        ports:
+        - containerPort: 80
+```
+
+### 3.3. 使用 Volume 进行持久化存储
+```yaml
+# persistent-volume.yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: app-pv
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data"
+
+# persistent-volume-claim.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: app-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 3Gi
+
+# 更新 deployment 以使用 PVC
+spec:
+  template:
+    spec:
+      containers:
+      - name: web
+        # ...（其他部分保持不变）
+        volumeMounts:
+        - name: app-storage
+          mountPath: "/app/data"
+      volumes:
+      - name: app-storage
+        persistentVolumeClaim:
+          claimName: app-pvc
+```
+
+## 第 4 部分：扩展与性能优化
+
+### 4.1. Horizontal Pod Autoscaler（HPA）
+```yaml
+# hpa.yaml
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: web-app-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: web-app
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+```
+
+### 4.2. Resource Limits 与 Requests
+```yaml
+# 在 deployment 的 container spec 中
+resources:
+  requests:
+    memory: "256Mi"
+    cpu: "500m"
+  limits:
+    memory: "512Mi"
+    cpu: "1000m"
+```
+
+### 4.3. Node Selector 与 Affinity
+```yaml
+# 让 pod 运行在特定的 node 上
+spec:
+  template:
+    spec:
+      nodeSelector:
+        disktype: ssd
+      # 或者使用 affinity
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/e2e-az-name
+                operator: In
+                values:
+                - us-east-1a
+                - us-east-1b
+```
+
+## 第 5 部分：更新与回滚应用
+
+### 5.1. 更新策略
+Kubernetes Deployment 支持多种更新策略：
+- **Rolling Update**（默认）：逐步替换 pod
+- **Recreate**：先删除所有旧 pod，再创建新 pod
+
+```yaml
+# 在 deployment 中设置策略
+spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+```
+
+### 5.2. 执行更新
+```bash
+# 更新 deployment 中的镜像
+kubectl set image deployment/web-app web=myapp:v2
+
+# 查看发布进度
+kubectl rollout status deployment/web-app
+
+# 查看发布历史
+kubectl rollout history deployment/web-app
+```
+
+### 5.3. 必要时回滚
+```bash
+# 回滚到上一个版本
+kubectl rollout undo deployment/web-app
+
+# 回滚到指定的版本
+kubectl rollout undo deployment/web-app --to-revision=3
+```
+
+## 第 6 部分：监控与日志
+
+### 6.1. K8s 监控基础
+- **Metrics Server**：收集资源使用情况（CPU、内存）
+- **kubectl top**：查看当前资源使用情况
+- **Dashboard**：用于监控集群的 Web 界面
+
+### 6.2. 收集应用日志
+```yaml
+# 为容器添加日志
+spec:
+  template:
+    spec:
+      containers:
+      - name: web
+        image: myapp:latest
+        # ...（其他部分）
+        volumeMounts:
+        - name: app-logs
+          mountPath: "/var/log/app"
+      volumes:
+      - name: app-logs
+        emptyDir: {}
+```
+
+### 6.3. 使用 Sidecar 容器收集日志
+```yaml
+spec:
+  template:
+    spec:
+      containers:
+      - name: web
+        image: myapp:latest
+        # ...（其他部分）
+      - name: log-agent
+        image: fluent/fluentd:v1.14-debian-1
+        volumeMounts:
+        - name: app-logs
+          mountPath: "/var/log/app"
+      volumes:
+      - name: app-logs
+        emptyDir: {}
+```
+
+## 第 7 部分：Kubernetes 中的安全
+
+### 7.1. 基于角色的访问控制（RBAC）
+```yaml
+# 创建 role
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: default
+  name: pod-reader
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "watch", "list"]
+
+# 将 role 绑定到用户或 service account
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: read-pods
+  namespace: default
+subjects:
+- kind: User
+  name: jane  # 用户的 "name"
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: pod-reader
+  apiGroup: rbac.authorization.k8s.io
+```
+
+### 7.2. Network Policies
+```yaml
+# 阻止所有进出 pod 的流量
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: deny-all
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+
+# 允许来自特定 pod 的流量
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-frontend
+spec:
+  podSelector:
+    matchLabels:
+      role: backend
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          role: frontend
+    ports:
+    - protocol: TCP
+      port: 8080
+```
+
+### 7.3. 镜像安全
+- 使用来自可信来源的镜像
+- 扫描镜像中的安全漏洞
+- 以最小权限运行容器
+- 尽可能使用只读的根文件系统
+
+## 第 8 部分：实际的部署模式
+
+### 8.1. 蓝绿部署（Blue-Green Deployment）
+```yaml
+# Blue service（当前版本）
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app
+spec:
+  selector:
+    app: web-app
+    version: blue
+  ports:
+  - port: 80
+    targetPort: 80
+
+# Green service（新版本）
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app-green
+spec:
+  selector:
+    app: web-app
+    version: green
+  ports:
+  - port: 80
+    targetPort: 80
+```
+
+### 8.2. 金丝雀发布（Canary Release）
+```yaml
+# Main service（95% 的流量）
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app
+spec:
+  selector:
+    app: web-app
+  ports:
+  - port: 80
+    targetPort: 80
+
+# Canary service（5% 的流量）
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app-canary
+spec:
+  selector:
+    app: web-app
+    version: canary
+  ports:
+  - port: 80
+    targetPort: 80
+```
+
+## 第 9 部分：常见问题排查
+
+### 9.1. Pod 无法启动
+```bash
+# 查看 pod 事件
+kubectl describe pod <pod-name>
+
+# 查看容器日志
+kubectl logs <pod-name>
+
+# 检查容器状态
+kubectl get pod <pod-name> -o yaml
+```
+
+### 9.2. Service 无法访问
+```bash
+# 检查 service
+kubectl get svc <service-name>
+
+# 检查 endpoints
+kubectl get endpoints <service-name>
+
+# 检查 pod 是否在运行
+kubectl get pods -l <selector>
+```
+
+### 9.3. 性能低下
+```bash
+# 检查资源使用情况
+kubectl top pods
+kubectl top nodes
+
+# 查看事件
+kubectl get events --sort-by='.lastTimestamp'
+
+# 检查 resource limits
+kubectl describe pod <pod-name> | grep -A 10 -B 5 "Limits\|Requests"
+```
+
+## 第 10 部分：进阶主题与未来趋势
+
+### 10.1. Service Mesh（Istio、Linkerd）
+- 管理微服务之间的流量
+- 提供安全、监控和链路追踪
+- 熔断、重试、超时等功能
+
+### 10.2. GitOps（Argo CD、Flux）
+- 通过 Git 仓库管理集群
+- 自动化部署与同步
+- 提高可复现性和可审计性
+
+### 10.3. K8s 上的 Serverless（Knative）
+- 无需管理服务器即可部署应用
+- 根据流量自动扩缩容
+- 按实际使用量付费
+
+### 10.4. K8s 上的 AI/ML（Kubeflow）
+- 面向端到端机器学习工作流的平台
+- 管理实验、训练和模型服务
+- 与 TensorFlow、PyTorch 等主流框架集成
+
+## 结语
+
+Kubernetes 是在生产环境中部署和管理容器化应用的强大平台。虽然一开始比较复杂，但投入时间学习 K8s 会带来巨大的回报：
+
+- **可扩展性**：轻松从几个 pod 扩展到数千个 pod
+- **稳定性**：自动从故障中恢复，并进行负载均衡
+- **可移植性**：可以运行在任何基础设施上（本地、云端、边缘）
+- **丰富的生态**：大量配套工具和服务
+- **行业标准**：在业界被广泛采用
+
+从基本概念开始，并经常动手实践。在部署到生产环境之前，先用 Minikube 或 kind 进行本地开发。始终记住，K8s 只是工具——目标是通过稳定、高效、易于维护的应用为用户创造价值。
+
+加入 K8s 社区，参加线下聚会，并持续学习，因为这个生态系统发展得非常快。祝你在成为 Kubernetes 专家的道路上一切顺利！

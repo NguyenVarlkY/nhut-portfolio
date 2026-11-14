@@ -1,0 +1,284 @@
+---
+title: "A Guide to Refactoring: Improving Code Quality"
+date: "2026-08-04"
+excerpt: "A comprehensive guide to refactoring: techniques for improving source code without changing its external behavior."
+---
+
+# A Guide to Refactoring: Improving Code Quality
+
+Refactoring is the process of restructuring existing code without changing its external behavior. The goal is to improve the software's design, make the code easier to understand, and reduce maintenance costs.
+
+## Why Refactor?
+
+### 1. Reduce Complexity
+- Complex code is hard to understand, hard to maintain, and bug-prone
+- Refactoring simplifies logic and makes code clearer
+
+### 2. Improve Readability
+- Good code should read like a story
+- Refactoring helps you give variables, functions, and classes meaningful names
+
+### 3. Prepare for New Features
+- Clean code is easier to extend
+- Refactoring before adding a feature reduces the risk of bugs
+
+### 4. Reduce Maintenance Work
+- Good code cuts the time it takes to find and fix bugs
+- Refactoring helps pay down technical debt
+
+## Refactoring Principles
+
+### 1. Always Have Tests
+- Before refactoring, make sure you have a good enough test suite
+- Tests verify that behavior hasn't changed after refactoring
+
+### 2. Refactor in Small Steps
+- Small changes are easier to control
+- They're easy to roll back if something goes wrong
+
+### 3. Keep Doing It
+- Refactoring isn't a one-off activity
+- It should happen continuously throughout development
+
+## Basic Refactoring Techniques
+
+### 1. Extract Method
+```javascript
+// Before
+function printOwing(invoice) {
+  let outstanding = 0;
+  console.log(`*************************`);
+  console.log(`**** Customer Owes ****`);
+  console.log(`*************************`);
+  
+  // calculate outstanding
+  for (const border of invoice.borders) {
+    outstanding += border.amount;
+  }
+  
+  // record due date
+  const today = Date.now();
+  invoice.dueDate = new Date(today + 30 * 24 * 60 * 60 * 1000);
+  
+  console.log(`Customer name: ${invoice.customer}`);
+  console.log(`Amount owed: ${outstanding}`);
+  console.log(`Due date: ${invoice.dueDate.toLocaleDateString()}`);
+}
+
+// After
+function printOwing(invoice) {
+  printBanner();
+  const outstanding = calculateOutstanding(invoice);
+  recordDueDate(invoice);
+  printDetails(invoice, outstanding);
+}
+
+function printBanner() {
+  console.log(`*************************`);
+  console.log(`**** Customer Owes ****`);
+  console.log(`*************************`);
+}
+
+function calculateOutstanding(invoice) {
+  return invoice.borders.reduce((sum, border) => sum + border.amount, 0);
+}
+
+function recordDueDate(invoice) {
+  const today = Date.now();
+  invoice.dueDate = new Date(today + 30 * 24 * 60 * 60 * 1000);
+}
+
+function printDetails(invoice, outstanding) {
+  console.log(`Customer name: ${invoice.customer}`);
+  console.log(`Amount owed: ${outstanding}`);
+  console.log(`Due date: ${invoice.dueDate.toLocaleDateString()}`);
+}
+```
+
+### 2. Rename Variable
+```javascript
+// Before
+function getTotalPrice() {
+  let t = 0;
+  for (let i = 0; i < items.length; i++) {
+    t += items[i].price * items[i].quantity;
+  }
+  return t;
+}
+
+// After
+function getTotalPrice() {
+  let totalPrice = 0;
+  for (let i = 0; i < items.length; i++) {
+    totalPrice += items[i].price * items[i].quantity;
+  }
+  return totalPrice;
+}
+```
+
+### 3. Replace Temp with Query
+```javascript
+// Before
+function getDistanceTraveled(time) {
+  const result = 2 * Math.PI * radius;
+  return result * time;
+}
+
+// After
+function getDistanceTraveled(time) {
+  return getBaseCircumference() * time;
+}
+
+function getBaseCircumference() {
+  return 2 * Math.PI * radius;
+}
+```
+
+## An Effective Refactoring Process
+
+### Step 1: Analyze and Plan
+- Identify the area that needs refactoring
+- Set a concrete goal (better readability, lower complexity, etc.)
+- Plan a series of small steps
+
+### Step 2: Prepare the Environment
+- Make sure you have a good enough test suite
+- Run all tests to confirm a stable starting point
+
+### Step 3: Make Small Refactorings
+- Apply one refactoring technique at a time
+- Run the tests after every change
+
+### Step 4: Test and Verify
+- Run the full test suite
+- Check whether any behavior has changed
+
+### Step 5: Repeat
+- Move on to the next area
+- Reassess the code quality
+
+## Common Types of Refactoring
+
+### 1. Composing Methods
+- Extract Method
+- Inline Method
+- Inline Temp
+- Replace Temp with Query
+- Split Temporary Variable
+- Remove Assignments to Parameters
+- Replace Method with Method Object
+- Substitute Algorithm
+
+### 2. Moving Features Between Objects
+- Move Method
+- Move Field
+- Extract Class
+- Inline Class
+- Hide Delegate
+- Remove Middle Man
+- Introduce Foreign Method
+- Introduce Local Extension
+
+### 3. Organizing Data
+- Self Encapsulate Field
+- Replace Data Value with Object
+- Change Value to Reference
+- Change Reference to Value
+- Replace Array with Object
+- Duplicate Observed Data
+- Change Unidirectional Association to Bidirectional
+- Change Bidirectional Association to Unidirectional
+- Replace Magic Number with Symbolic Constant
+- Encapsulate Field
+- Encapsulate Collection
+- Replace Record with Data Class
+- Replace Type Code with Class
+- Replace Type Code with Subclasses
+- Replace Type Code with State/Strategy
+- Replace Subclass with Fields
+
+### 4. Simplifying Conditional Expressions
+- Decompose Conditional
+- Consolidate Conditional Expression
+- Consolidate Duplicate Conditional Fragments
+- Remove Control Flag
+- Replace Nested Conditional with Guard Clauses
+- Conditional to Polymorphism
+- Introduce Null Object
+- Introduce Assertion
+
+### 5. Simplifying Method Calls
+- Rename Method
+- Add Parameter
+- Remove Parameter
+- Separate Query from Modifier
+- Parameterize Method
+- Replace Parameter with Explicit Methods
+- Preserve Whole Object
+- Replace Parameter with Methods
+- Hide Method
+- Replace Constructor with Factory Function
+- Replace Error Code with Exception
+- Replace Exception with Test
+
+## Refactoring Best Practices
+
+### 1. Focus on One Thing at a Time
+- Don't try to do too much at once
+- Each commit should have a single, specific refactoring purpose
+
+### 2. Record Your Reasons
+- Explain in the commit message why you're refactoring
+- This helps the team understand the value of the change
+
+### 3. Use Tooling
+- Most modern IDEs support refactoring
+- Take advantage of features like Rename, Extract Method, etc.
+
+### 4. Don't Refactor When It Isn't Needed
+- If the code works well and causes no problems, don't refactor it just to make it "clean"
+- Refactoring should deliver real value
+
+### 5. Keep Learning
+- Read Martin Fowler's book "Refactoring: Improving the Design of Existing Code"
+- Join knowledge-sharing sessions within your team
+
+## When to Avoid Refactoring
+
+### 1. Under Deadline Pressure
+- If you're in the middle of an urgent bug fix, fix the bug first
+- Refactoring can come later, once things are stable
+
+### 2. Without Good Enough Tests
+- Refactoring without tests is very risky
+- Write good enough tests first, then refactor
+
+### 3. When the Code Will Change Soon
+- If you know this code will be completely rewritten in the near future
+- Refactoring it may not be worth it
+
+## Refactoring Tools
+
+### IDE Built-in Tools
+- Visual Studio Code: Refactoring menu, IntelliSense
+- IntelliJ IDEA: The most powerful refactoring tools
+- WebStorm: Optimized for JavaScript/TypeScript
+
+### Specialized Tools
+- ESLint with refactoring rules
+- JSCodeshift: A source code transformation tool
+- CodeClimate: Code quality analysis
+
+## Conclusion
+
+Refactoring isn't a separate activity; it's an inseparable part of software development. Done right, refactoring helps you:
+
+- Raise code quality
+- Reduce the risk of bugs
+- Move faster in the long run
+- Improve team satisfaction
+- Lower maintenance costs
+
+Remember that refactoring is an art as much as a skill. It takes patience, attention to detail, and a deep understanding of software design. Start with small, seamless changes, and always keep tests in place to protect correctness.
+
+As you get used to refactoring, you'll start noticing "code smells" and know exactly how to deal with them. That's the mark of a skilled developer: not just writing code that works, but writing code that works well.

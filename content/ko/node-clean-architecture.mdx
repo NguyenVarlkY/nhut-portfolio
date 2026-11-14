@@ -1,0 +1,43 @@
+---
+title: "Node.js로 클린 아키텍처 구축하기"
+date: "2026-08-05"
+excerpt: "유지보수와 확장이 쉽도록 Node.js 프로젝트를 클린 아키텍처 방식으로 구성하는 상세 가이드."
+---
+
+# Node.js로 클린 아키텍처 구축하기
+
+소프트웨어 세계에서 유지보수성은 생존의 문제입니다. 클린 아키텍처는 비즈니스 로직을 외부 의존성으로부터 분리해 줍니다.
+
+## 왜 클린 아키텍처가 필요한가?
+프로젝트가 커질수록 데이터베이스 로직, 서드파티 라이브러리, 비즈니스 로직이 뒤섞인 코드는 테스트하고 업그레이드하기가 매우 어려워집니다.
+
+## 핵심 원칙
+1. **Dependency Rule:** 의존성은 오직 안쪽(핵심 로직 방향)으로만 향해야 합니다.
+2. **Entities:** 핵심 비즈니스 규칙을 담습니다.
+3. **Use Cases:** 시스템이 수행하는 구체적인 동작을 정의합니다.
+4. **Interface Adapters:** Use Case와 외부 구성 요소(API, 데이터베이스) 사이에서 데이터를 변환합니다.
+5. **Frameworks & Drivers:** 데이터베이스, Express/NestJS 등이 위치하는 곳입니다.
+
+## 구현 예시
+```javascript
+// Entities
+class User {
+  constructor(id, name) {
+    this.id = id;
+    this.name = name;
+  }
+}
+
+// Use Case
+class RegisterUser {
+  constructor(userRepository) {
+    this.userRepository = userRepository;
+  }
+  execute(userData) {
+    // 비즈니스 로직은 여기에
+    return this.userRepository.save(userData);
+  }
+}
+```
+
+이렇게 분리하면 `Use Case` 코드를 한 줄도 고치지 않고 MongoDB에서 PostgreSQL로 바꿀 수 있습니다.

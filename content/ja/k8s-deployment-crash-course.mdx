@@ -1,0 +1,568 @@
+---
+title: "Kubernetes 徹底講座：クラウドへのアプリケーションデプロイ"
+date: "2026-08-04"
+excerpt: "基礎から応用まで学べる実践的な Kubernetes ガイド：コンテナアプリケーションのデプロイ、管理、スケーリング。"
+---
+
+# Kubernetes 徹底講座：クラウドへのアプリケーションデプロイ
+
+Kubernetes（K8s）は、本番環境におけるコンテナオーケストレーションの標準プラットフォームとなりました。この講座では、基本的な概念から Kubernetes での高度なデプロイ手法までを順に解説します。
+
+## パート 1：Kubernetes の基本概念
+
+### 1.1. Cluster、Node、Pod
+- **Cluster**：連携して動作するマシン（node）の集まり
+- **Node**：クラスター内の個々のマシン（VM またはベアメタル）
+- **Pod**：K8s における最小のデプロイ単位で、1 つ以上のコンテナを含む
+
+### 1.2. 主要なコンポーネント
+- **API Server**：クラスターとやり取りするための主要なインターフェース
+- **etcd**：クラスターの状態を保存する分散キーバリューストア
+- **Scheduler**：各 pod をどの node で実行するかを決定
+- **Controller Manager**：コントローラー（ReplicaSet、Deployment など）を管理
+- **Kubelet**：各 node で動作し、コンテナランタイムとやり取りするエージェント
+- **Kube-proxy**：ネットワークルールとサービスディスカバリを管理
+
+### 1.3. 主要な K8s オブジェクト
+- **Pod**：基本的なデプロイ単位
+- **Deployment**：ReplicaSet を管理し、ロールバック可能な更新を提供
+- **Service**：pod にアクセスするための安定したネットワークエンドポイントを提供
+- **ConfigMap & Secret**：設定と機密データを保存
+- **Volume & PersistentVolume**：永続ストレージを管理
+- **Namespace**：クラスター内の論理的な区分け
+- **Ingress**：外部からクラスターへのアクセスを管理
+
+## パート 2：最初のアプリケーションをデプロイする
+
+### 2.1. 環境の準備
+```bash
+# kubectl をインストール
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+chmod +x kubectl
+sudo mv kubectl /usr/local/bin/
+
+# Minikube をインストール（ローカル開発用）
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
+
+# ローカルクラスターを起動
+minikube start
+```
+
+### 2.2. シンプルな Web アプリケーションを作成する
+```yaml
+# deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-app
+  labels:
+    app: web-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web-app
+  template:
+    metadata:
+      labels:
+        app: web-app
+    spec:
+      containers:
+      - name: web
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+```
+
+### 2.3. アプリケーションにアクセスするための Service を作成する
+```yaml
+# service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app-service
+spec:
+  selector:
+    app: web-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
+```
+
+### 2.4. デプロイと確認
+```bash
+# マニフェストを適用
+kubectl apply -f deployment.yaml
+kubectl apply -f service.yaml
+
+# 状態を確認
+kubectl get deployments
+kubectl get pods
+kubectl get services
+
+# アプリケーションにアクセス（Minikube）
+minikube service web-app-service
+```
+
+## パート 3：アプリケーションの設定と管理
+
+### 3.1. ConfigMap と Secret を使う
+```yaml
+# configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  APP_ENV: "production"
+  LOG_LEVEL: "info"
+  DATABASE_URL: "postgres://user:pass@db:5432/myapp"
+
+# secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: app-secret
+type: Opaque
+data:
+  # 値は base64 でエンコードする必要がある
+  DB_USERNAME: "dXNlcg=="  # "user"
+  DB_PASSWORD: "cGFzc3dvcmQ="  # "password"
+```
+
+### 3.2. Deployment から ConfigMap と Secret を参照する
+```yaml
+# deployment.yaml を更新
+spec:
+  template:
+    spec:
+      containers:
+      - name: web
+        image: myapp:latest
+        env:
+        - name: APP_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: APP_ENV
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: LOG_LEVEL
+        - name: DATABASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: DATABASE_URL
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: app-secret
+              key: DB_USERNAME
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: app-secret
+              key: DB_PASSWORD
+        ports:
+        - containerPort: 80
+```
+
+### 3.3. 永続ストレージに Volume を使う
+```yaml
+# persistent-volume.yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: app-pv
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data"
+
+# persistent-volume-claim.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: app-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 3Gi
+
+# PVC を使うように deployment を更新
+spec:
+  template:
+    spec:
+      containers:
+      - name: web
+        # ...（その他はそのまま）
+        volumeMounts:
+        - name: app-storage
+          mountPath: "/app/data"
+      volumes:
+      - name: app-storage
+        persistentVolumeClaim:
+          claimName: app-pvc
+```
+
+## パート 4：スケーリングとパフォーマンスの最適化
+
+### 4.1. Horizontal Pod Autoscaler（HPA）
+```yaml
+# hpa.yaml
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: web-app-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: web-app
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+```
+
+### 4.2. Resource Limits と Requests
+```yaml
+# deployment の container spec 内で
+resources:
+  requests:
+    memory: "256Mi"
+    cpu: "500m"
+  limits:
+    memory: "512Mi"
+    cpu: "1000m"
+```
+
+### 4.3. Node Selector と Affinity
+```yaml
+# 特定の node で pod を実行する
+spec:
+  template:
+    spec:
+      nodeSelector:
+        disktype: ssd
+      # または affinity を使う
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/e2e-az-name
+                operator: In
+                values:
+                - us-east-1a
+                - us-east-1b
+```
+
+## パート 5：アプリケーションの更新とロールバック
+
+### 5.1. 更新の戦略
+Kubernetes の Deployment は複数の更新戦略をサポートしています：
+- **Rolling Update**（デフォルト）：pod を段階的に置き換える
+- **Recreate**：新しい pod を作成する前に、古い pod をすべて削除する
+
+```yaml
+# deployment で戦略を設定
+spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+```
+
+### 5.2. 更新を実行する
+```bash
+# deployment のイメージを更新
+kubectl set image deployment/web-app web=myapp:v2
+
+# ロールアウトの進行状況を確認
+kubectl rollout status deployment/web-app
+
+# ロールアウトの履歴を表示
+kubectl rollout history deployment/web-app
+```
+
+### 5.3. 必要に応じてロールバックする
+```bash
+# 1 つ前のバージョンにロールバック
+kubectl rollout undo deployment/web-app
+
+# 特定のリビジョンにロールバック
+kubectl rollout undo deployment/web-app --to-revision=3
+```
+
+## パート 6：監視とログ
+
+### 6.1. K8s における監視の基本
+- **Metrics Server**：リソース使用量（CPU、メモリ）を収集
+- **kubectl top**：現在のリソース使用量を表示
+- **Dashboard**：クラスターを監視するための Web UI
+
+### 6.2. アプリケーションログの収集
+```yaml
+# コンテナにログ出力を追加
+spec:
+  template:
+    spec:
+      containers:
+      - name: web
+        image: myapp:latest
+        # ...（その他の部分）
+        volumeMounts:
+        - name: app-logs
+          mountPath: "/var/log/app"
+      volumes:
+      - name: app-logs
+        emptyDir: {}
+```
+
+### 6.3. ログ収集にサイドカーコンテナを使う
+```yaml
+spec:
+  template:
+    spec:
+      containers:
+      - name: web
+        image: myapp:latest
+        # ...（その他の部分）
+      - name: log-agent
+        image: fluent/fluentd:v1.14-debian-1
+        volumeMounts:
+        - name: app-logs
+          mountPath: "/var/log/app"
+      volumes:
+      - name: app-logs
+        emptyDir: {}
+```
+
+## パート 7：Kubernetes のセキュリティ
+
+### 7.1. Role-Based Access Control（RBAC）
+```yaml
+# role を作成
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: default
+  name: pod-reader
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "watch", "list"]
+
+# ユーザーまたは service account に role を割り当てる
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: read-pods
+  namespace: default
+subjects:
+- kind: User
+  name: jane  # ユーザーの "name"
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: pod-reader
+  apiGroup: rbac.authorization.k8s.io
+```
+
+### 7.2. Network Policies
+```yaml
+# pod へのすべての通信を遮断
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: deny-all
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+
+# 特定の pod からの通信を許可
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-frontend
+spec:
+  podSelector:
+    matchLabels:
+      role: backend
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          role: frontend
+    ports:
+    - protocol: TCP
+      port: 8080
+```
+
+### 7.3. イメージのセキュリティ
+- 信頼できる提供元のイメージを使う
+- イメージの脆弱性をスキャンする
+- 必要最小限の権限でコンテナを実行する
+- 可能であれば読み取り専用のルートファイルシステムを使う
+
+## パート 8：実践的なデプロイパターン
+
+### 8.1. Blue-Green デプロイ
+```yaml
+# Blue service（現行バージョン）
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app
+spec:
+  selector:
+    app: web-app
+    version: blue
+  ports:
+  - port: 80
+    targetPort: 80
+
+# Green service（新バージョン）
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app-green
+spec:
+  selector:
+    app: web-app
+    version: green
+  ports:
+  - port: 80
+    targetPort: 80
+```
+
+### 8.2. Canary リリース
+```yaml
+# Main service（トラフィックの 95%）
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app
+spec:
+  selector:
+    app: web-app
+  ports:
+  - port: 80
+    targetPort: 80
+
+# Canary service（トラフィックの 5%）
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app-canary
+spec:
+  selector:
+    app: web-app
+    version: canary
+  ports:
+  - port: 80
+    targetPort: 80
+```
+
+## パート 9：よくある問題のトラブルシューティング
+
+### 9.1. Pod が起動しない
+```bash
+# pod のイベントを確認
+kubectl describe pod <pod-name>
+
+# コンテナのログを表示
+kubectl logs <pod-name>
+
+# コンテナの状態を確認
+kubectl get pod <pod-name> -o yaml
+```
+
+### 9.2. Service にアクセスできない
+```bash
+# service を確認
+kubectl get svc <service-name>
+
+# endpoints を確認
+kubectl get endpoints <service-name>
+
+# pod が動いているか確認
+kubectl get pods -l <selector>
+```
+
+### 9.3. パフォーマンスが低い
+```bash
+# リソース使用量を確認
+kubectl top pods
+kubectl top nodes
+
+# イベントを確認
+kubectl get events --sort-by='.lastTimestamp'
+
+# resource limits を確認
+kubectl describe pod <pod-name> | grep -A 10 -B 5 "Limits\|Requests"
+```
+
+## パート 10：高度なトピックと今後のトレンド
+
+### 10.1. Service Mesh（Istio、Linkerd）
+- マイクロサービス間のトラフィックを管理
+- セキュリティ、監視、トレーシングを提供
+- サーキットブレーカー、リトライ、タイムアウトなどの機能
+
+### 10.2. GitOps（Argo CD、Flux）
+- Git リポジトリを通じてクラスターを管理
+- デプロイと同期を自動化
+- 再現性と監査性を向上
+
+### 10.3. K8s 上のサーバーレス（Knative）
+- サーバーを管理せずにアプリケーションをデプロイ
+- トラフィックに応じた自動スケーリング
+- 実際の使用量に応じた課金
+
+### 10.4. K8s 上の AI/ML（Kubeflow）
+- エンドツーエンドの機械学習ワークフローのためのプラットフォーム
+- 実験、学習、推論提供を管理
+- TensorFlow や PyTorch などの主要なフレームワークと統合
+
+## まとめ
+
+Kubernetes は、本番環境でコンテナアプリケーションをデプロイ・管理するための強力なプラットフォームです。最初は複雑に感じますが、K8s の学習に投じた時間は、次のような大きなメリットとして返ってきます：
+
+- **スケーラビリティ**：数個の pod から数千の pod まで簡単に拡張
+- **安定性**：障害からの自動復旧と負荷分散
+- **可搬性**：どんなインフラ（オンプレミス、クラウド、エッジ）でも実行可能
+- **豊かなエコシステム**：多くの支援ツールとサービス
+- **業界標準**：業界全体で広く採用
+
+基本的な概念から始めて、定期的に手を動かしましょう。本番環境にデプロイする前に、Minikube や kind でローカル開発を行いましょう。K8s は道具であり、目的は安定していて効率的で保守しやすいアプリケーションを通じてユーザーに価値を届けることだと、常に心に留めておいてください。
+
+K8s のコミュニティに参加し、ミートアップに足を運び、学び続けましょう。このエコシステムは非常に速いペースで進化しています。Kubernetes のエキスパートを目指すあなたの旅を応援しています！

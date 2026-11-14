@@ -1,0 +1,568 @@
+---
+title: "Kubernetes 심화 과정: 클라우드에 애플리케이션 배포하기"
+date: "2026-08-04"
+excerpt: "기초부터 고급까지 다루는 실전 Kubernetes 가이드: 컨테이너 애플리케이션의 배포, 관리, 확장."
+---
+
+# Kubernetes 심화 과정: 클라우드에 애플리케이션 배포하기
+
+Kubernetes(K8s)는 프로덕션 환경에서 컨테이너 오케스트레이션의 표준 플랫폼이 되었습니다. 이 과정은 기본 개념부터 Kubernetes의 고급 배포 기법까지 안내합니다.
+
+## 1부: Kubernetes 기본 개념
+
+### 1.1. Cluster, Node, Pod
+- **Cluster**: 함께 동작하는 머신(node)들의 집합
+- **Node**: 클러스터 안의 개별 머신(VM 또는 베어메탈)
+- **Pod**: K8s에서 가장 작은 배포 단위로, 하나 이상의 컨테이너를 포함
+
+### 1.2. 주요 구성 요소
+- **API Server**: 클러스터와 상호작용하기 위한 주 인터페이스
+- **etcd**: 클러스터 상태를 저장하는 분산 키-값 저장소
+- **Scheduler**: 각 pod가 어떤 node에서 실행될지 결정
+- **Controller Manager**: 컨트롤러(ReplicaSet, Deployment 등)를 관리
+- **Kubelet**: 각 node에서 실행되며 컨테이너 런타임과 통신하는 에이전트
+- **Kube-proxy**: 네트워크 규칙과 서비스 디스커버리를 관리
+
+### 1.3. 주요 K8s 오브젝트
+- **Pod**: 기본 배포 단위
+- **Deployment**: ReplicaSet을 관리하고 롤백 가능한 업데이트를 제공
+- **Service**: pod에 접근하기 위한 안정적인 네트워크 엔드포인트 제공
+- **ConfigMap & Secret**: 설정과 민감한 데이터를 저장
+- **Volume & PersistentVolume**: 영구 스토리지 관리
+- **Namespace**: 클러스터 내 논리적 분할
+- **Ingress**: 외부에서 클러스터로의 접근 관리
+
+## 2부: 첫 애플리케이션 배포하기
+
+### 2.1. 환경 준비
+```bash
+# kubectl 설치
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+chmod +x kubectl
+sudo mv kubectl /usr/local/bin/
+
+# Minikube 설치 (로컬 개발용)
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
+
+# 로컬 클러스터 시작
+minikube start
+```
+
+### 2.2. 간단한 웹 애플리케이션 만들기
+```yaml
+# deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-app
+  labels:
+    app: web-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web-app
+  template:
+    metadata:
+      labels:
+        app: web-app
+    spec:
+      containers:
+      - name: web
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+```
+
+### 2.3. 애플리케이션 접근을 위한 Service 만들기
+```yaml
+# service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app-service
+spec:
+  selector:
+    app: web-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
+```
+
+### 2.4. 배포 및 확인
+```bash
+# 매니페스트 적용
+kubectl apply -f deployment.yaml
+kubectl apply -f service.yaml
+
+# 상태 확인
+kubectl get deployments
+kubectl get pods
+kubectl get services
+
+# 애플리케이션 접속 (Minikube)
+minikube service web-app-service
+```
+
+## 3부: 애플리케이션 설정과 관리
+
+### 3.1. ConfigMap과 Secret 사용하기
+```yaml
+# configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  APP_ENV: "production"
+  LOG_LEVEL: "info"
+  DATABASE_URL: "postgres://user:pass@db:5432/myapp"
+
+# secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: app-secret
+type: Opaque
+data:
+  # 값은 base64로 인코딩해야 함
+  DB_USERNAME: "dXNlcg=="  # "user"
+  DB_PASSWORD: "cGFzc3dvcmQ="  # "password"
+```
+
+### 3.2. Deployment에서 ConfigMap과 Secret 참조하기
+```yaml
+# deployment.yaml 업데이트
+spec:
+  template:
+    spec:
+      containers:
+      - name: web
+        image: myapp:latest
+        env:
+        - name: APP_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: APP_ENV
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: LOG_LEVEL
+        - name: DATABASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: DATABASE_URL
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: app-secret
+              key: DB_USERNAME
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: app-secret
+              key: DB_PASSWORD
+        ports:
+        - containerPort: 80
+```
+
+### 3.3. 영구 스토리지를 위한 Volume 사용하기
+```yaml
+# persistent-volume.yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: app-pv
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data"
+
+# persistent-volume-claim.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: app-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 3Gi
+
+# PVC를 사용하도록 deployment 업데이트
+spec:
+  template:
+    spec:
+      containers:
+      - name: web
+        # ... (나머지는 그대로)
+        volumeMounts:
+        - name: app-storage
+          mountPath: "/app/data"
+      volumes:
+      - name: app-storage
+        persistentVolumeClaim:
+          claimName: app-pvc
+```
+
+## 4부: 확장과 성능 최적화
+
+### 4.1. Horizontal Pod Autoscaler (HPA)
+```yaml
+# hpa.yaml
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: web-app-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: web-app
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+```
+
+### 4.2. Resource Limits와 Requests
+```yaml
+# deployment의 container spec 안에서
+resources:
+  requests:
+    memory: "256Mi"
+    cpu: "500m"
+  limits:
+    memory: "512Mi"
+    cpu: "1000m"
+```
+
+### 4.3. Node Selector와 Affinity
+```yaml
+# 특정 node에서 pod 실행하기
+spec:
+  template:
+    spec:
+      nodeSelector:
+        disktype: ssd
+      # 또는 affinity 사용
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/e2e-az-name
+                operator: In
+                values:
+                - us-east-1a
+                - us-east-1b
+```
+
+## 5부: 애플리케이션 업데이트와 롤백
+
+### 5.1. 업데이트 전략
+Kubernetes Deployment는 여러 업데이트 전략을 지원합니다:
+- **Rolling Update**(기본값): pod를 점진적으로 교체
+- **Recreate**: 새 pod를 만들기 전에 기존 pod를 모두 삭제
+
+```yaml
+# deployment에서 전략 설정
+spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+```
+
+### 5.2. 업데이트 수행하기
+```bash
+# deployment의 이미지 업데이트
+kubectl set image deployment/web-app web=myapp:v2
+
+# 롤아웃 진행 상황 확인
+kubectl rollout status deployment/web-app
+
+# 롤아웃 이력 보기
+kubectl rollout history deployment/web-app
+```
+
+### 5.3. 필요할 때 롤백하기
+```bash
+# 이전 버전으로 롤백
+kubectl rollout undo deployment/web-app
+
+# 특정 리비전으로 롤백
+kubectl rollout undo deployment/web-app --to-revision=3
+```
+
+## 6부: 모니터링과 로깅
+
+### 6.1. K8s 모니터링 기초
+- **Metrics Server**: 리소스 사용량(CPU, 메모리) 수집
+- **kubectl top**: 현재 리소스 사용량 확인
+- **Dashboard**: 클러스터를 모니터링하는 웹 UI
+
+### 6.2. 애플리케이션 로그 수집
+```yaml
+# 컨테이너에 로깅 추가
+spec:
+  template:
+    spec:
+      containers:
+      - name: web
+        image: myapp:latest
+        # ... (나머지 부분)
+        volumeMounts:
+        - name: app-logs
+          mountPath: "/var/log/app"
+      volumes:
+      - name: app-logs
+        emptyDir: {}
+```
+
+### 6.3. 로깅을 위한 Sidecar 컨테이너 사용
+```yaml
+spec:
+  template:
+    spec:
+      containers:
+      - name: web
+        image: myapp:latest
+        # ... (나머지 부분)
+      - name: log-agent
+        image: fluent/fluentd:v1.14-debian-1
+        volumeMounts:
+        - name: app-logs
+          mountPath: "/var/log/app"
+      volumes:
+      - name: app-logs
+        emptyDir: {}
+```
+
+## 7부: Kubernetes 보안
+
+### 7.1. Role-Based Access Control (RBAC)
+```yaml
+# role 생성
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: default
+  name: pod-reader
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "watch", "list"]
+
+# 사용자 또는 service account에 role 바인딩
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: read-pods
+  namespace: default
+subjects:
+- kind: User
+  name: jane  # 사용자의 "name"
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: pod-reader
+  apiGroup: rbac.authorization.k8s.io
+```
+
+### 7.2. Network Policies
+```yaml
+# pod로 향하는 모든 트래픽 차단
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: deny-all
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+
+# 특정 pod로부터의 트래픽 허용
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-frontend
+spec:
+  podSelector:
+    matchLabels:
+      role: backend
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          role: frontend
+    ports:
+    - protocol: TCP
+      port: 8080
+```
+
+### 7.3. 이미지 보안
+- 신뢰할 수 있는 출처의 이미지 사용
+- 이미지의 보안 취약점 스캔
+- 최소 권한으로 컨테이너 실행
+- 가능하면 읽기 전용 루트 파일 시스템 사용
+
+## 8부: 실전 배포 패턴
+
+### 8.1. Blue-Green 배포
+```yaml
+# Blue service (현재 버전)
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app
+spec:
+  selector:
+    app: web-app
+    version: blue
+  ports:
+  - port: 80
+    targetPort: 80
+
+# Green service (새 버전)
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app-green
+spec:
+  selector:
+    app: web-app
+    version: green
+  ports:
+  - port: 80
+    targetPort: 80
+```
+
+### 8.2. Canary 릴리스
+```yaml
+# Main service (트래픽 95%)
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app
+spec:
+  selector:
+    app: web-app
+  ports:
+  - port: 80
+    targetPort: 80
+
+# Canary service (트래픽 5%)
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app-canary
+spec:
+  selector:
+    app: web-app
+    version: canary
+  ports:
+  - port: 80
+    targetPort: 80
+```
+
+## 9부: 흔한 문제 해결
+
+### 9.1. Pod가 시작되지 않을 때
+```bash
+# pod 이벤트 확인
+kubectl describe pod <pod-name>
+
+# 컨테이너 로그 보기
+kubectl logs <pod-name>
+
+# 컨테이너 상태 확인
+kubectl get pod <pod-name> -o yaml
+```
+
+### 9.2. Service에 접근할 수 없을 때
+```bash
+# service 확인
+kubectl get svc <service-name>
+
+# endpoints 확인
+kubectl get endpoints <service-name>
+
+# pod가 실행 중인지 확인
+kubectl get pods -l <selector>
+```
+
+### 9.3. 성능이 낮을 때
+```bash
+# 리소스 사용량 확인
+kubectl top pods
+kubectl top nodes
+
+# 이벤트 확인
+kubectl get events --sort-by='.lastTimestamp'
+
+# resource limits 확인
+kubectl describe pod <pod-name> | grep -A 10 -B 5 "Limits\|Requests"
+```
+
+## 10부: 고급 주제와 미래 트렌드
+
+### 10.1. Service Mesh (Istio, Linkerd)
+- 마이크로서비스 간 트래픽 관리
+- 보안, 모니터링, 트레이싱 제공
+- 서킷 브레이커, 재시도, 타임아웃 같은 기능
+
+### 10.2. GitOps (Argo CD, Flux)
+- Git 저장소를 통해 클러스터 관리
+- 배포와 동기화 자동화
+- 재현성과 감사 가능성 향상
+
+### 10.3. K8s 위의 서버리스 (Knative)
+- 서버를 관리하지 않고 애플리케이션 배포
+- 트래픽 기반 자동 확장
+- 실제 사용량만큼 비용 지불
+
+### 10.4. K8s 위의 AI/ML (Kubeflow)
+- 엔드투엔드 머신러닝 워크플로를 위한 플랫폼
+- 실험, 학습, 서빙 관리
+- TensorFlow, PyTorch 같은 인기 프레임워크와 통합
+
+## 결론
+
+Kubernetes는 프로덕션 환경에서 컨테이너 애플리케이션을 배포하고 관리하는 강력한 플랫폼입니다. 처음에는 복잡하지만, K8s를 배우는 데 투자한 시간은 다음과 같은 큰 이점으로 돌아옵니다:
+
+- **확장성**: 몇 개의 pod에서 수천 개의 pod까지 쉽게 확장
+- **안정성**: 장애로부터의 자동 복구와 로드 밸런싱
+- **이식성**: 어떤 인프라(온프레미스, 클라우드, 엣지)에서도 실행 가능
+- **풍부한 생태계**: 다양한 지원 도구와 서비스
+- **업계 표준**: 업계 전반에서 폭넓게 사용
+
+기본 개념부터 시작해 꾸준히 실습하세요. 프로덕션에 배포하기 전에 Minikube나 kind로 로컬 개발을 먼저 해 보세요. K8s는 도구일 뿐이며, 목표는 안정적이고 효율적이며 유지보수하기 쉬운 애플리케이션으로 사용자에게 가치를 전달하는 것임을 항상 기억하세요.
+
+K8s 커뮤니티에 참여하고, 밋업에 나가고, 계속 배우세요. 이 생태계는 매우 빠르게 발전하고 있습니다. Kubernetes 전문가가 되는 여정을 응원합니다!

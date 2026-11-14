@@ -1,0 +1,58 @@
+---
+title: "L'état d'esprit d'un Senior Engineer : la façon de penser et l'attitude qui font la différence"
+date: "2026-08-16"
+excerpt: "Les compétences techniques ne sont que la moitié du travail. Le bon état d'esprit et une attitude professionnelle font le Senior Engineer."
+---
+
+# L'état d'esprit d'un Senior Engineer : la façon de penser et l'attitude qui font la différence
+
+Les compétences techniques s'apprennent dans les livres et les formations, mais l'**état d'esprit** (mindset) et l'**attitude** sont les plus difficiles à acquérir, et ce sont eux qui font la plus grande différence entre un Junior et un Senior Engineer.
+
+## 1. L'état d'esprit qui compte au travail
+
+### 1.1 Ne pas se précipiter pour corriger un bug
+Si vous ne savez pas **pourquoi** quelque chose ne marche pas, ne le corrigez pas : vous ne feriez que créer de nouveaux bugs. Ce principe paraît simple, mais il est essentiel.
+
+- Corriger un bug sans en comprendre la cause racine ne fait que « masquer » le symptôme.
+- Allez toujours du **diagnostic** au **traitement**, jamais l'inverse.
+
+### 1.2 La pensée du « pourquoi » (5 Whys)
+La méthode des **5 Whys** vient du système de production de Toyota : demandez « pourquoi » cinq fois de suite pour trouver la **cause racine (Root Cause)** au lieu de traiter seulement la surface.
+
+**Exemple :**
+- Incident : le système tombe à 2 h du matin.
+- Pourquoi ? → Le serveur manque de RAM.
+- Pourquoi ? → Un service a une fuite mémoire.
+- Pourquoi ? → Le cache n'est jamais vidé.
+- Pourquoi ? → Il n'y a pas de mécanisme de TTL.
+- Pourquoi ? → Personne ne l'a conçu dès le départ.
+
+=> La meilleure solution est de **reconcevoir le cache** avec un TTL, et pas seulement de redémarrer le serveur.
+
+### 1.3 La responsabilité envers le produit
+Un Senior Engineer ne se contente pas de « terminer la tâche ». Il se demande aussi :
+- Le code tourne-t-il de façon stable en production ?
+- Y a-t-il du monitoring et des alertes ?
+- Y a-t-il de la documentation et des tests ?
+- La personne suivante pourra-t-elle continuer à le maintenir ?
+
+## 2. Une attitude professionnelle
+
+### 2.1 Apprendre toute sa vie (Lifelong Learning)
+La technologie change chaque jour. Savoir **apprendre à apprendre** compte plus que connaître la syntaxe par cœur.
+
+- Consacrez 1 à 2 heures par semaine à de nouvelles technologies.
+- Lisez le code source des bibliothèques que vous utilisez.
+- Écrivez des articles et de la documentation pour consolider vos connaissances.
+
+### 2.2 Communication et esprit d'équipe
+- Expliquez simplement des problèmes techniques complexes.
+- Faites des revues de code constructives, pas des jugements.
+- Prenez les tâches difficiles et aidez vos coéquipiers.
+
+### 2.3 Humilité et ouverture
+- Sachez reconnaître quand vous avez tort.
+- Apprenez de tout le monde, y compris des Juniors.
+- N'hésitez pas à poser des questions quand vous ne comprenez pas.
+
+> *« Un excellent ingénieur n'est pas quelqu'un qui ne se trompe jamais, mais quelqu'un qui sait corriger ses erreurs le plus vite possible et faire en sorte qu'elles ne se reproduisent pas. »*

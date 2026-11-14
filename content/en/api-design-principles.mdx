@@ -1,0 +1,36 @@
+---
+title: "Designing Solid REST APIs"
+date: "2026-08-07"
+excerpt: "Building APIs that follow standards, stay secure, and scale easily."
+---
+
+# Designing Solid REST APIs
+
+APIs are the "backbone" of most modern applications. A poorly designed API makes the frontend's life miserable and is hard to maintain.
+
+## 1. Design principles
+*   **Use nouns:** `/users` instead of `/getUsers`.
+*   **Use HTTP methods correctly:**
+    *   `GET`: Read data.
+    *   `POST`: Create.
+    *   `PUT/PATCH`: Update.
+    *   `DELETE`: Delete.
+*   **Standard HTTP status codes:** 200 (OK), 201 (Created), 400 (Bad Request), 401 (Unauthorized), 403 (Forbidden), 404 (Not Found), 500 (Server Error).
+
+## 2. Security and management
+*   **Authentication:** Use JWT or sessions.
+*   **Rate Limiting:** Essential for protecting against DoS attacks.
+*   **Validation:** Always validate input on both the frontend and backend (server-side validation is mandatory).
+*   **API Versioning:** Define your API version from day one (e.g. `/api/v1/...`).
+
+```json
+// Example of a standard JSON response
+{
+  "status": "success",
+  "data": {
+    "user": { "id": 1, "name": "Nhut Y" }
+  }
+}
+```
+
+Taking the time to design your API carefully up front will save you hundreds of hours of coding and bug fixing later.

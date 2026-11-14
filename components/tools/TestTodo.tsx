@@ -1,11 +1,13 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef, type ChangeEvent } from 'react';
 import {
   Trash2, Check, Edit, Plus, ListTodo, Target, CalendarDays, BarChart3, ClipboardList,
-  Flag, X, ChevronRight, Search, CalendarClock, AlertCircle, CheckCircle2,
+  Flag, X, ChevronRight, Search, CalendarClock, AlertCircle, CheckCircle2, LayoutDashboard,
+  Download, Upload, CheckCheck, ArrowUpDown,
 } from 'lucide-react';
 import { useTranslation } from '@/lib/i18n/LanguageContext';
+import { showToast } from '@/lib/toast';
 
 /* ================= Types ================= */
 interface TodoItem {
@@ -48,10 +50,12 @@ const GOALS_KEY = 'nhut-todo-goals';
 const PLANS_KEY = 'nhut-todo-plans';
 const SCHEDULE_KEY = 'nhut-todo-schedule';
 
-type Tab = 'tasks' | 'goals' | 'plans' | 'schedule' | 'analytics';
+type Tab = 'overview' | 'tasks' | 'goals' | 'plans' | 'schedule' | 'analytics';
+type SortMode = 'created' | 'priority' | 'due';
 
-const uid = () => Math.random().toString(36).substr(2, 9);
+const uid = () => Math.random().toString(36).slice(2, 11);
 const CATEGORIES = ['Work', 'Study', 'Personal', 'Health'];
+const PRIORITY_RANK: Record<TodoItem['priority'], number> = { high: 0, medium: 1, low: 2 };
 
 /* ================= Charts (pure SVG) ================= */
 function Donut({ pct, color = '#8b5cf6' }: { pct: number; color?: string }) {
@@ -83,10 +87,23 @@ function BarRow({ label, value, max, color = '#8b5cf6' }: { label: string; value
   );
 }
 
+function PriorityBars({ high, medium, low, labels }: { high: number; medium: number; low: number; labels: [string, string, string] }) {
+  const max = Math.max(high, medium, low, 1);
+  return (
+    <div className="space-y-2">
+      <BarRow label={labels[0]} value={high} max={max} color="#ef4444" />
+      <BarRow label={labels[1]} value={medium} max={max} color="#f59e0b" />
+      <BarRow label={labels[2]} value={low} max={max} color="#22c55e" />
+    </div>
+  );
+}
+
 /* ================= Main Component ================= */
 export default function TestTodo() {
   const { t } = useTranslation();
-  const [tab, setTab] = useState<Tab>('tasks');
+  // Categories are stored by their English id; only the label is translated.
+  const catLabel = (c: string) => (CATEGORIES.includes(c) ? t(`tools.todo.categories.${c}`) : c);
+  const [tab, setTab] = useState<Tab>('overview');
 
   // Tasks
   const [todos, setTodos] = useState<TodoItem[]>([]);
@@ -99,6 +116,9 @@ export default function TestTodo() {
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [editId, setEditId] = useState<string | null>(null);
   const [editText, setEditText] = useState('');
+  const [sortBy, setSortBy] = useState<SortMode>('created');
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const importInputRef = useRef<HTMLInputElement>(null);
 
   // Goals
   const [goals, setGoals] = useState<Goal[]>([]);
@@ -130,6 +150,19 @@ export default function TestTodo() {
   useEffect(() => { localStorage.setItem(PLANS_KEY, JSON.stringify(plans)); }, [plans]);
   useEffect(() => { localStorage.setItem(SCHEDULE_KEY, JSON.stringify(events)); }, [events]);
 
+  /* Keyboard shortcut: "/" focuses the task search box */
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== '/' || tab !== 'tasks') return;
+      const activeTag = (document.activeElement as HTMLElement | null)?.tagName;
+      if (activeTag === 'INPUT' || activeTag === 'TEXTAREA' || activeTag === 'SELECT') return;
+      e.preventDefault();
+      searchInputRef.current?.focus();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [tab]);
+
   /* ---- Tasks ---- */
   const addTodo = useCallback(() => {
     const trimmed = inputValue.trim();
@@ -137,36 +170,71 @@ export default function TestTodo() {
     setTodos([...todos, { id: uid(), text: trimmed, completed: false, createdAt: Date.now(), priority, dueDate: dueDate || undefined, category }]);
     setInputValue('');
     setDueDate('');
-  }, [inputValue, todos, priority]);
+    showToast(t('tools.todo.toastAdded'), 'success');
+  }, [inputValue, todos, priority, dueDate, category, t]);
 
   const toggleTodo = (id: string) =>
-    setTodos(todos.map(t => (t.id === id ? { ...t, completed: !t.completed } : t)));
-  const deleteTodo = (id: string) => setTodos(todos.filter(t => t.id !== id));
+    setTodos(todos.map(tItem => (tItem.id === id ? { ...tItem, completed: !tItem.completed } : tItem)));
+  const deleteTodo = (id: string) => {
+    setTodos(todos.filter(tItem => tItem.id !== id));
+    showToast(t('tools.todo.toastDeleted'), 'info');
+  };
   const startEdit = (id: string) => {
-    const todo = todos.find(t => t.id === id);
+    const todo = todos.find(tItem => tItem.id === id);
     if (todo) { setEditId(id); setEditText(todo.text); }
   };
   const saveEdit = () => {
     if (editId && editText.trim()) {
-      setTodos(todos.map(t => (t.id === editId ? { ...t, text: editText.trim() } : t)));
+      setTodos(todos.map(tItem => (tItem.id === editId ? { ...tItem, text: editText.trim() } : tItem)));
       setEditId(null); setEditText('');
     }
   };
-  const clearCompleted = () => setTodos(todos.filter(t => !t.completed));
+  const clearCompleted = () => {
+    setTodos(todos.filter(tItem => !tItem.completed));
+    showToast(t('tools.todo.toastCleared'), 'success');
+  };
+  const markAllComplete = () => {
+    setTodos(todos.map(tItem => ({ ...tItem, completed: true })));
+    showToast(t('tools.todo.toastAllDone'), 'success');
+  };
 
   const todayKey = new Date().toISOString().slice(0, 10);
-  const filteredTodos = todos.filter(t => {
-    if (filter === 'active') return !t.completed;
-    if (filter === 'completed') return t.completed;
-    if (filter === 'today') return t.dueDate === todayKey;
-    if (filter === 'overdue') return Boolean(t.dueDate && t.dueDate < todayKey && !t.completed);
-    return true;
-  }).filter(t => t.text.toLowerCase().includes(search.trim().toLowerCase()))
-    .filter(t => categoryFilter === 'all' || (t.category ?? 'Work') === categoryFilter);
-  const activeCount = todos.filter(t => !t.completed).length;
-  const completedCount = todos.filter(t => t.completed).length;
-  const todayCount = todos.filter(t => t.dueDate === todayKey && !t.completed).length;
-  const overdueCount = todos.filter(t => Boolean(t.dueDate && t.dueDate < todayKey && !t.completed)).length;
+
+  const sortedTodos = useMemo(() => {
+    const filtered = todos
+      .filter(tItem => {
+        if (filter === 'active') return !tItem.completed;
+        if (filter === 'completed') return tItem.completed;
+        if (filter === 'today') return tItem.dueDate === todayKey;
+        if (filter === 'overdue') return Boolean(tItem.dueDate && tItem.dueDate < todayKey && !tItem.completed);
+        return true;
+      })
+      .filter(tItem => tItem.text.toLowerCase().includes(search.trim().toLowerCase()))
+      .filter(tItem => categoryFilter === 'all' || (tItem.category ?? 'Work') === categoryFilter);
+
+    return filtered.sort((a, b) => {
+      if (sortBy === 'priority') return PRIORITY_RANK[a.priority] - PRIORITY_RANK[b.priority];
+      if (sortBy === 'due') return (a.dueDate || '9999-99-99').localeCompare(b.dueDate || '9999-99-99');
+      return b.createdAt - a.createdAt;
+    });
+  }, [todos, filter, search, categoryFilter, sortBy, todayKey]);
+
+  const { activeCount, completedCount, todayCount, overdueCount, highCount, medCount, lowCount, weekCount } = useMemo(() => {
+    let active = 0, completed = 0, today = 0, overdue = 0, high = 0, medium = 0, low = 0, week = 0;
+    const now = Date.now();
+    for (const tItem of todos) {
+      if (tItem.completed) completed++; else active++;
+      if (!tItem.completed && tItem.dueDate === todayKey) today++;
+      if (!tItem.completed && tItem.dueDate && tItem.dueDate < todayKey) overdue++;
+      if (!tItem.completed) {
+        if (tItem.priority === 'high') high++;
+        else if (tItem.priority === 'medium') medium++;
+        else low++;
+      }
+      if (now - tItem.createdAt < 7 * 86400000) week++;
+    }
+    return { activeCount: active, completedCount: completed, todayCount: today, overdueCount: overdue, highCount: high, medCount: medium, lowCount: low, weekCount: week };
+  }, [todos, todayKey]);
 
   const prioColor: Record<TodoItem['priority'], string> = {
     low: 'text-green-400', medium: 'text-amber-400', high: 'text-red-400',
@@ -177,16 +245,21 @@ export default function TestTodo() {
     if (!goalTitle.trim()) return;
     setGoals([...goals, { id: uid(), title: goalTitle.trim(), desc: '', target: parseInt(goalTarget) || 100, progress: 0, createdAt: Date.now() }]);
     setGoalTitle(''); setGoalTarget('');
+    showToast(t('tools.todo.toastAdded'), 'success');
   };
   const updateGoalProgress = (id: string, delta: number) =>
     setGoals(goals.map(g => (g.id === id ? { ...g, progress: Math.max(0, Math.min(g.target, g.progress + delta)) } : g)));
-  const deleteGoal = (id: string) => setGoals(goals.filter(g => g.id !== id));
+  const deleteGoal = (id: string) => {
+    setGoals(goals.filter(g => g.id !== id));
+    showToast(t('tools.todo.toastDeleted'), 'info');
+  };
 
   /* ---- Plans ---- */
   const addPlan = () => {
     if (!planTitle.trim()) return;
     setPlans([...plans, { id: uid(), title: planTitle.trim(), steps: [], createdAt: Date.now() }]);
     setPlanTitle('');
+    showToast(t('tools.todo.toastAdded'), 'success');
   };
   const addStep = (planId: string) => {
     if (!planStep.trim()) return;
@@ -195,16 +268,23 @@ export default function TestTodo() {
   };
   const toggleStep = (planId: string, stepId: string) =>
     setPlans(plans.map(p => (p.id === planId ? { ...p, steps: p.steps.map(s => (s.id === stepId ? { ...s, done: !s.done } : s)) } : p)));
-  const deletePlan = (id: string) => setPlans(plans.filter(p => p.id !== id));
+  const deletePlan = (id: string) => {
+    setPlans(plans.filter(p => p.id !== id));
+    showToast(t('tools.todo.toastDeleted'), 'info');
+  };
 
   /* ---- Schedule ---- */
   const addEvent = () => {
     if (!evTitle.trim()) return;
     setEvents([...events, { id: uid(), title: evTitle.trim(), date: evDate, time: evTime, done: false }]);
     setEvTitle(''); setEvDate(''); setEvTime('');
+    showToast(t('tools.todo.toastAdded'), 'success');
   };
   const toggleEvent = (id: string) => setEvents(events.map(e => (e.id === id ? { ...e, done: !e.done } : e)));
-  const deleteEvent = (id: string) => setEvents(events.filter(e => e.id !== id));
+  const deleteEvent = (id: string) => {
+    setEvents(events.filter(e => e.id !== id));
+    showToast(t('tools.todo.toastDeleted'), 'info');
+  };
 
   /* ---- Analytics ---- */
   const completionPct = todos.length ? Math.round((completedCount / todos.length) * 100) : 0;
@@ -215,14 +295,53 @@ export default function TestTodo() {
   const schedulePct = events.length ? Math.round((events.filter(e => e.done).length / events.length) * 100) : 0;
   const overallPct = Math.round((completionPct + goalPct + planPct + schedulePct) / 4);
 
-  const highCount = todos.filter(t => t.priority === 'high' && !t.completed).length;
-  const medCount = todos.filter(t => t.priority === 'medium' && !t.completed).length;
-  const lowCount = todos.filter(t => t.priority === 'low' && !t.completed).length;
+  /* ---- Overview widgets ---- */
+  const todayOverdueTasks = todos
+    .filter(tItem => !tItem.completed && tItem.dueDate && tItem.dueDate <= todayKey)
+    .sort((a, b) => (a.dueDate || '').localeCompare(b.dueDate || ''));
+  const upcomingEvents = events
+    .filter(e => !e.done)
+    .sort((a, b) => `${a.date}${a.time}`.localeCompare(`${b.date}${b.time}`));
 
-  // This week's tasks (created within last 7 days)
-  const weekCount = todos.filter(t => Date.now() - t.createdAt < 7 * 86400000).length;
+  /* ---- Export / Import ---- */
+  const exportData = () => {
+    const payload = { todos, goals, plans, events, exportedAt: new Date().toISOString() };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `todo-dashboard-${Date.now()}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast(t('tools.todo.toastExported'), 'success');
+  };
+
+  const triggerImport = () => importInputRef.current?.click();
+
+  const handleImportFile = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const data = JSON.parse(String(reader.result));
+        if (Array.isArray(data.todos)) setTodos(data.todos);
+        if (Array.isArray(data.goals)) setGoals(data.goals);
+        if (Array.isArray(data.plans)) setPlans(data.plans);
+        if (Array.isArray(data.events)) setEvents(data.events);
+        showToast(t('tools.todo.toastImported'), 'success');
+      } catch {
+        showToast(t('tools.todo.toastImportError'), 'error');
+      }
+    };
+    reader.readAsText(file);
+  };
 
   const tabs: { id: Tab; label: string; icon: React.ReactNode }[] = [
+    { id: 'overview', label: t('tools.todo.tabOverview'), icon: <LayoutDashboard size={15} /> },
     { id: 'tasks', label: t('tools.todo.tabTasks'), icon: <ListTodo size={15} /> },
     { id: 'goals', label: t('tools.todo.tabGoals'), icon: <Target size={15} /> },
     { id: 'plans', label: t('tools.todo.tabPlans'), icon: <ClipboardList size={15} /> },
@@ -231,38 +350,51 @@ export default function TestTodo() {
   ];
 
   return (
-    <div className="min-h-[calc(100vh-70px)] flex flex-col items-center justify-start px-6 pt-16 pb-12">
-      <div className="container-port w-full max-w-4xl">
+    <div className="min-h-[calc(100vh-70px)] flex flex-col items-center justify-start px-4 pt-8 pb-8 sm:px-6">
+      <div className="mx-auto w-full max-w-[1600px]">
         {/* Header */}
-        <div className="mb-8">
-          <span className="section-tag">{t('tools.todo.tag')}</span>
-          <h1 className="section-title mb-4">
-            {t('tools.todo.title')} <span className="grad-text">{t('tools.todo.titleHighlight')}</span>
-          </h1>
-          <p className="text-muted max-w-lg">{t('tools.todo.description')}</p>
-
-          <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
-            {[
-              { label: 'Active', value: activeCount, icon: <ListTodo size={16} />, color: 'text-primary-light' },
-              { label: 'Completed', value: completedCount, icon: <CheckCircle2 size={16} />, color: 'text-green-400' },
-              { label: 'Today', value: todayCount, icon: <CalendarClock size={16} />, color: 'text-accent' },
-              { label: 'Overdue', value: overdueCount, icon: <AlertCircle size={16} />, color: 'text-red-400' },
-            ].map(card => (
-              <div key={card.label} className="glass flex items-center gap-3 p-3">
-                <span className={card.color}>{card.icon}</span>
-                <div><p className="font-mono text-lg font-bold text-body">{card.value}</p><p className="text-[11px] text-muted">{card.label}</p></div>
-              </div>
-            ))}
+        <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <span className="section-tag">{t('tools.todo.tag')}</span>
+            <h1 className="section-title mb-1">
+              {t('tools.todo.title')} <span className="grad-text">{t('tools.todo.titleHighlight')}</span>
+            </h1>
+            <p className="text-muted max-w-lg text-sm">{t('tools.todo.description')}</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <input ref={importInputRef} type="file" accept="application/json" onChange={handleImportFile} className="hidden" aria-hidden="true" />
+            <button onClick={triggerImport} className="btn btn-ghost !px-3 !py-2 text-xs" title={t('tools.todo.import')}>
+              <Upload size={14} /> {t('tools.todo.import')}
+            </button>
+            <button onClick={exportData} className="btn btn-ghost !px-3 !py-2 text-xs" title={t('tools.todo.export')}>
+              <Download size={14} /> {t('tools.todo.export')}
+            </button>
           </div>
         </div>
 
+        {/* Stat cards + tabs — pinned below the tool-selector bar while scrolling */}
+        <div className="sticky top-[126px] z-30 -mx-4 bg-base/95 px-4 pb-1 pt-1 backdrop-blur-xl sm:-mx-6 sm:px-6">
+        <div className="mb-4 grid grid-cols-2 gap-2.5 sm:grid-cols-4">
+          {[
+            { label: 'Active', value: activeCount, icon: <ListTodo size={15} />, color: 'text-primary-light' },
+            { label: 'Completed', value: completedCount, icon: <CheckCircle2 size={15} />, color: 'text-green-400' },
+            { label: 'Today', value: todayCount, icon: <CalendarClock size={15} />, color: 'text-accent' },
+            { label: 'Overdue', value: overdueCount, icon: <AlertCircle size={15} />, color: 'text-red-400' },
+          ].map(card => (
+            <div key={card.label} className="glass flex items-center gap-2.5 p-2.5">
+              <span className={card.color}>{card.icon}</span>
+              <div><p className="font-mono text-base font-bold text-body leading-tight">{card.value}</p><p className="text-[10px] text-muted leading-tight">{card.label}</p></div>
+            </div>
+          ))}
+        </div>
+
         {/* Tabs */}
-        <div className="mb-6 flex flex-wrap gap-2">
+        <div className="mb-4 flex flex-wrap gap-1.5">
           {tabs.map(tb => (
             <button
               key={tb.id}
               onClick={() => setTab(tb.id)}
-              className={`flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-medium transition-all ${
+              className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium transition-all ${
                 tab === tb.id
                   ? 'border-primary-light/40 bg-surface-hover text-primary-light'
                   : 'border-subtle bg-surface text-muted hover:border-primary-light/40 hover:text-body'
@@ -272,14 +404,103 @@ export default function TestTodo() {
             </button>
           ))}
         </div>
+        </div>
 
         <div className="glass w-full">
+          {/* ============ OVERVIEW ============ */}
+          {tab === 'overview' && (
+            <div className="p-4 space-y-4">
+              {/* Quick add */}
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={inputValue}
+                  onChange={e => setInputValue(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && addTodo()}
+                  placeholder={t('tools.todo.placeholder')}
+                  className="flex-1 rounded-xl bg-surface px-4 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary-light/40"
+                />
+                <button onClick={addTodo} disabled={!inputValue.trim()} className="btn btn-primary !px-4 !py-2.5">
+                  <Plus size={16} /> {t('tools.todo.addButton')}
+                </button>
+              </div>
+
+              <div className="grid gap-3 md:grid-cols-2">
+                {/* Today & overdue */}
+                <div className="rounded-xl border border-subtle bg-surface p-3.5">
+                  <div className="mb-2.5 flex items-center justify-between">
+                    <h4 className="text-xs font-semibold text-body">{t('tools.todo.overview.todayOverdue')}</h4>
+                    <button onClick={() => setTab('tasks')} className="text-[11px] text-primary-light hover:underline">{t('tools.todo.overview.viewAll')}</button>
+                  </div>
+                  {todayOverdueTasks.length === 0 ? (
+                    <p className="text-xs text-muted">{t('tools.todo.overview.noneToday')}</p>
+                  ) : (
+                    <ul className="space-y-1.5">
+                      {todayOverdueTasks.slice(0, 5).map(todo => (
+                        <li key={todo.id} className="flex items-center gap-2">
+                          <button
+                            onClick={() => toggleTodo(todo.id)}
+                            className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 border-subtle"
+                            aria-label={`Complete ${todo.text}`}
+                          />
+                          <span className="flex-1 truncate text-xs text-body">{todo.text}</span>
+                          {todo.dueDate && (
+                            <span className={`shrink-0 text-[10px] font-mono ${todo.dueDate < todayKey ? 'text-red-400' : 'text-muted'}`}>{todo.dueDate}</span>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+
+                {/* Upcoming schedule */}
+                <div className="rounded-xl border border-subtle bg-surface p-3.5">
+                  <div className="mb-2.5 flex items-center justify-between">
+                    <h4 className="text-xs font-semibold text-body">{t('tools.todo.overview.upcomingEvents')}</h4>
+                    <button onClick={() => setTab('schedule')} className="text-[11px] text-primary-light hover:underline">{t('tools.todo.overview.viewAll')}</button>
+                  </div>
+                  {upcomingEvents.length === 0 ? (
+                    <p className="text-xs text-muted">{t('tools.todo.overview.noUpcoming')}</p>
+                  ) : (
+                    <ul className="space-y-1.5">
+                      {upcomingEvents.slice(0, 5).map(ev => (
+                        <li key={ev.id} className="flex items-center justify-between gap-2">
+                          <span className="flex-1 truncate text-xs text-body">{ev.title}</span>
+                          <span className="shrink-0 font-mono text-[10px] text-muted">{ev.date}{ev.date && ev.time ? ' · ' : ''}{ev.time}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </div>
+
+              <div className="grid gap-3 md:grid-cols-2">
+                {/* Overall progress */}
+                <div className="rounded-xl border border-subtle bg-surface p-3.5">
+                  <div className="mb-2 flex items-center justify-between">
+                    <h4 className="text-xs font-semibold text-body">{t('tools.todo.overview.overallProgress')}</h4>
+                    <span className="font-mono text-sm font-bold grad-text">{overallPct}%</span>
+                  </div>
+                  <div className="h-2 overflow-hidden rounded-full bg-surface-hover">
+                    <div className="h-full rounded-full bg-gradient-brand transition-all duration-500" style={{ width: `${overallPct}%` }} />
+                  </div>
+                </div>
+
+                {/* Priority glance */}
+                <div className="rounded-xl border border-subtle bg-surface p-3.5">
+                  <h4 className="mb-2 text-xs font-semibold text-body">{t('tools.todo.analyticsPriority')}</h4>
+                  <PriorityBars high={highCount} medium={medCount} low={lowCount} labels={[t('tools.todo.priorityHigh'), t('tools.todo.priorityMedium'), t('tools.todo.priorityLow')]} />
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* ============ TASKS ============ */}
           {tab === 'tasks' && (
             <>
               {/* Input */}
-          <div className="p-5 border-b border-subtle">
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+              <div className="p-3.5 border-b border-subtle">
+                <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center">
                   <input
                     type="text"
                     value={editId ? editText : inputValue}
@@ -296,7 +517,7 @@ export default function TestTodo() {
                   )}
                   {!editId && (
                     <select value={category} onChange={e => setCategory(e.target.value)} aria-label="Task category" className="rounded-xl bg-surface px-3 py-2.5 text-xs text-body outline-none focus:ring-2 focus:ring-primary-light/40 sm:w-[120px]">
-                      {CATEGORIES.map(item => <option key={item} value={item}>{item}</option>)}
+                      {CATEGORIES.map(item => <option key={item} value={item}>{catLabel(item)}</option>)}
                     </select>
                   )}
                   {/* Priority chips */}
@@ -332,7 +553,7 @@ export default function TestTodo() {
               </div>
 
               {/* Filter bar */}
-              <div className="flex flex-col gap-3 p-4 border-b border-subtle sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex flex-col gap-2.5 p-3 border-b border-subtle sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex flex-wrap gap-2">
                   {(['all', 'active', 'completed', 'today', 'overdue'] as const).map(f => (
                     <button
@@ -345,25 +566,34 @@ export default function TestTodo() {
                     </button>
                   ))}
                 </div>
-                <label className="flex items-center gap-2 rounded-lg border border-subtle bg-surface px-3 py-1.5 text-xs text-muted sm:w-48">
+                <label className="flex items-center gap-2 rounded-lg border border-subtle bg-surface px-3 py-1.5 text-xs text-muted sm:w-44">
                   <Search size={14} aria-hidden="true" />
-                  <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search tasks" aria-label="Search tasks" className="min-w-0 flex-1 bg-transparent text-body outline-none placeholder:text-muted" />
+                  <input ref={searchInputRef} value={search} onChange={e => setSearch(e.target.value)} placeholder={t('tools.todo.searchPlaceholder')} aria-label={t('tools.todo.searchPlaceholder')} className="min-w-0 flex-1 bg-transparent text-body outline-none placeholder:text-muted" />
                 </label>
                 <select value={categoryFilter} onChange={e => setCategoryFilter(e.target.value)} aria-label="Filter by category" className="rounded-lg border border-subtle bg-surface px-3 py-1.5 text-xs text-body outline-none focus:ring-2 focus:ring-primary-light/40">
-                  <option value="all">All categories</option>
-                  {CATEGORIES.map(item => <option key={item} value={item}>{item}</option>)}
+                  <option value="all">{t('tools.todo.allCategories')}</option>
+                  {CATEGORIES.map(item => <option key={item} value={item}>{catLabel(item)}</option>)}
                 </select>
+                <label className="flex items-center gap-1.5 rounded-lg border border-subtle bg-surface px-2.5 py-1.5 text-xs text-muted">
+                  <ArrowUpDown size={13} aria-hidden="true" />
+                  <select value={sortBy} onChange={e => setSortBy(e.target.value as SortMode)} aria-label="Sort tasks" className="bg-transparent text-body outline-none">
+                    <option value="created">{t('tools.todo.sortCreated')}</option>
+                    <option value="priority">{t('tools.todo.sortPriority')}</option>
+                    <option value="due">{t('tools.todo.sortDue')}</option>
+                  </select>
+                </label>
               </div>
 
               {/* List */}
-              <div className="p-4 space-y-2">
-                {filteredTodos.length === 0 ? (
+              <div className="p-3">
+                {sortedTodos.length === 0 ? (
                   <p className="py-10 text-center text-muted">
                     {todos.length === 0 ? t('tools.todo.emptyState') : t('tools.todo.noMatchingTodos')}
                   </p>
                 ) : (
-                  filteredTodos.map(todo => (
-                    <div key={todo.id} className="flex items-start gap-3 rounded-xl border border-transparent p-3 hover:border-primary-light/20 hover:bg-surface-hover transition-all">
+                  <div className="grid gap-1.5 lg:grid-cols-2">
+                  {sortedTodos.map(todo => (
+                    <div key={todo.id} className="flex items-start gap-3 rounded-xl border border-transparent p-2.5 hover:border-primary-light/20 hover:bg-surface-hover transition-all">
                       <button
                         onClick={() => toggleTodo(todo.id)}
                         aria-label={todo.completed ? `Mark ${todo.text} as active` : `Complete ${todo.text}`}
@@ -388,7 +618,7 @@ export default function TestTodo() {
                           </div>
                         )}
                         <div className="mt-1 flex flex-wrap items-center gap-2 text-[11px]">
-                          {todo.category && <span className="rounded-md bg-primary-light/10 px-1.5 py-0.5 text-primary-light">{todo.category}</span>}
+                          {todo.category && <span className="rounded-md bg-primary-light/10 px-1.5 py-0.5 text-primary-light">{catLabel(todo.category)}</span>}
                           {todo.dueDate && <span className={`flex items-center gap-1 ${todo.dueDate < todayKey && !todo.completed ? 'text-red-400' : 'text-muted'}`}><CalendarDays size={12} aria-hidden="true" /> {todo.dueDate}</span>}
                         </div>
                       </div>
@@ -401,15 +631,21 @@ export default function TestTodo() {
                         </button>
                       </div>
                     </div>
-                  ))
+                  ))}
+                  </div>
                 )}
               </div>
 
               {todos.length > 0 && (
-                <div className="flex items-center justify-between border-t border-subtle p-4">
-                  <button onClick={clearCompleted} disabled={completedCount === 0} className="btn btn-ghost !px-3 !py-2 text-xs">
-                    <Trash2 size={15} /> {t('tools.todo.clearCompleted')}
-                  </button>
+                <div className="flex flex-wrap items-center justify-between gap-2 border-t border-subtle p-3">
+                  <div className="flex gap-2">
+                    <button onClick={markAllComplete} disabled={activeCount === 0} className="btn btn-ghost !px-3 !py-2 text-xs">
+                      <CheckCheck size={15} /> {t('tools.todo.markAllComplete')}
+                    </button>
+                    <button onClick={clearCompleted} disabled={completedCount === 0} className="btn btn-ghost !px-3 !py-2 text-xs">
+                      <Trash2 size={15} /> {t('tools.todo.clearCompleted')}
+                    </button>
+                  </div>
                   <span className="text-xs text-muted">{todos.length} {t('tools.todo.totalTodos')} · {completedCount} ✓</span>
                 </div>
               )}
@@ -418,8 +654,8 @@ export default function TestTodo() {
 
           {/* ============ GOALS ============ */}
           {tab === 'goals' && (
-            <div className="p-5 space-y-4">
-              <div className="flex flex-col gap-3 sm:flex-row">
+            <div className="p-3.5 space-y-3">
+              <div className="flex flex-col gap-2.5 sm:flex-row">
                 <input
                   type="text" value={goalTitle} onChange={e => setGoalTitle(e.target.value)}
                   placeholder={t('tools.todo.goalTitle')} onKeyDown={e => e.key === 'Enter' && addGoal()}
@@ -437,35 +673,37 @@ export default function TestTodo() {
               {goals.length === 0 ? (
                 <p className="py-8 text-center text-muted">{t('tools.todo.emptyState')}</p>
               ) : (
-                goals.map(goal => {
-                  const pct = goal.target > 0 ? Math.round((goal.progress / goal.target) * 100) : 0;
-                  return (
-                    <div key={goal.id} className="rounded-xl border border-subtle bg-surface p-4">
-                      <div className="flex items-center justify-between gap-3">
-                        <div className="flex-1">
-                          <h4 className="font-semibold text-sm text-body">{goal.title}</h4>
-                          <p className="text-xs text-muted">{goal.progress}/{goal.target} · {pct}%</p>
+                <div className="grid gap-3 lg:grid-cols-2">
+                  {goals.map(goal => {
+                    const pct = goal.target > 0 ? Math.round((goal.progress / goal.target) * 100) : 0;
+                    return (
+                      <div key={goal.id} className="rounded-xl border border-subtle bg-surface p-3.5">
+                        <div className="flex items-center justify-between gap-3">
+                          <div className="flex-1">
+                            <h4 className="font-semibold text-sm text-body">{goal.title}</h4>
+                            <p className="text-xs text-muted">{goal.progress}/{goal.target} · {pct}%</p>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <button onClick={() => updateGoalProgress(goal.id, -10)} className="rounded-lg border border-subtle px-2 py-1 text-xs text-muted hover:text-body">−</button>
+                            <button onClick={() => updateGoalProgress(goal.id, 10)} className="rounded-lg border border-subtle px-2 py-1 text-xs text-muted hover:text-body">+</button>
+                            <button onClick={() => deleteGoal(goal.id)} className="rounded-lg p-1.5 text-muted hover:text-red-400"><Trash2 size={15} /></button>
+                          </div>
                         </div>
-                        <div className="flex items-center gap-1">
-                          <button onClick={() => updateGoalProgress(goal.id, -10)} className="rounded-lg border border-subtle px-2 py-1 text-xs text-muted hover:text-body">−</button>
-                          <button onClick={() => updateGoalProgress(goal.id, 10)} className="rounded-lg border border-subtle px-2 py-1 text-xs text-muted hover:text-body">+</button>
-                          <button onClick={() => deleteGoal(goal.id)} className="rounded-lg p-1.5 text-muted hover:text-red-400"><Trash2 size={15} /></button>
+                        <div className="mt-2.5 h-2.5 overflow-hidden rounded-full bg-surface-hover">
+                          <div className="h-full rounded-full bg-gradient-brand transition-all duration-500" style={{ width: `${Math.min(pct, 100)}%` }} />
                         </div>
                       </div>
-                      <div className="mt-3 h-2.5 overflow-hidden rounded-full bg-surface-hover">
-                        <div className="h-full rounded-full bg-gradient-brand transition-all duration-500" style={{ width: `${Math.min(pct, 100)}%` }} />
-                      </div>
-                    </div>
-                  );
-                })
+                    );
+                  })}
+                </div>
               )}
             </div>
           )}
 
           {/* ============ PLANS ============ */}
           {tab === 'plans' && (
-            <div className="p-5 space-y-4">
-              <div className="flex gap-3">
+            <div className="p-3.5 space-y-3">
+              <div className="flex gap-2.5">
                 <input
                   type="text" value={planTitle} onChange={e => setPlanTitle(e.target.value)}
                   placeholder={t('tools.todo.planTitle')} onKeyDown={e => e.key === 'Enter' && addPlan()}
@@ -483,7 +721,7 @@ export default function TestTodo() {
                   const done = plan.steps.filter(s => s.done).length;
                   const pct = plan.steps.length ? Math.round((done / plan.steps.length) * 100) : 0;
                   return (
-                    <div key={plan.id} className="rounded-xl border border-subtle bg-surface p-4">
+                    <div key={plan.id} className="rounded-xl border border-subtle bg-surface p-3.5">
                       <div className="flex items-center justify-between">
                         <h4 className="font-semibold text-sm text-body">{plan.title}</h4>
                         <div className="flex items-center gap-2">
@@ -492,7 +730,7 @@ export default function TestTodo() {
                         </div>
                       </div>
 
-                      <div className="mt-3 flex gap-2">
+                      <div className="mt-2.5 flex gap-2">
                         <input
                           type="text" value={planStep} onChange={e => setPlanStep(e.target.value)}
                           placeholder={t('tools.todo.planStepPlaceholder')} onKeyDown={e => e.key === 'Enter' && addStep(plan.id)}
@@ -501,7 +739,7 @@ export default function TestTodo() {
                         <button onClick={() => addStep(plan.id)} disabled={!planStep.trim()} className="rounded-lg border border-subtle px-2.5 py-1.5 text-xs hover:border-primary-light/40"><Plus size={14} /></button>
                       </div>
 
-                      <div className="mt-3 space-y-1.5">
+                      <div className="mt-2.5 space-y-1">
                         {plan.steps.map(step => (
                           <button key={step.id} onClick={() => toggleStep(plan.id, step.id)} className="flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-left hover:bg-surface-hover">
                             <span className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full border ${step.done ? 'border-primary-light bg-primary-light/20' : 'border-subtle'}`}>
@@ -521,8 +759,8 @@ export default function TestTodo() {
 
           {/* ============ SCHEDULE ============ */}
           {tab === 'schedule' && (
-            <div className="p-5 space-y-4">
-              <div className="flex flex-col gap-3 sm:flex-row">
+            <div className="p-3.5 space-y-3">
+              <div className="flex flex-col gap-2.5 sm:flex-row">
                 <input
                   type="text" value={evTitle} onChange={e => setEvTitle(e.target.value)}
                   placeholder={t('tools.todo.scheduleTitle')} className="flex-1 rounded-xl bg-surface px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-light/40"
@@ -534,7 +772,7 @@ export default function TestTodo() {
                 </button>
               </div>
 
-              <div className="mb-2 flex gap-4 text-xs text-muted">
+              <div className="mb-1.5 flex gap-4 text-xs text-muted">
                 <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-accent/60" /> {t('tools.todo.upcoming')}</span>
                 <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-green-400/60" /> {t('tools.todo.completed')}</span>
               </div>
@@ -542,8 +780,8 @@ export default function TestTodo() {
               {events.length === 0 ? (
                 <p className="py-8 text-center text-muted">{t('tools.todo.emptySchedule')}</p>
               ) : (
-                events.map(ev => (
-                  <div key={ev.id} className="flex items-center gap-3 rounded-xl border border-subtle bg-surface p-3">
+                [...events].sort((a, b) => `${a.date}${a.time}`.localeCompare(`${b.date}${b.time}`)).map(ev => (
+                  <div key={ev.id} className="flex items-center gap-3 rounded-xl border border-subtle bg-surface p-2.5">
                     <button
                       onClick={() => toggleEvent(ev.id)}
                       className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 ${ev.done ? 'border-green-400 bg-green-400/20' : 'border-subtle'}`}
@@ -565,9 +803,9 @@ export default function TestTodo() {
 
           {/* ============ ANALYTICS ============ */}
           {tab === 'analytics' && (
-            <div className="p-6 space-y-6">
+            <div className="p-4 space-y-4">
               {/* 4 donut cards */}
-              <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+              <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
                 {[
                   { label: t('tools.todo.analyticsCompletion'), pct: completionPct, color: '#8b5cf6' },
                   { label: t('tools.todo.analyticsGoals'), pct: goalPct, color: '#22d3ee' },
@@ -585,10 +823,10 @@ export default function TestTodo() {
               </div>
 
               {/* Overall progress */}
-              <div className="rounded-xl border border-subtle bg-surface p-4">
+              <div className="rounded-xl border border-subtle bg-surface p-3.5">
                 <div className="flex items-center justify-between mb-2">
                   <h4 className="text-sm font-semibold text-body">{t('tools.todo.analyticsOverall')}</h4>
-<span className="font-mono text-lg font-bold grad-text">{overallPct}%</span>
+                  <span className="font-mono text-lg font-bold grad-text">{overallPct}%</span>
                 </div>
                 <div className="h-3 overflow-hidden rounded-full bg-surface-hover">
                   <div className="h-full rounded-full bg-gradient-brand transition-all duration-600" style={{ width: `${overallPct}%` }} />
@@ -596,30 +834,26 @@ export default function TestTodo() {
               </div>
 
               {/* Weekly + priority */}
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="rounded-xl border border-subtle bg-surface p-4">
-                  <h4 className="mb-3 text-sm font-semibold text-body">{t('tools.todo.analyticsWeek')}</h4>
-                  <div className="space-y-3">
+              <div className="grid gap-3 md:grid-cols-2">
+                <div className="rounded-xl border border-subtle bg-surface p-3.5">
+                  <h4 className="mb-2.5 text-sm font-semibold text-body">{t('tools.todo.analyticsWeek')}</h4>
+                  <div className="space-y-2.5">
                     <BarRow label={t('tools.todo.tabTasks')} value={todos.length} max={Math.max(todos.length, 1)} color="#8b5cf6" />
                     <BarRow label={t('tools.todo.analyticsCompletion')} value={completedCount} max={Math.max(todos.length, 1)} color="#22c55e" />
                     <BarRow label="7d" value={weekCount} max={Math.max(todos.length, 1)} color="#22d3ee" />
                   </div>
                 </div>
-                <div className="rounded-xl border border-subtle bg-surface p-4">
-                  <h4 className="mb-3 text-sm font-semibold text-body">{t('tools.todo.analyticsPriority')}</h4>
-                  <div className="space-y-3">
-                    <BarRow label={t('tools.todo.priorityHigh')} value={highCount} max={Math.max(highCount, medCount, lowCount, 1)} color="#ef4444" />
-                    <BarRow label={t('tools.todo.priorityMedium')} value={medCount} max={Math.max(highCount, medCount, lowCount, 1)} color="#f59e0b" />
-                    <BarRow label={t('tools.todo.priorityLow')} value={lowCount} max={Math.max(highCount, medCount, lowCount, 1)} color="#22c55e" />
-                  </div>
+                <div className="rounded-xl border border-subtle bg-surface p-3.5">
+                  <h4 className="mb-2.5 text-sm font-semibold text-body">{t('tools.todo.analyticsPriority')}</h4>
+                  <PriorityBars high={highCount} medium={medCount} low={lowCount} labels={[t('tools.todo.priorityHigh'), t('tools.todo.priorityMedium'), t('tools.todo.priorityLow')]} />
                 </div>
               </div>
 
               {/* Goal progress bars */}
               {goals.length > 0 && (
-                <div className="rounded-xl border border-subtle bg-surface p-4">
-                  <h4 className="mb-3 text-sm font-semibold text-body">{t('tools.todo.analyticsGoalProgress')}</h4>
-                  <div className="space-y-3">
+                <div className="rounded-xl border border-subtle bg-surface p-3.5">
+                  <h4 className="mb-2.5 text-sm font-semibold text-body">{t('tools.todo.analyticsGoalProgress')}</h4>
+                  <div className="space-y-2.5">
                     {goals.map(g => (
                       <BarRow key={g.id} label={g.title} value={g.progress} max={Math.max(g.target, 1)} color="#8b5cf6" />
                     ))}

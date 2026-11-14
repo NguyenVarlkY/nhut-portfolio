@@ -1,0 +1,38 @@
+---
+title: "Deep Dive: Advanced Database Optimization"
+date: "2026-08-08"
+excerpt: "Database optimization from the page level and B-Tree internals to query planning."
+---
+
+# Deep Dive: Advanced Database Optimization
+
+Database optimization isn't "trial and error". It is the science of how data is stored, retrieved, and locked on disk. Here is an in-depth technical breakdown.
+
+## 1. B-Tree internals: understanding the data structure
+An index is not just a list.
+- **B-Tree structure:** A balanced tree that allows search, insert, and delete in $O(\log n)$ time.
+- **Page splits:** When a node fills up, the database must split it, which costs I/O. Avoid random `UUID` primary keys unless you need them, because they cause much more index fragmentation than an `Integer Auto-increment`.
+- **Fill factor:** Tune how full each page is to balance read and write performance.
+
+## 2. The query planner & execution plans
+Always use `EXPLAIN (ANALYZE, BUFFERS)` to see:
+- **Sequential scan vs index scan:** A seq scan on a million-row table is a disaster.
+- **Cost estimation:** PostgreSQL/Oracle use statistics to guess the best path. If the statistics are stale, the planner will pick the wrong one.
+- **Nested loop vs hash join:** On large data sets, a hash join is usually faster than a nested loop, but uses more memory.
+
+## 3. Advanced SQL techniques
+### 3.1. Handling large data
+- **Pagination:** Never use `OFFSET/LIMIT` for very large data (millions of rows), because `OFFSET` has to scan every preceding row. Use **keyset pagination** instead (based on the value of the last column of the previous page).
+- **Partitioning:** For huge tables, partition by time (e.g. one partition per month) to speed up queries and manage old data.
+
+### 3.2. Concurrency control
+- **Locking:** Understand `row-level locking` vs `table-level locking`.
+- **Deadlocks:** Always update resources in a consistent order to avoid deadlocks in high-concurrency environments.
+
+## 4. Full-Text Search (FTS)
+Don't use `LIKE '%keyword%'`.
+- **Why?** It can't use a regular (B-Tree) index.
+- **Solution:** Use a **GIN/GiST index** (in Postgres), or integrate **Elasticsearch** if you need massive scale and complex search (fuzzy search, stemming).
+
+---
+*This knowledge combines computer science theory with hands-on experience across millions of records. Understanding database internals is what makes you a real engineer.*

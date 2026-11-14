@@ -1,0 +1,38 @@
+---
+title: "Deep Dive: 심층 데이터베이스 최적화"
+date: "2026-08-08"
+excerpt: "페이지 수준과 B-Tree 내부 구조부터 쿼리 플래닝까지 데이터베이스 최적화."
+---
+
+# Deep Dive: 심층 데이터베이스 최적화
+
+데이터베이스 최적화는 "시행착오"가 아닙니다. 데이터가 디스크에 어떻게 저장되고, 조회되고, 잠기는지(locking)를 다루는 과학입니다. 아래는 심층 기술 분석입니다.
+
+## 1. B-Tree 내부 구조: 자료구조 이해하기
+인덱스는 단순한 목록이 아닙니다.
+- **B-Tree 구조:** 균형 트리로, 검색·삽입·삭제를 $O(\log n)$ 시간에 처리합니다.
+- **Page Split:** 노드가 가득 차면 데이터베이스는 그 노드를 분할해야 하며, 이는 I/O 비용이 듭니다. 꼭 필요하지 않다면 무작위 `UUID`를 기본 키로 쓰지 마세요. `Integer Auto-increment`보다 인덱스 단편화가 훨씬 심합니다.
+- **Fill Factor:** 페이지 채움 비율을 조정해 읽기/쓰기 성능을 최적화합니다.
+
+## 2. 쿼리 플래너와 실행 계획
+항상 `EXPLAIN (ANALYZE, BUFFERS)`를 사용해 다음을 확인하세요:
+- **Sequential Scan vs Index Scan:** 수백만 행 테이블에서의 seq scan은 재앙입니다.
+- **Cost Estimation:** PostgreSQL/Oracle은 통계(statistics)로 최적 경로를 추정합니다. 통계가 오래되면(stale) 플래너가 잘못된 경로를 선택합니다.
+- **Nested Loop vs Hash Join:** 대용량 데이터에서는 Hash Join이 보통 Nested Loop보다 빠르지만 메모리를 더 사용합니다.
+
+## 3. 고급 SQL 기법
+### 3.1. 대용량 데이터 처리
+- **Pagination:** 매우 큰 데이터(수백만 행)에는 절대 `OFFSET/LIMIT`를 쓰지 마세요. `OFFSET`은 앞의 모든 행을 스캔해야 합니다. 대신 **Keyset Pagination**(이전 페이지 마지막 행의 컬럼 값 기준)을 사용하세요.
+- **Partitioning:** 거대한 테이블은 시간 기준으로 분할(예: 월별 파티션)해 쿼리 속도를 높이고 오래된 데이터를 관리하세요.
+
+### 3.2. 동시성 제어
+- **Locking:** `Row-level locking`과 `Table-level locking`의 차이를 이해하세요.
+- **Deadlocks:** 고동시성 환경에서 데드락을 피하려면 항상 일정한 순서로 리소스를 갱신하세요.
+
+## 4. 전문 검색 (FTS)
+`LIKE '%keyword%'`를 쓰지 마세요.
+- **왜?** 일반 인덱스(B-Tree)를 사용할 수 없기 때문입니다.
+- **해결책:** **GIN/GiST 인덱스**(Postgres)를 사용하거나, 대규모 확장성과 복잡한 검색(fuzzy search, stemming)이 필요하다면 **ElasticSearch**를 도입하세요.
+
+---
+*이 지식은 컴퓨터 과학 이론과 수백만 건의 레코드를 다룬 실전 경험의 결합입니다. 데이터베이스 내부 구조를 이해하면 진정한 엔지니어가 될 수 있습니다.*

@@ -1,0 +1,52 @@
+---
+title: "Die Kunst des Debuggens: Eine wissenschaftliche Methode zur Fehlersuche"
+date: "2026-08-15"
+excerpt: "Beim Debuggen geht es nicht ums Fehlersuchen, sondern darum, Möglichkeiten auszuschließen, bis die Wahrheit übrig bleibt. Lerne einen systematischen Ansatz."
+---
+
+# Die Kunst des Debuggens: Eine wissenschaftliche Methode zur Fehlersuche
+
+Code schreiben kann jeder, aber Senior Engineers unterscheiden sich durch ihre Fähigkeit zum **Troubleshooting**. Professionelles Debugging ist weder Glück noch Bauchgefühl, sondern ein **systematischer Prozess**, der auf der wissenschaftlichen Methode beruht.
+
+## 1. Die wissenschaftliche Methode beim Debuggen
+
+### 1.1 Beobachtung (Observation)
+Der erste und wichtigste Schritt: **Du musst den Fehler reproduzieren können** (reproduce bug). Was du nicht reproduzieren kannst, kannst du auch nicht beheben.
+
+- Notiere genau die Schritte, die zum Fehler führen.
+- Notiere Eingabe, Ausgabe und Systemzustand.
+- Bestimme die Umgebung: welcher Browser, welche Version, welches Gerät.
+
+### 1.2 Hypothese (Hypothesis)
+Stelle begründete Vermutungen darüber auf, **warum** der Fehler auftritt. Rate nicht ins Blaue, sondern stütze dich auf:
+
+- Dein Wissen über die Codebasis.
+- Die Fehlermeldung.
+- Logs und Stack Traces.
+- Dein Verständnis des Datenflusses.
+
+### 1.3 Experiment
+Prüfe deine Hypothese, indem du:
+- an verdächtigen Stellen ausführliche **Logs** einfügst.
+- mit einem **Debugger** Breakpoints setzt und Schritt für Schritt beobachtest.
+- den Code **isolierst**: vorübergehend auskommentieren, Variablen herauslösen, mit einfachen Eingaben testen.
+- im Code eine **binäre Suche** durchführst: den verdächtigen Bereich immer wieder halbieren.
+
+### 1.4 Schlussfolgerung (Conclusion)
+Finde die Ursache, behebe sie und **schreib einen Test**, damit der Fehler nie wiederkommt (**Regressionstest**).
+
+## 2. Fortgeschrittene Debugging-Techniken
+
+- **Rubber Duck Debugging:** Erkläre deinen Code einer „Gummiente“. Wenn man das Problem laut ausspricht, springt einem die Lösung oft ins Auge.
+- **Debuggen durch erneutes Lesen:** Lies jede Zeile mit der Frage „Was macht das tatsächlich?“ statt „Was soll das machen?“.
+- **Git Bisect nutzen:** Den Commit finden, der den Fehler eingeführt hat, indem man die Commit-Historie halbiert.
+- **Versionen und Abhängigkeiten prüfen:** Viele Fehler entstehen durch geänderte Bibliotheksversionen, nicht durch deinen Code.
+
+## 3. Unverzichtbare Debugging-Tools
+
+- **Browser-DevTools:** Network-Tab, Console, Sources, Performance.
+- **Serverseitig:** Logdateien, APM-Tools (Datadog, Sentry), Monitoring.
+- **Datenbank:** Query-Logs, EXPLAIN, Indexanalyse.
+- **API:** Postman, curl, Mock-Server.
+
+> *"Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it."* — Brian Kernighan

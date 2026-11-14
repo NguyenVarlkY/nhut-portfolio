@@ -1,0 +1,25 @@
+---
+title: "Kubernetes 与云原生：应用部署的未来"
+date: "2026-08-09"
+excerpt: "在 AWS/Azure/GCP 上借助 Docker 和 K8s，从单体走向微服务。"
+---
+
+# Kubernetes 与云原生
+
+在传统服务器上部署应用已经成为过去。在现代企业环境中，**Kubernetes（K8s）** 是容器编排的标准。
+
+## 我为什么选择 K8s？
+1. **Self-healing（自愈）：** 容器出错时自动重启。
+2. **Auto-scaling（自动扩缩容）：** 根据流量自动增减 pod 数量。
+3. **Rollout/Rollback（发布/回滚）：** 上线新功能而不中断服务。
+
+## 云中立（Cloud Agnostic）思维
+无论你选择 AWS、Azure 还是 GCP，云原生的核心始终是 **容器（Docker）** 和 **基础设施即代码（Terraform）**。
+- 如非必要，不要过度依赖某一家云厂商的专有服务（vendor lock-in）。
+- 按照 12-Factor App 原则设计应用，便于在不同云厂商之间迁移。
+
+## 给新人的建议
+不要急着学会所有云服务。先从这些开始：
+1. 将你的应用 Docker 化。
+2. 编写 Docker Compose。
+3. 学习基础的 K8s 管理（Deployment、Service、Ingress）。

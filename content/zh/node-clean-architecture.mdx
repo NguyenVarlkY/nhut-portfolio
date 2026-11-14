@@ -1,0 +1,43 @@
+---
+title: "用 Node.js 构建整洁架构"
+date: "2026-08-05"
+excerpt: "详细介绍如何按整洁架构（Clean Architecture）组织 Node.js 项目，让它易于维护和扩展。"
+---
+
+# 用 Node.js 构建整洁架构
+
+在软件世界里，可维护性关乎生死。整洁架构能把业务逻辑与外部依赖分离开来。
+
+## 为什么需要整洁架构？
+随着项目变大，如果数据库逻辑、第三方库和业务逻辑混在一起，项目将非常难以测试和升级。
+
+## 核心原则
+1. **Dependency Rule（依赖规则）：** 依赖只能指向内部（指向核心逻辑）。
+2. **Entities（实体）：** 承载核心业务规则。
+3. **Use Cases（用例）：** 定义系统的具体行为。
+4. **Interface Adapters（接口适配器）：** 在用例与外部组件（API、数据库）之间转换数据。
+5. **Frameworks & Drivers（框架与驱动）：** 放置数据库、Express/NestJS 等的地方。
+
+## 实现示例
+```javascript
+// Entities
+class User {
+  constructor(id, name) {
+    this.id = id;
+    this.name = name;
+  }
+}
+
+// Use Case
+class RegisterUser {
+  constructor(userRepository) {
+    this.userRepository = userRepository;
+  }
+  execute(userData) {
+    // 业务逻辑写在这里
+    return this.userRepository.save(userData);
+  }
+}
+```
+
+这样的分层能让你从 MongoDB 切换到 PostgreSQL，而无需修改 `Use Case` 中的任何一行代码。

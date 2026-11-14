@@ -1,0 +1,101 @@
+---
+title: "SOLID とデザインパターン：拡張しやすく壊れにくいコード"
+date: "2026-08-14"
+excerpt: "SOLID とデザインパターンは優れたソフトウェアアーキテクチャの土台です。乱用せず、適切なタイミングで使う方法を学びましょう。"
+---
+
+# SOLID とデザインパターン：ソフトウェアアーキテクチャの土台
+
+SOLID とデザインパターンは、コードを **拡張しやすく、壊れにくく** するための原則です。すべてのエンジニアが身につけるべき核となる知識です。
+
+## 1. SOLID の原則
+
+### S — Single Responsibility（単一責任）
+各クラス/関数は、**変更される理由をただ 1 つだけ** 持つべきです。
+
+- 「やりすぎている」クラスを、それぞれ 1 つの責任を持つ小さなクラスに分ける。
+- 例：`UserService` を `UserRepository`（保存）、`UserValidator`（検証）、`EmailService`（メール送信）に分割する。
+
+### O — Open/Closed（開放/閉鎖）
+**拡張** に対して開いており、**修正** に対して閉じているべきです。新しい機能を追加するときは、既存のコードを変えずに新しいコードを追加します。
+
+- 継承、コンポジション、ポリモーフィズムを使う。
+- 例：古い switch 文を修正するのではなく、新しいクラスを追加して新しいレポートの種類に対応する。
+
+### L — Liskov Substitution（リスコフの置換）
+サブクラスは、エラーを起こさずに親クラスと **置き換えられなければなりません**。
+
+- サブクラスが親クラスの基本的な振る舞いを変えるなら、それは LSP 違反です。
+- 例：setWidth/setHeight のロジックを壊すなら、`Square` は `Rectangle` を継承すべきではありません。
+
+### I — Interface Segregation（インターフェース分離）
+クライアントに、**使わない** インターフェースへの依存を強制すべきではありません。
+
+- 大きなインターフェースを、小さく特化したインターフェースに分ける。
+- 例：`Bird` インターフェースを `Flyable`、`Swimmable`、`Walkable` に分割する。
+
+### D — Dependency Inversion（依存性逆転）
+**具体的な実装** ではなく、**抽象** に依存しましょう。
+
+- インターフェースを使ってモジュール間の結合度を下げる。
+- **依存性注入（Dependency Injection）** を使って、外部から依存関係を渡す。
+
+## 2. デザインパターン
+
+### 2.1 乱用しない
+デザインパターンは道具であって、**目的ではありません**。必要なときだけ使いましょう：
+- パターンを選ぶ前に、問題をしっかり理解する。
+- あらゆる状況にパターンを無理やり当てはめない。
+- 過剰設計（over-engineering）はコードを不必要に複雑にする。
+
+### 2.2 よく使われるパターン
+
+**生成（Creational）：**
+- **Singleton：** インスタンスが 1 つだけであることを保証する（データベース接続、設定）。
+- **Factory：** 具体的なクラスを指定せずにオブジェクトを生成する。
+- **Builder：** 複雑なオブジェクトを段階的に組み立てる。
+
+**構造（Structural）：**
+- **Adapter：** 互換性を持たせるためにインターフェースを変換する。
+- **Decorator：** 元のクラスを変更せずに、オブジェクトに振る舞いを追加する。
+
+**振る舞い（Behavioral）：**
+- **Observer：** 状態の変化を購読者に通知する（イベントシステム）。
+- **Strategy：** 実行時にアルゴリズムを選択する（柔軟な振る舞いの切り替え）。
+- **Repository：** データアクセスのロジックをビジネスロジックから切り離す。
+
+## 3. 実践例
+
+**SOLID 適用前：**
+```javascript
+class UserService {
+  save(user) { /* DB */ }
+  validate(user) { /* validation */ }
+  sendEmail(user) { /* email */ }
+  generateReport(user) { /* report */ }
+}
+```
+
+**SOLID 適用後：**
+```javascript
+class UserRepository { save(user) { /* DB */ } }
+class UserValidator { validate(user) { /* validation */ } }
+class EmailService { send(user) { /* email */ } }
+class ReportGenerator { generate(user) { /* report */ } }
+
+class UserService {
+  constructor(repo, validator, email, report) {
+    this.repo = repo; // Dependency Injection
+    this.validator = validator;
+    this.email = email;
+    this.report = report;
+  }
+  create(user) {
+    this.validator.validate(user);
+    this.repo.save(user);
+    this.email.send(user);
+  }
+}
+```
+
+> *「コードは道具だ。シニアエンジニアの価値を生むのは、考え方と分野を越えた理解である。」*

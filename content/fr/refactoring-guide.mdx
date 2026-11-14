@@ -1,0 +1,284 @@
+---
+title: "Guide du refactoring : améliorer la qualité du code"
+date: "2026-08-04"
+excerpt: "Un guide complet du refactoring : les techniques pour améliorer le code source sans modifier son comportement externe."
+---
+
+# Guide du refactoring : améliorer la qualité du code
+
+Le refactoring consiste à restructurer du code existant sans modifier son comportement externe. L'objectif est d'améliorer la conception du logiciel, de rendre le code plus facile à comprendre et de réduire les coûts de maintenance.
+
+## Pourquoi refactorer ?
+
+### 1. Réduire la complexité
+- Un code complexe est difficile à comprendre, difficile à maintenir et source de bugs
+- Le refactoring simplifie la logique et rend le code plus clair
+
+### 2. Améliorer la lisibilité
+- Un bon code devrait se lire comme une histoire
+- Le refactoring aide à donner des noms parlants aux variables, fonctions et classes
+
+### 3. Préparer les nouvelles fonctionnalités
+- Un code propre est plus facile à étendre
+- Refactorer avant d'ajouter une fonctionnalité réduit le risque de bugs
+
+### 4. Réduire le travail de maintenance
+- Un bon code réduit le temps passé à trouver et corriger les bugs
+- Le refactoring aide à rembourser la dette technique (technical debt)
+
+## Les principes du refactoring
+
+### 1. Toujours avoir des tests
+- Avant de refactorer, assurez-vous d'avoir une suite de tests suffisante
+- Les tests vérifient que le comportement n'a pas changé après le refactoring
+
+### 2. Refactorer par petites étapes
+- Les petits changements sont plus faciles à maîtriser
+- Ils sont faciles à annuler en cas de problème
+
+### 3. En faire une habitude
+- Le refactoring n'est pas une activité ponctuelle
+- Il doit se faire en continu tout au long du développement
+
+## Les techniques de refactoring de base
+
+### 1. Extract Method (extraire une méthode)
+```javascript
+// Avant
+function printOwing(invoice) {
+  let outstanding = 0;
+  console.log(`*************************`);
+  console.log(`**** Customer Owes ****`);
+  console.log(`*************************`);
+  
+  // calculer le montant dû
+  for (const border of invoice.borders) {
+    outstanding += border.amount;
+  }
+  
+  // enregistrer la date d'échéance
+  const today = Date.now();
+  invoice.dueDate = new Date(today + 30 * 24 * 60 * 60 * 1000);
+  
+  console.log(`Customer name: ${invoice.customer}`);
+  console.log(`Amount owed: ${outstanding}`);
+  console.log(`Due date: ${invoice.dueDate.toLocaleDateString()}`);
+}
+
+// Après
+function printOwing(invoice) {
+  printBanner();
+  const outstanding = calculateOutstanding(invoice);
+  recordDueDate(invoice);
+  printDetails(invoice, outstanding);
+}
+
+function printBanner() {
+  console.log(`*************************`);
+  console.log(`**** Customer Owes ****`);
+  console.log(`*************************`);
+}
+
+function calculateOutstanding(invoice) {
+  return invoice.borders.reduce((sum, border) => sum + border.amount, 0);
+}
+
+function recordDueDate(invoice) {
+  const today = Date.now();
+  invoice.dueDate = new Date(today + 30 * 24 * 60 * 60 * 1000);
+}
+
+function printDetails(invoice, outstanding) {
+  console.log(`Customer name: ${invoice.customer}`);
+  console.log(`Amount owed: ${outstanding}`);
+  console.log(`Due date: ${invoice.dueDate.toLocaleDateString()}`);
+}
+```
+
+### 2. Rename Variable (renommer une variable)
+```javascript
+// Avant
+function getTotalPrice() {
+  let t = 0;
+  for (let i = 0; i < items.length; i++) {
+    t += items[i].price * items[i].quantity;
+  }
+  return t;
+}
+
+// Après
+function getTotalPrice() {
+  let totalPrice = 0;
+  for (let i = 0; i < items.length; i++) {
+    totalPrice += items[i].price * items[i].quantity;
+  }
+  return totalPrice;
+}
+```
+
+### 3. Replace Temp with Query (remplacer une variable temporaire par une requête)
+```javascript
+// Avant
+function getDistanceTraveled(time) {
+  const result = 2 * Math.PI * radius;
+  return result * time;
+}
+
+// Après
+function getDistanceTraveled(time) {
+  return getBaseCircumference() * time;
+}
+
+function getBaseCircumference() {
+  return 2 * Math.PI * radius;
+}
+```
+
+## Un processus de refactoring efficace
+
+### Étape 1 : analyser et planifier
+- Identifier la zone à refactorer
+- Fixer un objectif précis (meilleure lisibilité, complexité réduite, etc.)
+- Planifier une série de petites étapes
+
+### Étape 2 : préparer l'environnement
+- S'assurer d'avoir une suite de tests suffisante
+- Lancer tous les tests pour confirmer un état de départ stable
+
+### Étape 3 : effectuer de petits refactorings
+- Appliquer une seule technique à la fois
+- Lancer les tests après chaque modification
+
+### Étape 4 : tester et vérifier
+- Lancer toute la suite de tests
+- Vérifier que le comportement n'a pas changé
+
+### Étape 5 : recommencer
+- Passer à la zone suivante
+- Réévaluer la qualité du code
+
+## Les types de refactoring les plus courants
+
+### 1. Composing Methods (composer les méthodes)
+- Extract Method
+- Inline Method
+- Inline Temp
+- Replace Temp with Query
+- Split Temporary Variable
+- Remove Assignments to Parameters
+- Replace Method with Method Object
+- Substitute Algorithm
+
+### 2. Moving Features Between Objects (déplacer des fonctionnalités entre objets)
+- Move Method
+- Move Field
+- Extract Class
+- Inline Class
+- Hide Delegate
+- Remove Middle Man
+- Introduce Foreign Method
+- Introduce Local Extension
+
+### 3. Organizing Data (organiser les données)
+- Self Encapsulate Field
+- Replace Data Value with Object
+- Change Value to Reference
+- Change Reference to Value
+- Replace Array with Object
+- Duplicate Observed Data
+- Change Unidirectional Association to Bidirectional
+- Change Bidirectional Association to Unidirectional
+- Replace Magic Number with Symbolic Constant
+- Encapsulate Field
+- Encapsulate Collection
+- Replace Record with Data Class
+- Replace Type Code with Class
+- Replace Type Code with Subclasses
+- Replace Type Code with State/Strategy
+- Replace Subclass with Fields
+
+### 4. Simplifying Conditional Expressions (simplifier les expressions conditionnelles)
+- Decompose Conditional
+- Consolidate Conditional Expression
+- Consolidate Duplicate Conditional Fragments
+- Remove Control Flag
+- Replace Nested Conditional with Guard Clauses
+- Conditional to Polymorphism
+- Introduce Null Object
+- Introduce Assertion
+
+### 5. Simplifying Method Calls (simplifier les appels de méthodes)
+- Rename Method
+- Add Parameter
+- Remove Parameter
+- Separate Query from Modifier
+- Parameterize Method
+- Replace Parameter with Explicit Methods
+- Preserve Whole Object
+- Replace Parameter with Methods
+- Hide Method
+- Replace Constructor with Factory Function
+- Replace Error Code with Exception
+- Replace Exception with Test
+
+## Les bonnes pratiques du refactoring
+
+### 1. Se concentrer sur une seule chose à la fois
+- N'essayez pas d'en faire trop d'un coup
+- Chaque commit doit avoir un seul objectif de refactoring précis
+
+### 2. Noter ses raisons
+- Expliquez dans le message de commit pourquoi vous refactorez
+- Cela aide l'équipe à comprendre la valeur du changement
+
+### 3. S'appuyer sur les outils
+- La plupart des IDE modernes prennent en charge le refactoring
+- Profitez de fonctionnalités comme Rename, Extract Method, etc.
+
+### 4. Ne pas refactorer sans nécessité
+- Si le code fonctionne bien et ne pose pas de problème, ne le refactorez pas juste pour qu'il soit « propre »
+- Le refactoring doit apporter une vraie valeur
+
+### 5. Continuer à apprendre
+- Lisez le livre de Martin Fowler « Refactoring: Improving the Design of Existing Code »
+- Participez aux sessions de partage de connaissances de votre équipe
+
+## Quand éviter le refactoring
+
+### 1. Sous la pression des délais
+- Si vous êtes en pleine correction d'un bug urgent, corrigez d'abord le bug
+- Le refactoring pourra venir plus tard, une fois la situation stabilisée
+
+### 2. Sans tests suffisants
+- Refactorer sans tests est très risqué
+- Écrivez d'abord des tests suffisants, puis refactorez
+
+### 3. Quand le code va bientôt changer
+- Si vous savez que ce code sera entièrement réécrit dans un avenir proche
+- le refactoring n'en vaut peut-être pas la peine
+
+## Les outils de refactoring
+
+### Les outils intégrés aux IDE
+- Visual Studio Code : menu de refactoring, IntelliSense
+- IntelliJ IDEA : les outils de refactoring les plus puissants
+- WebStorm : optimisé pour JavaScript/TypeScript
+
+### Les outils spécialisés
+- ESLint avec des règles de refactoring
+- JSCodeshift : un outil de transformation du code source
+- CodeClimate : analyse de la qualité du code
+
+## Conclusion
+
+Le refactoring n'est pas une activité à part : c'est une composante indissociable du développement logiciel. Bien mené, le refactoring permet de :
+
+- Améliorer la qualité du code
+- Réduire le risque de bugs
+- Aller plus vite sur le long terme
+- Améliorer la satisfaction de l'équipe
+- Réduire les coûts de maintenance
+
+N'oubliez pas que le refactoring est autant un art qu'une compétence. Il demande de la patience, du soin dans les détails et une compréhension profonde de la conception logicielle. Commencez par de petits changements fluides, et gardez toujours des tests pour protéger la justesse du code.
+
+À force de refactorer, vous commencerez à repérer les « mauvaises odeurs » du code (code smells) et saurez exactement comment les traiter. C'est la marque d'un développeur aguerri : ne pas seulement écrire du code qui fonctionne, mais du code qui fonctionne bien.

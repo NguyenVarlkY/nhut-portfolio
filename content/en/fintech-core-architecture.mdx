@@ -1,0 +1,29 @@
+---
+title: "Financial System Architecture: Banking & Fintech Core"
+date: "2026-08-13"
+excerpt: "An analysis of core financial system architecture and its strict requirements for ACID and data consistency."
+---
+
+# Financial System Architecture (Fintech Core)
+
+In financial systems, **consistency** matters more than anything. A single failed money transaction can lead to losses in the billions.
+
+## 1. ACID - the foundation of a Fintech core
+Only systems that follow these principles are fit to serve as core banking:
+- **Atomicity:** Either everything succeeds, or nothing happens.
+- **Consistency:** Data is always in a valid state.
+- **Isolation:** Concurrent transactions do not affect each other.
+- **Durability:** Once data is committed, it is never lost.
+
+## 2. The ledger system
+This is the heart of every financial application.
+- **Double-Entry Bookkeeping:** Every entry is recorded as a debit and a credit, and total debits always equal total credits.
+- **Audit Log:** Every change must leave a trace (an immutable audit trail).
+
+## 3. Technical challenges
+- **Concurrency:** How do you prevent "double spending" when millions of transactions happen at once? (Use optimistic or pessimistic locking at the database level.)
+- **ISO 8583:** The standard for financial card transactions.
+- **Security:** Encryption in transit and at rest, and hardware security modules (HSM) for keys.
+
+---
+*Working in Fintech requires engineers who are not only technically strong but also extremely careful with every line of code.*

@@ -1,0 +1,43 @@
+---
+title: "Clean Architecture mit Node.js umsetzen"
+date: "2026-08-05"
+excerpt: "Eine ausführliche Anleitung, wie man ein Node.js-Projekt nach Clean Architecture strukturiert, damit es wartbar und erweiterbar bleibt."
+---
+
+# Clean Architecture mit Node.js umsetzen
+
+In der Softwarewelt ist Wartbarkeit überlebenswichtig. Clean Architecture trennt die Geschäftslogik von externen Abhängigkeiten.
+
+## Warum Clean Architecture?
+Wenn ein Projekt wächst und Datenbanklogik, Drittanbieter-Bibliotheken und Geschäftslogik vermischt sind, wird es sehr schwer zu testen und weiterzuentwickeln.
+
+## Grundprinzipien
+1. **Dependency Rule:** Abhängigkeiten dürfen nur nach innen zeigen (zur Kernlogik hin).
+2. **Entities:** Enthalten die zentralen Geschäftsregeln.
+3. **Use Cases:** Definieren die konkreten Aktionen des Systems.
+4. **Interface Adapters:** Wandeln Daten zwischen den Use Cases und externen Komponenten (API, Datenbank) um.
+5. **Frameworks & Drivers:** Hier liegen Datenbank, Express/NestJS usw.
+
+## Beispielimplementierung
+```javascript
+// Entities
+class User {
+  constructor(id, name) {
+    this.id = id;
+    this.name = name;
+  }
+}
+
+// Use Case
+class RegisterUser {
+  constructor(userRepository) {
+    this.userRepository = userRepository;
+  }
+  execute(userData) {
+    // Geschäftslogik gehört hierher
+    return this.userRepository.save(userData);
+  }
+}
+```
+
+Dank dieser Trennung kannst du von MongoDB auf PostgreSQL wechseln, ohne eine einzige Zeile im `Use Case` zu ändern.

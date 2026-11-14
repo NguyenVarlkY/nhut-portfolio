@@ -1,0 +1,36 @@
+---
+title: "견고한 REST API 설계"
+date: "2026-08-07"
+excerpt: "표준을 따르고, 안전하며, 확장하기 쉬운 API 만들기."
+---
+
+# 견고한 REST API 설계
+
+API는 대부분의 현대 애플리케이션의 "척추"입니다. 잘못 설계된 API는 프론트엔드를 힘들게 하고 유지보수를 어렵게 만듭니다.
+
+## 1. 설계 원칙
+*   **명사 사용:** `/getUsers` 대신 `/users`.
+*   **HTTP 메서드를 올바르게:**
+    *   `GET`: 데이터 조회.
+    *   `POST`: 생성.
+    *   `PUT/PATCH`: 수정.
+    *   `DELETE`: 삭제.
+*   **표준 HTTP 상태 코드:** 200 (OK), 201 (Created), 400 (Bad Request), 401 (Unauthorized), 403 (Forbidden), 404 (Not Found), 500 (Server Error).
+
+## 2. 보안과 관리
+*   **Authentication:** JWT 또는 세션 사용.
+*   **Rate Limiting:** DoS 공격을 막기 위해 매우 중요합니다.
+*   **Validation:** 프론트엔드와 백엔드 모두에서 항상 입력을 검증하세요(서버 측 검증은 필수).
+*   **API Versioning:** 처음부터 API 버전을 정의하세요(예: `/api/v1/...`).
+
+```json
+// 표준 JSON 응답 예시
+{
+  "status": "success",
+  "data": {
+    "user": { "id": 1, "name": "Nhut Y" }
+  }
+}
+```
+
+처음부터 API를 신중하게 설계하는 데 시간을 들이면, 나중에 코딩과 버그 수정에 들어갈 수백 시간을 아낄 수 있습니다.

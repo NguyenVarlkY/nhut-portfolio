@@ -1,0 +1,38 @@
+---
+title: "Deep Dive : l'optimisation avancée des bases de données"
+date: "2026-08-08"
+excerpt: "Optimiser une base de données, du niveau des pages et des entrailles du B-Tree jusqu'à la planification des requêtes."
+---
+
+# Deep Dive : l'optimisation avancée des bases de données
+
+Optimiser une base de données n'est pas une affaire « d'essais et d'erreurs ». C'est la science de la façon dont les données sont stockées, lues et verrouillées (locking) sur le disque. Voici une analyse technique approfondie.
+
+## 1. Le fonctionnement interne du B-Tree : comprendre la structure de données
+Un index n'est pas une simple liste.
+- **Structure B-Tree :** un arbre équilibré qui permet la recherche, l'insertion et la suppression en $O(\log n)$.
+- **Page splits :** quand un nœud est plein, la base doit le scinder, ce qui coûte des I/O. Évitez les clés primaires `UUID` aléatoires si ce n'est pas nécessaire : elles fragmentent bien plus l'index qu'un `Integer Auto-increment`.
+- **Fill factor :** ajustez le taux de remplissage des pages pour optimiser les performances en lecture et en écriture.
+
+## 2. Le planificateur de requêtes et le plan d'exécution
+Utilisez toujours `EXPLAIN (ANALYZE, BUFFERS)` pour voir :
+- **Sequential scan vs index scan :** un seq scan sur une table de plusieurs millions de lignes est une catastrophe.
+- **Estimation des coûts :** PostgreSQL/Oracle s'appuient sur des statistiques pour choisir le meilleur chemin. Si elles sont obsolètes (stale), le planificateur se trompe de chemin.
+- **Nested loop vs hash join :** sur de gros volumes, un hash join est généralement plus rapide qu'un nested loop, mais consomme plus de mémoire.
+
+## 3. Techniques SQL avancées
+### 3.1. Gérer de gros volumes
+- **Pagination :** n'utilisez jamais `OFFSET/LIMIT` sur de très gros volumes (des millions de lignes), car `OFFSET` doit parcourir toutes les lignes précédentes. Utilisez plutôt la **keyset pagination** (basée sur la valeur de la colonne de la dernière ligne de la page précédente).
+- **Partitionnement :** pour les tables gigantesques, partitionnez par période (par exemple une partition par mois) afin d'accélérer les requêtes et de gérer les anciennes données.
+
+### 3.2. Contrôle de la concurrence
+- **Verrouillage :** comprenez la différence entre `row-level locking` et `table-level locking`.
+- **Deadlocks :** mettez toujours à jour les ressources dans le même ordre pour éviter les interblocages dans les environnements à forte concurrence.
+
+## 4. Recherche plein texte (FTS)
+N'utilisez pas `LIKE '%keyword%'`.
+- **Pourquoi ?** Il ne peut pas utiliser un index classique (B-Tree).
+- **Solution :** utilisez un **index GIN/GiST** (dans Postgres), ou intégrez **ElasticSearch** si vous avez besoin d'une très grande scalabilité et de recherches complexes (fuzzy search, stemming).
+
+---
+*Ces connaissances associent la théorie informatique à une expérience concrète sur des millions d'enregistrements. Comprendre le fonctionnement interne des bases de données, c'est ce qui fait un véritable ingénieur.*

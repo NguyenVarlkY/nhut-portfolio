@@ -1,0 +1,52 @@
+---
+title: "L'art du débogage : une méthode scientifique pour trouver les bugs"
+date: "2026-08-15"
+excerpt: "Déboguer, ce n'est pas chercher des bugs, c'est éliminer des possibilités jusqu'à trouver la vérité. Apprenez une approche systématique."
+---
+
+# L'art du débogage : une méthode scientifique pour trouver les bugs
+
+Tout le monde peut écrire du code, mais les Senior Engineers se distinguent par leur capacité à **résoudre les incidents (troubleshooting)**. Le débogage professionnel n'est ni une question de chance ni d'intuition : c'est un **processus systématique** fondé sur la méthode scientifique.
+
+## 1. La méthode scientifique appliquée au débogage
+
+### 1.1 Observation
+La première étape, et la plus importante : **il faut pouvoir reproduire le bug** (reproduce bug). Si vous ne pouvez pas le reproduire, vous ne pouvez pas le corriger.
+
+- Notez précisément les étapes qui mènent au bug.
+- Notez l'entrée, la sortie et l'état du système.
+- Identifiez l'environnement : quel navigateur, quelle version, quel appareil.
+
+### 1.2 Hypothèse
+Formulez des hypothèses fondées sur la **raison** du bug. Ne devinez pas au hasard, appuyez-vous sur :
+
+- Votre connaissance de la base de code.
+- Le message d'erreur.
+- Les logs et la stack trace.
+- Votre compréhension du flux de données.
+
+### 1.3 Expérimentation
+Vérifiez votre hypothèse en :
+- Ajoutant des **logs** détaillés aux endroits suspects.
+- Utilisant un **débogueur** pour poser des points d'arrêt et avancer pas à pas.
+- **Isolant** le code : commentez temporairement, extrayez des variables, testez avec des entrées simples.
+- Faisant une **recherche dichotomique** dans le code : divisez la zone suspecte par deux à chaque fois.
+
+### 1.4 Conclusion
+Trouvez la cause racine, corrigez-la et **écrivez un test** pour que le bug ne revienne jamais (**tests de régression**).
+
+## 2. Techniques de débogage avancées
+
+- **Rubber duck debugging :** expliquez votre code à un « canard en plastique ». Énoncer le problème à voix haute fait souvent surgir la solution.
+- **Déboguer en relisant le code :** relisez chaque ligne en vous demandant « que fait-elle réellement ? » plutôt que « que devrait-elle faire ? ».
+- **Utiliser Git Bisect :** trouvez le commit qui a introduit le bug en divisant l'historique des commits par deux.
+- **Vérifier les versions et les dépendances :** beaucoup de bugs viennent d'un changement de version d'une bibliothèque, pas de votre code.
+
+## 3. Les outils de débogage indispensables
+
+- **DevTools du navigateur :** onglet Network, Console, Sources, Performance.
+- **Côté serveur :** fichiers de logs, outils APM (Datadog, Sentry), monitoring.
+- **Base de données :** logs de requêtes, EXPLAIN, analyse des index.
+- **API :** Postman, curl, serveurs de mock.
+
+> *"Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it."* — Brian Kernighan

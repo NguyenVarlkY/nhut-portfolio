@@ -11,13 +11,36 @@
     "contact": "Kontakt",
     "resume": "Lebenslauf"
   },
+  "blog": {
+    "backToBlog": "Zurück zum Blog",
+    "minRead": "{count} Min. Lesezeit",
+    "title": "Blog",
+    "metaTitle": "Blog — NGUYEN BUI NHUT Y",
+    "metaDescription": "Artikel über Full-Stack-Entwicklung, Softwarearchitektur und den Bau produktionsreifer Webprodukte.",
+    "searchPlaceholder": "Artikel suchen...",
+    "clear": "Löschen",
+    "noResults": "Keine Ergebnisse",
+    "postCount": "{count} Artikel",
+    "readMore": "Weiterlesen →",
+    "noMatch": "Keine Artikel passend zu „{query}“",
+    "prev": "← Zurück",
+    "next": "Weiter →",
+    "pageOf": "Seite {current} von {total}",
+    "translationNotice": "Dieser Artikel ist noch nicht auf Deutsch verfügbar. Es wird die vietnamesische Originalversion angezeigt."
+  },
   "hero": {
     "greeting": "Hallo, ich bin",
     "available": "Offen für Freelance- / Junior-Positionen",
     "description": "Full-Stack-Entwickler mit praktischer Erfahrung in der Entwicklung produktiver Webanwendungen mit React, TypeScript, Node.js & MongoDB. Ich liefere End-to-End-Funktionen — vom REST-API-Design und der Authentifizierung bis hin zu polierten, responsiven Benutzeroberflächen.",
     "subDescription": "Ich entwickle skalierbare Webprodukte vom API-Design bis zu ausgereiften Benutzeroberflächen mit Fokus auf Geschäftswert, sauberem Code und praktischer Nutzbarkeit.",
     "viewWork": "Meine Arbeit ansehen",
-    "contactMe": "Kontakt"
+    "contactMe": "Kontakt",
+    "roles": [
+      "Full-Stack-Entwickler",
+      "React- & Next.js-Engineer",
+      "Node.js-API-Entwickler",
+      "Produktorientierter Webentwickler"
+    ]
   },
   "about": {
     "tag": "// über mich",
@@ -46,7 +69,13 @@
   "skills": {
     "tag": "// fähigkeiten",
     "title": "Mein",
-    "titleHighlight": "Tech-Stack"
+    "titleHighlight": "Tech-Stack",
+    "groups": {
+      "frontend": "Frontend",
+      "backend": "Backend",
+      "infra": "Infrastruktur & Tools",
+      "concepts": "Engineering-Konzepte"
+    }
   },
   "stats": {
     "years": "Jahre Erfahrung",
@@ -55,7 +84,7 @@
     "tech": "Technologien"
   },
   "testimonials": {
-    "tag": "// testimonials",
+    "tag": "// Referenzen",
     "title": "Was Leute sagen",
     "titleHighlight": "über mich",
     "t1Quote": "Nhut Y ist ein schneller und zuverlässiger Entwickler. Er hat unsere Landing Page vorzeitig geliefert und das Design war auf jedem Gerät pixelgenau.",
@@ -135,10 +164,54 @@
     "title": "Wo ich gearbeitet",
     "titleHighlight": "habe"
   },
+  "experienceData": [
+    {
+      "title": "Software-Entwickler (Berufseinsteiger)",
+      "desc": [
+        "Entwicklung von CRM/ERP-Modulen für das Master-Data-Management, einschließlich Massenoperationen, hierarchischer Datenstrukturen, Suche und Freigabeworkflows.",
+        "Aufbau sicherer Benutzer- und Rollenverwaltungsfunktionen mit Authentifizierung, Eingabevalidierung, Filterung unangemessener Sprache und Zugriffskontrolle mit Next.js, Spring Boot, PostgreSQL und React Query.",
+        "Entwicklung von HR-Management-, zweisprachigen UI-, Dashboard-Analyse- und KI-Chatbot-Workflow-Modulen zur Unterstützung des Geschäftsbetriebs.",
+        "Verbesserung der Anwendungs- und Datenbankleistung durch Indizierung, Query-Optimierung und API-Integration.",
+        "Zusammenarbeit mit funktionsübergreifenden Teams zur Bereitstellung von Enterprise-Software-Funktionen über Frontend- und Backend-Systeme hinweg."
+      ]
+    },
+    {
+      "title": "Software Engineer Praktikant | Unterstützung der Geschäftsanalyse",
+      "desc": [
+        "Mitwirkung an der End-to-End-Feature-Entwicklung über Frontend, Backend-Validierung und Datenbank-Workflows für 3 ERP-Module (Buchhaltung, UI, interner Chat).",
+        "Entwurf und Implementierung von REST-APIs mit JWT-basierter Authentifizierung zur Sicherstellung einer sicheren rollenbasierten Zugriffskontrolle.",
+        "Verbesserung der Transaktionskonsistenz durch Validierung von Grenzfällen und Reduzierung von Datenanomalien in internen Workflows.",
+        "Zusammenarbeit mit Frontend-, Backend- und KI-Teams zur Integration von Python-basierten Agenten-APIs und Dokumentenverarbeitungsdiensten.",
+        "Anwendung von Cloud-Konzepten (Serviceintegration, Umgebungskonfiguration) und Oracle-Datenbankgrundlagen (Schemadesign, relationale Modellierung)."
+      ]
+    },
+    {
+      "title": "Front-End-Praktikant",
+      "desc": [
+        "Entwicklung responsiver React- und Redux-Komponenten zur Unterstützung von mehr als 5 zentralen Benutzerabläufen auf verschiedenen Geräten.",
+        "Integration von REST-APIs und Unterstützung des Frontend-Backend-Deployments für kundenseitige Produktionsveröffentlichungen."
+      ]
+    },
+    {
+      "title": "Frontend-Entwickler (Freelance)",
+      "desc": [
+        "Umsetzung von Figma-Designs in responsive React-Webanwendungen für kleine Unternehmen und Event-Promotion-Projekte.",
+        "Direkte Zusammenarbeit mit Kunden zur Anforderungserhebung und Bereitstellung produktionsreifer Benutzeroberflächen."
+      ]
+    }
+  ],
   "projects": {
     "tag": "// projekte",
     "title": "Ausgewählte",
     "titleHighlight": "Projekte",
+    "subtitle": "Ausgewählte Arbeiten mit Schwerpunkt auf realer Produktbereitstellung, benutzerorientierten Oberflächen und Geschäftsworkflows, die Wachstum und Betrieb unterstützen.",
+    "filterAll": "Alle",
+    "openCaseStudy": "Fallstudie öffnen",
+    "caseLabel": "Fall",
+    "overview": "Übersicht",
+    "keyFeatures": "Hauptfunktionen",
+    "techStack": "Tech-Stack",
+    "close": "Schließen",
     "source": "Quellcode",
     "liveDemo": "Live-Demo",
     "businessCore": "Geschäftskern",
@@ -147,6 +220,127 @@
     "solution": "Lösung",
     "techHighlight": "Technische Highlights"
   },
+  "projectsData": [
+    {
+      "tagline": "Produktionsreifes Hotelbuchungs- und Zimmerverwaltungssystem",
+      "desc": "Eine vollständige Hotelbuchungsplattform für ein Resort in Phan Thiet, die die gesamte Gästereise abdeckt — von der Suche nach verfügbaren Zimmern bis zum Erhalt automatischer Bestätigungs-E-Mails. Das System verfügt über ein sicheres Admin-Dashboard, mit dem das Personal Zimmer, Bestand, Buchungen und Medien in Echtzeit verwalten kann. Das Backend wird mit gehärteter Umgebungskonfiguration bereitgestellt, integriert eine CRM-Schicht für das Kundenbeziehungsmanagement und nutzt ein ORM, um den Datenbankzugriff sauber und wartbar zu halten. Cloudinary wird für skalierbares Bild- und Medienmanagement verwendet, während Brevo (Sendinblue) zuverlässige transaktionale E-Mail-Benachrichtigungen übernimmt.",
+      "businessCore": "Das Kerngeschäft eines Hotels besteht darin, den Zimmerbestand in bestätigte Buchungen umzuwandeln, während die Auslastung maximiert und ein reibungsloses Gästeerlebnis geboten wird. Das System muss die Verfügbarkeit in Echtzeit genau halten, Doppelbuchungen verhindern, Preise und Zimmertypen verwalten und dem Personal eine einzige verlässliche Datenquelle für den Betrieb der Unterkunft bieten.",
+      "flow": [
+        "Der Gast durchsucht die Website und sucht nach Datum, Gästezahl und Zimmertyp nach verfügbaren Zimmern",
+        "Das System fragt den Live-Bestand ab und liefert nur buchbare Zimmer mit korrekten Preisen zurück",
+        "Der Gast wählt ein Zimmer und gibt seine Daten im Buchungsformular ein",
+        "Die Buchung wird mit serverseitiger Verfügbarkeitsprüfung erstellt, um Doppelbuchungen zu verhindern",
+        "Zahlung/Reservierung wird bestätigt, und eine automatische E-Mail wird über Brevo versendet",
+        "Der Admin meldet sich im Dashboard an, um Buchungen, Zimmer und Bestand in Echtzeit zu verwalten"
+      ],
+      "problem": "Das Hotel verwaltete Buchungen zuvor telefonisch, über Tabellenkalkulationen und manuelle Abstimmung. Dies führte zu häufigen Doppelbuchungen, veralteten Verfügbarkeitsdaten, langsamer Gästekommunikation und keinem zentralen Buchungsverzeichnis. Das Personal verbrachte täglich Stunden mit dem Abgleich von Daten, und das Hotel verlor Umsatz, weil Zimmer als nicht verfügbar angezeigt wurden, obwohl sie tatsächlich frei waren.",
+      "solution": "Ich habe ein digitales Buchungssystem entwickelt, das den gesamten Ablauf automatisiert. Die Echtzeit-Verfügbarkeitsprüfung verhindert Konflikte, automatische E-Mail-Bestätigungen ersetzen die manuelle Kommunikation, und das Admin-Dashboard gibt dem Personal volle Übersicht und Kontrolle über Zimmer, Buchungen und Medien. Eine sichere Umgebungskonfiguration und eine ORM-Schicht halten das Backend produktionssicher und wartbar.",
+      "features": [
+        "Echtzeit-Suche nach verfügbaren Zimmern nach Datum, Gästezahl und Zimmertyp",
+        "Serverseitige Verfügbarkeitsprüfung zur Verhinderung von Doppelbuchungen",
+        "Automatische transaktionale E-Mail-Bestätigungen über Brevo",
+        "Cloudinary-gestütztes Bild- und Medienmanagement",
+        "Admin-Dashboard zur Verwaltung von Zimmern, Buchungen und Bestand",
+        "CRM-Schicht zur Verfolgung von Kunden und Beziehungen",
+        "Gehärtete Umgebungskonfiguration für ein sicheres Produktions-Deployment"
+      ]
+    },
+    {
+      "tagline": "Produktionsreife E-Commerce-Plattform für gesunde Lebensmittel",
+      "desc": "Eine modular-monolithische E-Commerce-Plattform für eine Marke für gesunde Lebensmittel, entwickelt mit einem Container-Presentation-React-Frontend und React Query für effizientes Daten-Fetching. Sie unterstützt den gesamten Kaufprozess — Produktdurchsuchung, Warenkorb, Checkout und Stripe-Zahlungen — gesichert durch JWT-Authentifizierung mit rollenbasierter Zugriffskontrolle (RBAC). Das Backend ist als modularer Monolith organisiert, um die Geschäftsdomänen sauber und testbar zu halten, und die gesamte Anwendung ist mit Docker containerisiert für eine reproduzierbare Bereitstellung. Eine GraphQL-Schicht ermöglicht flexible Abfragen, und Cloudinary verwaltet die Produktbilder.",
+      "businessCore": "Ein E-Commerce-Unternehmen muss Kunden so effizient wie möglich vom Durchsuchen zu einer abgeschlossenen, bezahlten Bestellung führen. Der Kern besteht aus Produktkatalogverwaltung, Warenkorb- und Checkout-Ablauf, sicherer Zahlungsabwicklung, Bestellverfolgung und rollengetrenntem Zugriff (Kunden vs. Admins) — während Bestand und Aktionen konsistent gehalten werden.",
+      "flow": [
+        "Der Kunde durchsucht den Produktkatalog und filtert nach Kategorie",
+        "Der Kunde fügt Artikel mit gewünschter Menge dem Warenkorb hinzu",
+        "Der Kunde geht zur Kasse und gibt die Versanddaten ein",
+        "Die Zahlung wird sicher über Stripe abgewickelt",
+        "Die Bestellung wird erstellt und mit dem Bestand synchronisiert",
+        "Der Admin verwaltet Produkte, Bestellungen und Bestand über ein RBAC-geschütztes Dashboard"
+      ],
+      "problem": "Die Marke war auf manuelle Auftragsabwicklung angewiesen und hatte kein einheitliches Online-Geschäft. Es gab keinen konsistenten Produktkatalog, keine Möglichkeit, Zahlungen sicher zu verarbeiten, und keine Trennung zwischen Kunden- und Admin-Rollen. Eine Skalierung des Umsatzes war unmöglich, da der gesamte Bestellprozess manuell und fehleranfällig war.",
+      "solution": "Ich habe eine modular-monolithische E-Commerce-Plattform geliefert, die den gesamten Kaufprozess automatisiert. Das Container-Presentation-Muster hält die UI sauber und wartbar, React Query optimiert das Daten-Fetching, JWT + RBAC sichert Kunden- und Admin-Rollen, und Stripe übernimmt die Zahlungen. Die Docker-Containerisierung macht die Bereitstellung konsistent und reproduzierbar.",
+      "features": [
+        "Produktkatalog mit Suche, Filterung und Kategorienavigation",
+        "Warenkorb- und Checkout-Ablauf",
+        "Sichere Stripe-Zahlungsintegration",
+        "JWT-Authentifizierung mit rollenbasierter Zugriffskontrolle (RBAC)",
+        "GraphQL-gestützte flexible Datenabfragen",
+        "Modular-monolithisches Backend für eine saubere Trennung der Geschäftsdomänen",
+        "Docker-Containerisierung für eine reproduzierbare Bereitstellung"
+      ]
+    },
+    {
+      "tagline": "Vorbereitung und Verwaltung der theoretischen Führerscheinprüfung",
+      "desc": "Eine Webplattform zur Vorbereitung und Durchführung theoretischer Führerscheinprüfungen für mehrere Führerscheinklassen. Sie verfügt über einen Fragenkatalog mit mehr als 650 Fragen und generiert randomisierte Tests für ein realistisches Prüfungserlebnis. Das Backend ist eine ASP.NET-Core-Web-API nach der MVVM-Architektur, die Admin-CRUD-Endpunkte zur Verwaltung des Fragenkatalogs bereitstellt. Das responsive React-Frontend ermöglicht es Lernenden, zu lernen, Übungstests zu absolvieren und sofortiges Feedback zu erhalten. Die JWT-Authentifizierung mit rollenbasierter Zugriffskontrolle trennt die Erfahrungen von Lernenden und Admins.",
+      "businessCore": "Das Kerngeschäft einer Fahrschule besteht darin, Lernende zum Bestehen ihrer theoretischen Prüfung zu führen. Dies erfordert einen großen, präzisen Fragenkatalog, realistische Übungstests, die die echte Prüfung nachbilden, Fortschrittsverfolgung für Lernende und Admin-Tools, um Fragen und Kategorien aktuell zu halten.",
+      "flow": [
+        "Der Lernende registriert sich und wählt eine Führerscheinklasse (z. B. B1, B2, A)",
+        "Der Lernende lernt den Fragenkatalog nach Themen",
+        "Das System generiert einen randomisierten Übungstest aus dem Fragenkatalog",
+        "Der Lernende schließt den Test ab und erhält sofortiges Feedback mit den richtigen Antworten",
+        "Fortschritt und Ergebnisse werden für den Lernenden verfolgt",
+        "Der Admin meldet sich an, um Fragen kategorieübergreifend hinzuzufügen, zu bearbeiten und zu verwalten"
+      ],
+      "problem": "Lernende lernten zuvor mit veralteten Papiermaterialien, die keine Interaktivität, keine Randomisierung und keine Möglichkeit zur Fortschrittsmessung boten. Lehrkräfte hatten kein zentrales Tool zur Verwaltung von Fragen, und die statischen Materialien erschwerten es den Lernenden, das reale Prüfungserlebnis zu simulieren, was zu niedrigeren Bestehensquoten führte.",
+      "solution": "Ich habe eine digitale Plattform mit einem Fragenkatalog von über 650 Fragen, randomisierter Testgenerierung, sofortigem Feedback und Fortschrittsverfolgung entwickelt. Die MVVM-Architektur hält die ASP.NET-Core-API sauber, und JWT + RBAC trennt die Erfahrungen von Lernenden und Admins klar. Admins können den Fragenkatalog über CRUD-Endpunkte verwalten.",
+      "features": [
+        "Fragenkatalog mit über 650 nach Kategorie organisierten Fragen",
+        "Randomisierte Übungstestgenerierung für ein realistisches Prüfungsgefühl",
+        "Sofortiges Feedback mit richtigen Antworten nach jedem Test",
+        "Fortschrittsverfolgung für Lernende",
+        "Admin-CRUD-APIs zur Verwaltung des Fragenkatalogs",
+        "MVVM-Architektur mit einem responsiven React-Frontend",
+        "JWT-Authentifizierung mit rollenbasierter Zugriffskontrolle"
+      ]
+    },
+    {
+      "tagline": "Echtzeit-Sprache-zu-Text-Transkriptionstool",
+      "desc": "Eine Sprache-zu-Text-Webanwendung, die Sprache in Echtzeit transkribiert, mit Unterstützung mehrerer Sprachen und dem Hochladen von Audiodateien. Das React-Frontend erfasst die Mikrofoneingabe und streamt sie über WebSocket für eine Transkription mit niedriger Latenz an ein Node.js-Backend. Die verarbeiteten Ergebnisse werden sofort an die Benutzeroberfläche zurückgegeben und können in MongoDB gespeichert werden. Dieses Tool ist nützlich für Besprechungsnotizen, Transkription, Barrierefreiheit und Content-Erstellung.",
+      "businessCore": "Der Kernwert eines Sprache-zu-Text-Produkts besteht darin, gesprochenes Audio mit minimaler Latenz in genauen, nutzbaren Text umzuwandeln. Das System muss Live-Mikrofoneingaben verarbeiten, mehrere Sprachen unterstützen, das Hochladen vorab aufgenommener Audiodateien ermöglichen und die resultierenden Transkripte zur späteren Verwendung verwalten.",
+      "flow": [
+        "Der Benutzer öffnet die App und wählt eine Sprache und einen Eingabemodus (Live-Mikrofon oder Datei-Upload)",
+        "Live-Mikrofon: Audio wird erfasst und über WebSocket an das Backend gestreamt",
+        "Das Backend verarbeitet das Audio und gibt den transkribierten Text schrittweise zurück",
+        "Die Benutzeroberfläche zeigt das Transkript in Echtzeit mit niedriger Latenz an",
+        "Der Benutzer kann das Transkript überprüfen, bearbeiten und speichern",
+        "Transkripte werden zur späteren Abfrage in MongoDB gespeichert"
+      ],
+      "problem": "Manuelle Transkription ist langsam, fehleranfällig und teuer, und vielen Tools fehlt Echtzeit-Feedback oder Mehrsprachenunterstützung. Nutzer benötigten eine schnelle, zugängliche Möglichkeit, Besprechungen, Vorlesungen und Interviews in Text umzuwandeln, ohne alles von Hand eintippen zu müssen.",
+      "solution": "Ich habe eine Echtzeit-Sprache-zu-Text-Anwendung mit WebSocket-Streaming für eine Transkription mit niedriger Latenz entwickelt. Mehrsprachenunterstützung und das Hochladen von Audiodateien machen sie für viele Anwendungsfälle flexibel, und Transkripte werden dauerhaft in MongoDB gespeichert, damit Nutzer sie überprüfen und wiederverwenden können.",
+      "features": [
+        "Echtzeit-Transkription über WebSocket-Streaming",
+        "Mehrsprachenunterstützung für internationale Nutzer",
+        "Audio-Datei-Upload für vorab aufgenommene Inhalte",
+        "Inkrementelle Transkript-Darstellung mit niedriger Latenz",
+        "Überprüfung und Bearbeitung des Transkripts",
+        "Dauerhafte Transkriptspeicherung in MongoDB"
+      ]
+    },
+    {
+      "tagline": "Lehrreicher 8-Bit-CPU-Architektur-Simulator",
+      "desc": "Ein interaktiver 8-Bit-CPU-Simulator direkt im Browser zum Erlernen der Computerarchitektur. Er umfasst einen benutzerdefinierten Befehlssatz, einen kleinen Assembler, der Assembly in 16-Bit-Maschinenworte kompiliert, und eine virtuelle CPU, die Befehle Schritt für Schritt ausführt. Nutzer können beobachten, wie sich Register, Speicher und CPU-Flags in Echtzeit aktualisieren, wodurch niedrige Konzepte wie Befehls-Fetch/Decode/Execute, Programmzähler und Flags intuitiv und greifbar werden.",
+      "businessCore": "Der Kernwert eines CPU-Simulators besteht darin, Computerarchitektur greifbar zu machen. Er muss Nutzern ermöglichen, Programme zu schreiben und zu assemblieren, sie auf einer virtuellen CPU auszuführen und jede interne Zustandsänderung zu visualisieren — Register, Programmzähler, Speicher und Flags —, damit Lernende abstrakte Konzepte mit beobachtbarem Verhalten verbinden können.",
+      "flow": [
+        "Der Nutzer schreibt Assembly-Code im integrierten Editor (z. B. LOAD, ADD, INC, CMP, JNZ)",
+        "Der Assembler kompiliert den Quellcode in 16-Bit-Maschinenbefehle",
+        "Der Nutzer führt die Ausführung schrittweise durch oder lässt das Programm automatisch laufen",
+        "Die virtuelle CPU aktualisiert bei jedem Befehl Register, Speicher und Flags",
+        "Der Nutzer beobachtet das Summen-/Programmergebnis im Speicher und den endgültigen CPU-Zustand",
+        "Der Nutzer kann zurücksetzen und erneut ausführen, um andere Programme zu erforschen"
+      ],
+      "problem": "Computerarchitektur ist abstrakt und allein aus Lehrbüchern und Vorlesungen schwer zu erfassen. Studierende haben Schwierigkeiten, Befehlssätze, Register und Flags mit tatsächlichem Ausführungsverhalten zu verknüpfen, und es fehlt ihnen eine sichere, interaktive Sandbox, um mit niedrigem Programmieren zu experimentieren.",
+      "solution": "Ich habe einen vollständig clientseitigen 8-Bit-CPU-Simulator mit benutzerdefiniertem Befehlssatz, Assembler und Echtzeit-Visualisierung von Register/Speicher/Flags entwickelt. Er bietet eine interaktive, sichere Sandbox, in der Lernende Assembly schreiben, die Ausführung schrittweise durchlaufen und genau sehen können, wie sich die CPU verhält — alles im Browser ohne Installation.",
+      "features": [
+        "Benutzerdefinierter 8-Bit-Befehlssatz mit 16 Opcodes",
+        "Integrierter Assembler, der Assembly in Maschinenworte kompiliert",
+        "Schrittweise Ausführung und Auto-Run-Modi",
+        "Live-Anzeige von Registern (A, B, C, D) und Programmzähler",
+        "Speichervisualisierung mit 256 Bytes",
+        "Verfolgung von Zero- und Carry-Flag",
+        "Schleifen und bedingte Sprünge (JMP, JZ, JNZ)"
+      ]
+    }
+  ],
   "credentials": {
     "tag": "// zertifikate",
     "title": "Zertifikate &",
@@ -206,6 +400,57 @@
     "noteDetail": "Wechselkurse werden regelmäßig aktualisiert und dienen nur als Referenz. Für tatsächliche Transaktionen prüfen Sie bitte die Kurse bei Banken oder Wechselstuben.",
     "currencies": "Unterstützte Währungen"
   },
+  "seoChecker": {
+    "tag": "// Tools",
+    "title": "SEO & Sicherheit",
+    "titleHighlight": "Prüfer",
+    "description": "Durchsucht eine Website nach On-Page-SEO-Problemen und fehlenden HTTP-Sicherheitsheadern.",
+    "placeholder": "Website-URL eingeben (https://...)",
+    "checkButton": "Prüfen",
+    "checking": "Wird geprüft...",
+    "seoScore": "SEO-Score",
+    "securityScore": "Sicherheits-Score",
+    "noIssues": "Keine Probleme gefunden.",
+    "possiblyIncomplete": "Diese Seite hat sehr wenig Inhalt zurückgegeben — möglicherweise ist ein Login erforderlich oder der eigentliche Inhalt wird per JavaScript gerendert. Die folgenden Ergebnisse spiegeln möglicherweise nicht das wider, was ein angemeldeter Besucher oder ein JS-fähiger Crawler sehen würde.",
+    "error": "Diese URL konnte nicht geprüft werden.",
+    "errors": {
+      "invalid_url": "URL fehlt oder ist ungültig.",
+      "fetch_failed": "Diese URL konnte nicht geprüft werden."
+    },
+    "issues": {
+      "missing_title": "Title-Tag fehlt",
+      "missing_description": "Meta-Description-Tag fehlt",
+      "description_too_long": "Beschreibung zu lang (sollte unter 155 Zeichen sein)",
+      "missing_keywords": "Keywords-Meta-Tag fehlt",
+      "missing_h1": "H1-Tag fehlt",
+      "missing_robots": "Robots-Meta-Tag fehlt",
+      "images_without_alt": "{count} Bild(er) ohne Alt-Text",
+      "broken_links": "{count} defekte(r) Link(s) gefunden",
+      "missing_canonical": "Canonical-Tag fehlt",
+      "missing_og_title": "Open-Graph-Title-Tag fehlt",
+      "missing_viewport": "Viewport-Meta-Tag fehlt",
+      "missing_hreflang": "Hreflang-Tag für alternative Sprachversionen fehlt",
+      "not_https": "Seite wird nicht über HTTPS bereitgestellt",
+      "missing_schema": "Schema-Markup fehlt",
+      "content_too_short": "Inhalt zu kurz (mindestens 300 Wörter erforderlich)",
+      "iframes_without_title": "{count} iframe(s) ohne Title-Attribut",
+      "insufficient_internal_links": "Weitere interne Links zur SEO-Verbesserung hinzufügen",
+      "missing_csp": "Content-Security-Policy fehlt (Schutz vor XSS und anderen Angriffen)",
+      "missing_frame_options": "X-Frame-Options fehlt (verhindert Clickjacking)",
+      "missing_xss_protection": "X-XSS-Protection fehlt (Schutz vor XSS-Angriffen)",
+      "missing_hsts": "Strict-Transport-Security fehlt (erzwingt HTTPS)",
+      "missing_referrer_policy": "Referrer-Policy fehlt (steuert gesendete Referrer-Informationen)",
+      "missing_permissions_policy": "Permissions-Policy fehlt (schränkt Browser-Funktionszugriff ein)",
+      "missing_corp": "Cross-Origin-Resource-Policy fehlt (verhindert ungewollte Ressourcenfreigabe)",
+      "missing_coop": "Cross-Origin-Opener-Policy fehlt (hilft gegen Spectre-Angriffe)",
+      "missing_coep": "Cross-Origin-Embedder-Policy fehlt (Schutz vor Side-Channel-Angriffen)",
+      "missing_nosniff": "X-Content-Type-Options fehlt (verhindert MIME-Sniffing-Angriffe)",
+      "missing_cache_control": "Cache-Control fehlt (schützt zwischengespeicherte sensible Daten)",
+      "missing_cors": "CORS-Richtlinie fehlt (steuert Cross-Origin-Ressourcenfreigabe)",
+      "server_info_exposed": "Server-Header gibt Serverinformationen preis (sollte verborgen werden)",
+      "missing_cookie_flags": "Secure-, HttpOnly- & SameSite-Flags im Cookie fehlen (verringert XSS- & CSRF-Risiko)"
+    }
+  },
   "language": {
     "en": "EN",
     "vi": "VI",
@@ -218,7 +463,7 @@
   "tools": {
     "title": "Werkzeuge",
     "todo": {
-      "tag": "// tools",
+      "tag": "// Werkzeuge",
       "title": "Todo-Dashboard",
       "titleHighlight": "Aufgabenmanager",
       "description": "Verwalte deine Aufgaben, verfolge den Fortschritt und bleibe organisiert mit persistentem Speicher",
@@ -265,11 +510,43 @@
       "analyticsTasks": "Aufgaben",
       "analyticsWeek": "Aufgaben diese Woche",
       "analyticsPriority": "Aktiv nach Priorität",
-      "analyticsGoalProgress": "Zielfortschritt"
+      "analyticsGoalProgress": "Zielfortschritt",
+      "tabOverview": "Übersicht",
+      "import": "Importieren",
+      "export": "Exportieren",
+      "markAllComplete": "Alle als erledigt markieren",
+      "sortCreated": "Neueste",
+      "sortPriority": "Priorität",
+      "sortDue": "Fälligkeitsdatum",
+      "toastAdded": "Hinzugefügt",
+      "toastDeleted": "Gelöscht",
+      "toastCleared": "Erledigte Aufgaben gelöscht",
+      "toastAllDone": "Alle Aufgaben als erledigt markiert",
+      "toastExported": "Daten exportiert",
+      "toastImported": "Daten importiert",
+      "toastImportError": "Ungültige Datei — Import nicht möglich",
+      "overview": {
+        "todayOverdue": "Heute & Überfällig",
+        "viewAll": "Alle anzeigen",
+        "noneToday": "Heute nichts fällig. Super!",
+        "upcomingEvents": "Anstehend",
+        "noUpcoming": "Keine anstehenden Termine.",
+        "overallProgress": "Gesamtfortschritt"
+      },
+      "allCategories": "Alle Kategorien",
+      "searchPlaceholder": "Suchen (/)",
+      "metaTitle": "Aufgaben-Dashboard — Nguyen Bui Nhut Y",
+      "metaDescription": "Aufgaben verwalten, Arbeit planen und Produktivität analysieren – mit GitHub-Integration.",
+      "categories": {
+        "Work": "Arbeit",
+        "Study": "Lernen",
+        "Personal": "Privat",
+        "Health": "Gesundheit"
+      }
     },
     "ycpu": {
       "title": "Systeminfo",
-      "titleHighlight": "Viewer",
+      "titleHighlight": "Anzeige",
       "tag": "// Werkzeuge",
       "description": "Zeigt die Echtzeit-Spezifikationen Ihres Computers an — CPU, Speicher, Akku und mehr — direkt im Browser.",
       "os": "Betriebssystem",
@@ -326,7 +603,28 @@
       "wifiName": "Wi-Fi-Name (SSID)",
       "backgroundProcesses": "Hintergrundprozesse",
       "notAvailable": "Nicht im Browser verfügbar",
-      "batteryTime": "Verbleibende Zeit"
+      "batteryTime": "Verbleibende Zeit",
+      "gameReq": {
+        "title": "Spiel-Systemanforderungen prüfen",
+        "description": "Suche ein Spiel auf Steam und vergleiche dessen Systemanforderungen mit den erkannten Gerätespezifikationen.",
+        "placeholder": "Spielname eingeben...",
+        "searchButton": "Suchen",
+        "checking": "Anforderungen werden geladen...",
+        "noResults": "Keine Spiele gefunden.",
+        "minimum": "Minimum",
+        "recommended": "Empfohlen",
+        "ramOk": "RAM-Anforderung erfüllt",
+        "ramLow": "RAM könnte nicht ausreichen",
+        "deviceSpecs": "Erkannte Spezifikationen",
+        "ramOnlyNote": "Hinweis: Nur RAM wird automatisch verglichen — CPU-/GPU-Modelle können im Browser nicht zuverlässig abgeglichen werden.",
+        "error": "Spieldaten konnten nicht abgerufen werden.",
+        "errors": {
+          "missing_query": "Bitte gib einen Spielnamen ein.",
+          "invalid_url": "Ungültige Steam-Spiel-URL.",
+          "no_requirements_found": "Für diese Spielseite sind keine Systemanforderungen aufgeführt.",
+          "fetch_failed": "Spieldaten konnten nicht abgerufen werden."
+        }
+      }
     },
     "yspeech": {
       "title": "Yspeech",
@@ -347,38 +645,23 @@
       "unsupported": "Ihr Browser unterstützt die Web Speech API nicht. Bitte verwenden Sie einen unterstützten Browser (Chrome, Edge oder Safari)."
     }
   },
-  "ycpu": {
-    "title": "YCPU-Simulator",
-    "titleHighlight": "8-Bit-CPU",
-    "tag": "// tools",
-    "description": "Ein pädagogischer 8-Bit-CPU-Simulator. Schreibe Assembler, führe ihn Schritt für Schritt aus und beobachte, wie Register, Speicher und Flags in Echtzeit aktualisiert werden.",
-    "assembly": "Assembler",
-    "step": "Schritt",
-    "run": "Ausführen",
-    "stop": "Stopp",
-    "reset": "Zurücksetzen",
-    "registers": "Register",
-    "memory": "Speicher",
-    "steps": "Schritte",
-    "halted": "Angehalten",
-    "running": "Läuft"
+  "commandPalette": {
+    "placeholder": "Befehl eingeben oder suchen…",
+    "noResults": "Keine Ergebnisse."
   },
-  "yspeech": {
-    "title": "Yspeech",
-    "titleHighlight": "Sprache-zu-Text",
-    "tag": "// tools",
-    "description": "Echtzeit-Sprache-zu-Text-Transkription mit mehrsprachiger Unterstützung. Nutze dein Mikrofon oder lade Audio hoch, um Sprache in Text umzuwandeln.",
-    "start": "Start",
-    "stop": "Stopp",
-    "upload": "Hochladen",
-    "clear": "Löschen",
-    "transcript": "Transkript",
-    "placeholder": "Sprich jetzt oder tippe hier...",
-    "listening": "Hört zu...",
-    "idle": "Bereit",
-    "copy": "Kopieren",
-    "download": "Herunterladen",
-    "words": "Wörter",
-    "unsupported": "Ihr Browser unterstützt die Web Speech API nicht. Bitte verwenden Sie einen unterstützten Browser (Chrome, Edge oder Safari)."
+  "credentialsData": {
+    "cert0": "Cybersicherheit",
+    "cert1": "Projektmanagement (6/7 Kurse)",
+    "cert2": "UX-Design",
+    "lang0Name": "Englisch B1",
+    "lang0Detail": "Sicher im Berufsalltag",
+    "lang1Name": "Vietnamesisch",
+    "lang1Detail": "Muttersprache",
+    "degree": "Ingenieur für Informationstechnologie",
+    "highlights": [
+      "Ausgezeichnete Note in Analyse & Design von Informationssystemen (2023)",
+      "Ausgezeichnete Note in Systemdesign für Software Engineering (2022)",
+      "Talentstipendium + Doppelabschluss-Stipendium (TDTU & LTU — 2020)"
+    ]
   }
 }

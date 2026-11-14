@@ -1,0 +1,29 @@
+---
+title: "Architecture des systèmes financiers : Banking & Fintech Core"
+date: "2026-08-13"
+excerpt: "Analyse de l'architecture des systèmes financiers centraux et de leurs exigences strictes en matière d'ACID et de cohérence des données."
+---
+
+# Architecture des systèmes financiers (Fintech Core)
+
+Dans les systèmes financiers, la **cohérence (Consistency)** est primordiale. Une seule transaction monétaire défaillante peut entraîner des pertes considérables.
+
+## 1. ACID - le socle d'un Fintech Core
+Seuls les systèmes qui respectent ces principes peuvent servir de core banking :
+- **Atomicity (atomicité) :** soit tout réussit, soit rien ne se passe.
+- **Consistency (cohérence) :** les données sont toujours dans un état valide.
+- **Isolation :** les transactions concurrentes ne s'influencent pas.
+- **Durability (durabilité) :** une donnée validée (committed) n'est jamais perdue.
+
+## 2. Le système de registre (Ledger)
+C'est le cœur de toute application financière.
+- **Double-Entry Bookkeeping :** la comptabilité en partie double (débit - crédit) ; le total des débits est toujours égal au total des crédits.
+- **Audit Log :** chaque modification doit laisser une trace (piste d'audit immuable).
+
+## 3. Les défis techniques
+- **Concurrency :** comment éviter la « double dépense » (double spending) lorsque des millions de transactions ont lieu en même temps ? (Verrouillage optimiste ou pessimiste au niveau de la base de données.)
+- **ISO 8583 :** la norme des transactions par carte.
+- **Security :** chiffrement en transit et au repos, modules de sécurité matériels (HSM) pour les clés.
+
+---
+*Travailler dans la Fintech exige des ingénieurs non seulement compétents techniquement, mais aussi extrêmement rigoureux sur chaque ligne de code.*

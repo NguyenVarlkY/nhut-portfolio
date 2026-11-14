@@ -1,0 +1,36 @@
+---
+title: "Solide REST-APIs entwerfen"
+date: "2026-08-07"
+excerpt: "APIs bauen, die Standards folgen, sicher sind und sich leicht erweitern lassen."
+---
+
+# Solide REST-APIs entwerfen
+
+APIs sind das „Rückgrat“ der meisten modernen Anwendungen. Eine schlecht entworfene API macht dem Frontend das Leben schwer und ist kaum wartbar.
+
+## 1. Designprinzipien
+*   **Substantive verwenden:** `/users` statt `/getUsers`.
+*   **HTTP-Methoden richtig einsetzen:**
+    *   `GET`: Daten abrufen.
+    *   `POST`: Neu anlegen.
+    *   `PUT/PATCH`: Aktualisieren.
+    *   `DELETE`: Löschen.
+*   **Standard-HTTP-Statuscodes:** 200 (OK), 201 (Created), 400 (Bad Request), 401 (Unauthorized), 403 (Forbidden), 404 (Not Found), 500 (Server Error).
+
+## 2. Sicherheit und Verwaltung
+*   **Authentication:** JWT oder Sessions verwenden.
+*   **Rate Limiting:** Sehr wichtig zum Schutz vor DoS-Angriffen.
+*   **Validation:** Eingaben immer im Frontend und im Backend validieren (serverseitige Validierung ist Pflicht).
+*   **API Versioning:** Die API-Version von Anfang an festlegen (z. B. `/api/v1/...`).
+
+```json
+// Beispiel für eine standardisierte JSON-Antwort
+{
+  "status": "success",
+  "data": {
+    "user": { "id": 1, "name": "Nhut Y" }
+  }
+}
+```
+
+Wer sich von Anfang an Zeit für ein sorgfältiges API-Design nimmt, spart später Hunderte Stunden an Entwicklung und Fehlerbehebung.

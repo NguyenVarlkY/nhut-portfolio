@@ -1,0 +1,43 @@
+---
+title: "Node.js でクリーンアーキテクチャを構築する"
+date: "2026-08-05"
+excerpt: "保守しやすく拡張しやすいよう、Node.js プロジェクトをクリーンアーキテクチャで構成するための詳しいガイド。"
+---
+
+# Node.js でクリーンアーキテクチャを構築する
+
+ソフトウェアの世界では、保守性は死活問題です。クリーンアーキテクチャは、ビジネスロジックを外部の依存関係から切り離してくれます。
+
+## なぜクリーンアーキテクチャが必要なのか？
+プロジェクトが大きくなるにつれ、データベースのロジック、サードパーティのライブラリ、ビジネスロジックが混ざったコードは、テストもアップグレードも非常に難しくなります。
+
+## 核となる原則
+1. **Dependency Rule：** 依存関係は内側（コアロジックの方向）にのみ向かうべきです。
+2. **Entities：** 核となるビジネスルールを保持します。
+3. **Use Cases：** システムが行う具体的な操作を定義します。
+4. **Interface Adapters：** Use Case と外部コンポーネント（API、データベース）の間でデータを変換します。
+5. **Frameworks & Drivers：** データベースや Express/NestJS などが置かれる層です。
+
+## 実装例
+```javascript
+// Entities
+class User {
+  constructor(id, name) {
+    this.id = id;
+    this.name = name;
+  }
+}
+
+// Use Case
+class RegisterUser {
+  constructor(userRepository) {
+    this.userRepository = userRepository;
+  }
+  execute(userData) {
+    // ビジネスロジックはここに
+    return this.userRepository.save(userData);
+  }
+}
+```
+
+このように分離しておけば、`Use Case` のコードを一行も変えずに MongoDB から PostgreSQL へ切り替えられます。

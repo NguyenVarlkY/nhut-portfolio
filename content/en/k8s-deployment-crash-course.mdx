@@ -1,0 +1,568 @@
+---
+title: "Kubernetes Deep-Dive Course: Deploying Applications to the Cloud"
+date: "2026-08-04"
+excerpt: "A practical guide to Kubernetes from basics to advanced topics: deploying, managing, and scaling containerized applications."
+---
+
+# Kubernetes Deep-Dive Course: Deploying Applications to the Cloud
+
+Kubernetes (K8s) has become the standard platform for container orchestration in production. This course takes you from the basic concepts to advanced deployment techniques on Kubernetes.
+
+## Part 1: Kubernetes Fundamentals
+
+### 1.1. Cluster, Node, and Pod
+- **Cluster**: A set of machines (nodes) working together
+- **Node**: A single machine in the cluster (a VM or bare metal)
+- **Pod**: The smallest deployable unit in K8s, containing one or more containers
+
+### 1.2. Key Components
+- **API Server**: The main interface for interacting with the cluster
+- **etcd**: A distributed key-value store that holds the cluster state
+- **Scheduler**: Decides which node each pod runs on
+- **Controller Manager**: Runs the controllers (ReplicaSet, Deployment, etc.)
+- **Kubelet**: The agent on each node that talks to the container runtime
+- **Kube-proxy**: Manages network rules and service discovery
+
+### 1.3. Key K8s Objects
+- **Pod**: The basic unit of deployment
+- **Deployment**: Manages ReplicaSets and provides rollback-able updates
+- **Service**: Provides a stable network endpoint for reaching pods
+- **ConfigMap & Secret**: Store configuration and sensitive data
+- **Volume & PersistentVolume**: Manage persistent storage
+- **Namespace**: Logical partitioning within the cluster
+- **Ingress**: Manages external access into the cluster
+
+## Part 2: Deploying Your First Application
+
+### 2.1. Preparing the Environment
+```bash
+# Install kubectl
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+chmod +x kubectl
+sudo mv kubectl /usr/local/bin/
+
+# Install Minikube (for local development)
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
+
+# Start a local cluster
+minikube start
+```
+
+### 2.2. Creating a Simple Web Application
+```yaml
+# deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-app
+  labels:
+    app: web-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web-app
+  template:
+    metadata:
+      labels:
+        app: web-app
+    spec:
+      containers:
+      - name: web
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+```
+
+### 2.3. Creating a Service to Reach the Application
+```yaml
+# service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app-service
+spec:
+  selector:
+    app: web-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
+```
+
+### 2.4. Deploying and Verifying
+```bash
+# Apply the manifests
+kubectl apply -f deployment.yaml
+kubectl apply -f service.yaml
+
+# Check the status
+kubectl get deployments
+kubectl get pods
+kubectl get services
+
+# Open the application (on Minikube)
+minikube service web-app-service
+```
+
+## Part 3: Configuring and Managing Applications
+
+### 3.1. Using ConfigMaps and Secrets
+```yaml
+# configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  APP_ENV: "production"
+  LOG_LEVEL: "info"
+  DATABASE_URL: "postgres://user:pass@db:5432/myapp"
+
+# secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: app-secret
+type: Opaque
+data:
+  # Values must be base64-encoded
+  DB_USERNAME: "dXNlcg=="  # "user"
+  DB_PASSWORD: "cGFzc3dvcmQ="  # "password"
+```
+
+### 3.2. Referencing ConfigMaps and Secrets in a Deployment
+```yaml
+# Updated deployment.yaml
+spec:
+  template:
+    spec:
+      containers:
+      - name: web
+        image: myapp:latest
+        env:
+        - name: APP_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: APP_ENV
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: LOG_LEVEL
+        - name: DATABASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: DATABASE_URL
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: app-secret
+              key: DB_USERNAME
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: app-secret
+              key: DB_PASSWORD
+        ports:
+        - containerPort: 80
+```
+
+### 3.3. Using Volumes for Persistent Storage
+```yaml
+# persistent-volume.yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: app-pv
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data"
+
+# persistent-volume-claim.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: app-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 3Gi
+
+# Update the deployment to use the PVC
+spec:
+  template:
+    spec:
+      containers:
+      - name: web
+        # ... (everything else unchanged)
+        volumeMounts:
+        - name: app-storage
+          mountPath: "/app/data"
+      volumes:
+      - name: app-storage
+        persistentVolumeClaim:
+          claimName: app-pvc
+```
+
+## Part 4: Scaling and Performance Tuning
+
+### 4.1. Horizontal Pod Autoscaler (HPA)
+```yaml
+# hpa.yaml
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: web-app-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: web-app
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+```
+
+### 4.2. Resource Limits and Requests
+```yaml
+# In the deployment's container spec
+resources:
+  requests:
+    memory: "256Mi"
+    cpu: "500m"
+  limits:
+    memory: "512Mi"
+    cpu: "1000m"
+```
+
+### 4.3. Node Selectors and Affinity
+```yaml
+# Run pods on specific nodes
+spec:
+  template:
+    spec:
+      nodeSelector:
+        disktype: ssd
+      # Or use affinity
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/e2e-az-name
+                operator: In
+                values:
+                - us-east-1a
+                - us-east-1b
+```
+
+## Part 5: Updating and Rolling Back Applications
+
+### 5.1. Update Strategies
+Kubernetes Deployments support several update strategies:
+- **Rolling Update** (default): Replaces pods gradually
+- **Recreate**: Deletes all old pods before creating new ones
+
+```yaml
+# Set the strategy in the deployment
+spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+```
+
+### 5.2. Performing an Update
+```bash
+# Update the image in the deployment
+kubectl set image deployment/web-app web=myapp:v2
+
+# Watch the rollout progress
+kubectl rollout status deployment/web-app
+
+# View the rollout history
+kubectl rollout history deployment/web-app
+```
+
+### 5.3. Rolling Back When Needed
+```bash
+# Roll back to the previous version
+kubectl rollout undo deployment/web-app
+
+# Roll back to a specific revision
+kubectl rollout undo deployment/web-app --to-revision=3
+```
+
+## Part 6: Monitoring and Logging
+
+### 6.1. Monitoring Basics in K8s
+- **Metrics Server**: Collects resource usage (CPU, memory)
+- **kubectl top**: Shows current resource usage
+- **Dashboard**: A web UI for monitoring the cluster
+
+### 6.2. Collecting Application Logs
+```yaml
+# Add logging to the container
+spec:
+  template:
+    spec:
+      containers:
+      - name: web
+        image: myapp:latest
+        # ... (everything else)
+        volumeMounts:
+        - name: app-logs
+          mountPath: "/var/log/app"
+      volumes:
+      - name: app-logs
+        emptyDir: {}
+```
+
+### 6.3. Using a Sidecar Container for Logging
+```yaml
+spec:
+  template:
+    spec:
+      containers:
+      - name: web
+        image: myapp:latest
+        # ... (everything else)
+      - name: log-agent
+        image: fluent/fluentd:v1.14-debian-1
+        volumeMounts:
+        - name: app-logs
+          mountPath: "/var/log/app"
+      volumes:
+      - name: app-logs
+        emptyDir: {}
+```
+
+## Part 7: Security in Kubernetes
+
+### 7.1. Role-Based Access Control (RBAC)
+```yaml
+# Create a role
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: default
+  name: pod-reader
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "watch", "list"]
+
+# Bind the role to a user or service account
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: read-pods
+  namespace: default
+subjects:
+- kind: User
+  name: jane  # The user's "name"
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: pod-reader
+  apiGroup: rbac.authorization.k8s.io
+```
+
+### 7.2. Network Policies
+```yaml
+# Block all traffic to pods
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: deny-all
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+
+# Allow traffic from specific pods
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-frontend
+spec:
+  podSelector:
+    matchLabels:
+      role: backend
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          role: frontend
+    ports:
+    - protocol: TCP
+      port: 8080
+```
+
+### 7.3. Image Security
+- Use images from trusted sources
+- Scan images for vulnerabilities
+- Run containers with the least privilege necessary
+- Use a read-only root filesystem when possible
+
+## Part 8: Real-World Deployment Patterns
+
+### 8.1. Blue-Green Deployment
+```yaml
+# Blue service (current version)
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app
+spec:
+  selector:
+    app: web-app
+    version: blue
+  ports:
+  - port: 80
+    targetPort: 80
+
+# Green service (new version)
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app-green
+spec:
+  selector:
+    app: web-app
+    version: green
+  ports:
+  - port: 80
+    targetPort: 80
+```
+
+### 8.2. Canary Release
+```yaml
+# Main service (95% of traffic)
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app
+spec:
+  selector:
+    app: web-app
+  ports:
+  - port: 80
+    targetPort: 80
+
+# Canary service (5% of traffic)
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app-canary
+spec:
+  selector:
+    app: web-app
+    version: canary
+  ports:
+  - port: 80
+    targetPort: 80
+```
+
+## Part 9: Troubleshooting Common Problems
+
+### 9.1. A Pod Won't Start
+```bash
+# Check the pod's events
+kubectl describe pod <pod-name>
+
+# View the container logs
+kubectl logs <pod-name>
+
+# Inspect the container state
+kubectl get pod <pod-name> -o yaml
+```
+
+### 9.2. A Service Is Unreachable
+```bash
+# Check the service
+kubectl get svc <service-name>
+
+# Check the endpoints
+kubectl get endpoints <service-name>
+
+# Check that the pods are running
+kubectl get pods -l <selector>
+```
+
+### 9.3. Poor Performance
+```bash
+# Check resource usage
+kubectl top pods
+kubectl top nodes
+
+# Check events
+kubectl get events --sort-by='.lastTimestamp'
+
+# Check resource limits
+kubectl describe pod <pod-name> | grep -A 10 -B 5 "Limits\|Requests"
+```
+
+## Part 10: Advanced Topics and Future Trends
+
+### 10.1. Service Mesh (Istio, Linkerd)
+- Manages traffic between microservices
+- Provides security, monitoring, and tracing
+- Features like circuit breaking, retries, and timeouts
+
+### 10.2. GitOps (Argo CD, Flux)
+- Manage the cluster through a Git repository
+- Automated deployment and sync
+- Better reproducibility and auditability
+
+### 10.3. Serverless on K8s (Knative)
+- Deploy applications without managing servers
+- Autoscaling based on traffic
+- Pay for what you actually use
+
+### 10.4. AI/ML on K8s (Kubeflow)
+- A platform for end-to-end machine learning workflows
+- Manages experiments, training, and serving
+- Integrates with popular frameworks such as TensorFlow and PyTorch
+
+## Conclusion
+
+Kubernetes is a powerful platform for deploying and managing containerized applications in production. Despite its initial complexity, the time you invest in learning K8s pays off in:
+
+- **Scalability**: Easily scale from a few pods to thousands
+- **Reliability**: Automatic recovery from failures and load balancing
+- **Portability**: Runs on any infrastructure (on-prem, cloud, edge)
+- **A rich ecosystem**: Plenty of supporting tools and services
+- **An industry standard**: Widely adopted across the industry
+
+Start with the basic concepts and practice regularly. Use Minikube or kind for local development before deploying to production. Always remember that K8s is a tool; the goal is to deliver value to users through stable, efficient, maintainable applications.
+
+Join the K8s community, attend meetups, and keep learning, because this ecosystem is evolving fast. Good luck on your journey to becoming a Kubernetes expert!

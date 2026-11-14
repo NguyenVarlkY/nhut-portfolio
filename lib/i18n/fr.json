@@ -11,13 +11,36 @@
     "contact": "Contact",
     "resume": "CV"
   },
+  "blog": {
+    "backToBlog": "Retour au blog",
+    "minRead": "{count} min de lecture",
+    "title": "Blog",
+    "metaTitle": "Blog — NGUYEN BUI NHUT Y",
+    "metaDescription": "Articles sur le développement full-stack, l'architecture logicielle et la création de produits web prêts pour la production.",
+    "searchPlaceholder": "Rechercher des articles...",
+    "clear": "Effacer",
+    "noResults": "Aucun résultat",
+    "postCount": "{count} articles",
+    "readMore": "Lire la suite →",
+    "noMatch": "Aucun article ne correspond à « {query} »",
+    "prev": "← Précédent",
+    "next": "Suivant →",
+    "pageOf": "Page {current} sur {total}",
+    "translationNotice": "Cet article n'est pas encore disponible en français. Affichage de la version originale en vietnamien."
+  },
   "hero": {
     "greeting": "Bonjour, je suis",
     "available": "Ouvert aux opportunités Freelance / Junior",
     "description": "Développeur full-stack avec une expérience pratique de la création d'applications web de production avec React, TypeScript, Node.js & MongoDB. Je livre des fonctionnalités de bout en bout — de la conception d'API REST et de l'authentification à des interfaces utilisateur soignées et responsives.",
     "subDescription": "Je construis des produits web évolutifs, de la conception d'API aux interfaces soignées, avec un focus sur l'impact métier, le code propre et l'utilité concrète.",
     "viewWork": "Voir mon travail",
-    "contactMe": "Me contacter"
+    "contactMe": "Me contacter",
+    "roles": [
+      "Développeur Full-Stack",
+      "Ingénieur React & Next.js",
+      "Développeur d'API Node.js",
+      "Développeur web orienté produit"
+    ]
   },
   "about": {
     "tag": "// à propos",
@@ -46,7 +69,13 @@
   "skills": {
     "tag": "// compétences",
     "title": "Ma",
-    "titleHighlight": "stack technique"
+    "titleHighlight": "stack technique",
+    "groups": {
+      "frontend": "Front-end",
+      "backend": "Back-end",
+      "infra": "Infra & Outils",
+      "concepts": "Concepts d'ingénierie"
+    }
   },
   "stats": {
     "years": "Années d'expérience",
@@ -135,10 +164,54 @@
     "title": "Où j'ai",
     "titleHighlight": "travaillé"
   },
+  "experienceData": [
+    {
+      "title": "Développeur Logiciel Junior (débutant)",
+      "desc": [
+        "Développement de modules CRM/ERP pour la gestion des données de référence (Master Data Management), incluant les opérations en masse, les structures de données hiérarchiques, la recherche et les workflows d'approbation.",
+        "Création de fonctionnalités sécurisées de gestion des utilisateurs et des rôles avec authentification, validation des entrées, filtrage de langage inapproprié et contrôle d'accès, en utilisant Next.js, Spring Boot, PostgreSQL et React Query.",
+        "Développement de modules de gestion RH, d'interface bilingue, d'analyses de tableau de bord et de workflows de chatbot IA pour soutenir les opérations métier.",
+        "Amélioration des performances de l'application et de la base de données grâce à l'indexation, l'optimisation des requêtes et l'intégration d'API.",
+        "Collaboration avec des équipes transversales pour livrer des fonctionnalités logicielles d'entreprise sur les systèmes frontend et backend."
+      ]
+    },
+    {
+      "title": "Stagiaire Ingénieur Logiciel | Support en Analyse Métier",
+      "desc": [
+        "Participation au développement de fonctionnalités de bout en bout sur le frontend, la validation backend et les workflows de base de données pour 3 modules ERP (comptabilité, interface, chat interne).",
+        "Conception et implémentation d'API REST avec authentification basée sur JWT, garantissant un contrôle d'accès sécurisé basé sur les rôles.",
+        "Amélioration de la cohérence des transactions en validant les cas limites et en réduisant les anomalies de données dans les workflows internes.",
+        "Collaboration avec les équipes frontend, backend et IA pour intégrer des API d'agents basées sur Python et des services de traitement de documents.",
+        "Application de concepts cloud (intégration de services, configuration d'environnement) et des fondamentaux de base de données Oracle (conception de schéma, modélisation relationnelle)."
+      ]
+    },
+    {
+      "title": "Stagiaire Front-End",
+      "desc": [
+        "Développement de composants React et Redux responsives prenant en charge plus de 5 parcours utilisateurs essentiels sur plusieurs appareils.",
+        "Intégration d'API REST et support du déploiement frontend-backend pour des versions de production destinées aux clients."
+      ]
+    },
+    {
+      "title": "Développeur Frontend (Freelance)",
+      "desc": [
+        "Conversion de maquettes Figma en applications web React responsives pour des petites entreprises et des projets de promotion d'événements.",
+        "Collaboration directe avec les clients pour recueillir les besoins et livrer des interfaces utilisateur prêtes pour la production."
+      ]
+    }
+  ],
   "projects": {
     "tag": "// projets",
     "title": "Projets",
     "titleHighlight": "sélectionnés",
+    "subtitle": "Travaux sélectionnés axés sur la livraison de produits réels, des interfaces orientées utilisateur, et des workflows métier qui soutiennent la croissance et les opérations.",
+    "filterAll": "Tous",
+    "openCaseStudy": "Ouvrir l'étude de cas",
+    "caseLabel": "Cas",
+    "overview": "Aperçu",
+    "keyFeatures": "Fonctionnalités clés",
+    "techStack": "Pile technologique",
+    "close": "Fermer",
     "source": "Source",
     "liveDemo": "Démo",
     "businessCore": "Cœur de métier",
@@ -147,6 +220,127 @@
     "solution": "Solution",
     "techHighlight": "Points forts techniques"
   },
+  "projectsData": [
+    {
+      "tagline": "Système de réservation hôtelière et de gestion des chambres prêt pour la production",
+      "desc": "Une plateforme complète de réservation hôtelière construite pour un complexe à Phan Thiet, couvrant tout le parcours du client, de la recherche de chambres disponibles à la réception d'e-mails de confirmation automatiques. Le système est livré avec un tableau de bord administrateur sécurisé permettant au personnel de gérer les chambres, l'inventaire, les réservations et les médias en temps réel. Le backend est déployé avec une configuration d'environnement renforcée, intègre une couche CRM pour la gestion de la relation client, et utilise un ORM pour garder l'accès à la base de données propre et maintenable. Cloudinary est utilisé pour une gestion évolutive des images et des médias, tandis que Brevo (Sendinblue) assure des notifications transactionnelles par e-mail fiables.",
+      "businessCore": "L'activité principale d'un hôtel est de convertir l'inventaire des chambres en réservations confirmées tout en maximisant le taux d'occupation et en offrant une expérience fluide aux clients. Le système doit maintenir la disponibilité précise en temps réel, empêcher les doubles réservations, gérer les tarifs et les types de chambres, et fournir au personnel une source unique de vérité pour gérer l'établissement.",
+      "flow": [
+        "Le client parcourt le site et recherche les chambres disponibles par date, nombre de personnes et type de chambre",
+        "Le système interroge l'inventaire en direct et ne retourne que les chambres réservables avec des tarifs exacts",
+        "Le client sélectionne une chambre et saisit ses informations dans le formulaire de réservation",
+        "La réservation est créée avec une validation de disponibilité côté serveur pour éviter les doubles réservations",
+        "Le paiement / la réservation est confirmé et un e-mail automatique est envoyé via Brevo",
+        "L'administrateur se connecte au tableau de bord pour gérer les réservations, les chambres et l'inventaire en temps réel"
+      ],
+      "problem": "L'hôtel gérait auparavant les réservations par téléphone, via des feuilles de calcul et une coordination manuelle. Cela entraînait de fréquentes doubles réservations, des données de disponibilité obsolètes, une communication lente avec les clients et aucun registre centralisé des réservations. Le personnel passait des heures chaque jour à réconcilier les données, et l'hôtel perdait des revenus car des chambres apparaissaient indisponibles alors qu'elles étaient en réalité libres.",
+      "solution": "J'ai construit un système de réservation numérique qui automatise l'ensemble du flux. La validation de disponibilité en temps réel empêche les conflits, les confirmations automatiques par e-mail suppriment la communication manuelle, et le tableau de bord administrateur donne au personnel une visibilité et un contrôle complets sur les chambres, les réservations et les médias. Une configuration d'environnement sécurisée et une couche ORM gardent le backend sûr et maintenable en production.",
+      "features": [
+        "Recherche de disponibilité des chambres en temps réel par date, nombre de personnes et type de chambre",
+        "Validation de disponibilité côté serveur pour éviter les doubles réservations",
+        "Confirmations transactionnelles automatiques par e-mail via Brevo",
+        "Gestion des images et des médias propulsée par Cloudinary",
+        "Tableau de bord administrateur pour gérer les chambres, les réservations et l'inventaire",
+        "Couche CRM pour le suivi des clients et des relations",
+        "Configuration d'environnement renforcée pour un déploiement sécurisé en production"
+      ]
+    },
+    {
+      "tagline": "Plateforme e-commerce prête pour la production pour une marque d'alimentation saine",
+      "desc": "Une plateforme e-commerce de type monolithe modulaire pour une marque d'alimentation saine, construite avec un frontend React selon le modèle container–presentation et React Query pour une récupération de données efficace. Elle prend en charge l'ensemble du parcours d'achat — navigation des produits, panier, paiement et paiements Stripe — sécurisé par une authentification JWT avec contrôle d'accès basé sur les rôles (RBAC). Le backend est organisé en monolithe modulaire pour garder les domaines métier propres et testables, et l'ensemble de l'application est conteneurisé avec Docker pour un déploiement reproductible. Une couche GraphQL permet des requêtes flexibles, et Cloudinary gère les images produits.",
+      "businessCore": "Une entreprise e-commerce doit amener les clients de la navigation à une commande payée complète le plus efficacement possible. Le cœur du système est la gestion du catalogue produits, le flux panier et paiement, le traitement sécurisé des paiements, le suivi des commandes et l'accès séparé par rôle (clients vs. administrateurs) — tout en gardant l'inventaire et les promotions cohérents.",
+      "flow": [
+        "Le client parcourt le catalogue produits et filtre par catégorie",
+        "Le client ajoute des articles au panier avec les quantités souhaitées",
+        "Le client passe à la caisse et saisit les informations de livraison",
+        "Le paiement est traité en toute sécurité via Stripe",
+        "La commande est créée et synchronisée avec l'inventaire",
+        "L'administrateur gère les produits, les commandes et l'inventaire via un tableau de bord protégé par RBAC"
+      ],
+      "problem": "La marque dépendait d'un traitement manuel des commandes et n'avait pas de boutique en ligne unifiée. Il n'y avait pas de catalogue produits cohérent, aucun moyen de traiter les paiements en toute sécurité, et aucune séparation entre les rôles clients et administrateurs. Faire croître les ventes était impossible car l'ensemble du processus de commande était manuel et sujet aux erreurs.",
+      "solution": "J'ai livré une plateforme e-commerce de type monolithe modulaire qui automatise l'ensemble du parcours d'achat. Le modèle container–presentation garde l'interface propre et maintenable, React Query optimise la récupération de données, JWT + RBAC sécurise les rôles clients et administrateurs, et Stripe gère les paiements. La conteneurisation Docker rend le déploiement cohérent et reproductible.",
+      "features": [
+        "Catalogue produits avec recherche, filtrage et navigation par catégorie",
+        "Flux de panier et de paiement",
+        "Intégration sécurisée des paiements Stripe",
+        "Authentification JWT avec contrôle d'accès basé sur les rôles (RBAC)",
+        "Requêtes de données flexibles propulsées par GraphQL",
+        "Backend monolithe modulaire pour une séparation propre des domaines métier",
+        "Conteneurisation Docker pour un déploiement reproductible"
+      ]
+    },
+    {
+      "tagline": "Préparation et administration de l'examen théorique du permis de conduire",
+      "desc": "Une plateforme web pour préparer et administrer les examens théoriques du permis de conduire pour plusieurs catégories de permis. Elle héberge une banque de plus de 650 questions et génère des tests aléatoires pour une expérience d'examen réaliste. Le backend est une API Web ASP.NET Core suivant l'architecture MVVM, exposant des points de terminaison CRUD administrateur pour gérer la banque de questions. Le frontend React responsive permet aux apprenants d'étudier, de passer des tests pratiques et d'obtenir un retour instantané. L'authentification JWT avec contrôle d'accès basé sur les rôles sépare les expériences apprenant et administrateur.",
+      "businessCore": "L'activité principale d'une auto-école est d'amener les apprenants à réussir leur examen théorique. Cela nécessite une banque de questions large et précise, des tests pratiques réalistes qui imitent l'examen réel, un suivi des progrès pour les apprenants, et des outils d'administration pour maintenir les questions et catégories à jour.",
+      "flow": [
+        "L'apprenant s'inscrit et sélectionne une catégorie de permis (par ex. B1, B2, A)",
+        "L'apprenant étudie la banque de questions par sujet",
+        "Le système génère un test pratique aléatoire à partir de la banque de questions",
+        "L'apprenant termine le test et reçoit un retour instantané avec les bonnes réponses",
+        "Les progrès et résultats sont suivis pour l'apprenant",
+        "L'administrateur se connecte pour ajouter, modifier et gérer les questions par catégorie"
+      ],
+      "problem": "Les apprenants étudiaient avec des supports papier obsolètes qui n'offraient aucune interactivité, aucune randomisation et aucun moyen de mesurer les progrès. Les instructeurs n'avaient aucun outil centralisé pour gérer les questions, et les supports statiques rendaient difficile pour les apprenants de simuler l'expérience réelle de l'examen, entraînant des taux de réussite plus faibles.",
+      "solution": "J'ai construit une plateforme numérique avec une banque de plus de 650 questions, une génération de tests aléatoires, un retour instantané et un suivi des progrès. L'architecture MVVM garde l'API ASP.NET Core propre, et JWT + RBAC sépare clairement les expériences apprenant et administrateur. Les administrateurs peuvent gérer la banque de questions via des points de terminaison CRUD.",
+      "features": [
+        "Banque de plus de 650 questions organisées par catégorie",
+        "Génération de tests pratiques aléatoires pour une sensation d'examen réaliste",
+        "Retour instantané avec les bonnes réponses après chaque test",
+        "Suivi des progrès pour les apprenants",
+        "API CRUD administrateur pour gérer la banque de questions",
+        "Architecture MVVM avec un frontend React responsive",
+        "Authentification JWT avec contrôle d'accès basé sur les rôles"
+      ]
+    },
+    {
+      "tagline": "Outil de transcription vocale en temps réel",
+      "desc": "Une application web de transcription vocale qui transcrit la parole en temps réel, avec prise en charge multilingue et téléchargement de fichiers audio. Le frontend React capture l'entrée du microphone et la diffuse vers un backend Node.js via WebSocket pour une transcription à faible latence. Les résultats traités sont renvoyés instantanément à l'interface et peuvent être enregistrés dans MongoDB. Cet outil est utile pour les notes de réunion, la transcription, l'accessibilité et la création de contenu.",
+      "businessCore": "La valeur principale d'un produit de transcription vocale est de transformer l'audio parlé en texte précis et utilisable avec une latence minimale. Le système doit gérer l'entrée microphone en direct, prendre en charge plusieurs langues, permettre le téléchargement d'audio pré-enregistré, et gérer les transcriptions résultantes pour une utilisation ultérieure.",
+      "flow": [
+        "L'utilisateur ouvre l'application et sélectionne une langue et un mode d'entrée (micro en direct ou téléchargement de fichier)",
+        "Micro en direct : l'audio est capturé et diffusé vers le backend via WebSocket",
+        "Le backend traite l'audio et renvoie le texte transcrit de manière incrémentale",
+        "L'interface affiche la transcription en temps réel avec une faible latence",
+        "L'utilisateur peut revoir, modifier et enregistrer la transcription",
+        "Les transcriptions sont stockées dans MongoDB pour une récupération future"
+      ],
+      "problem": "La transcription manuelle est lente, sujette aux erreurs et coûteuse, et de nombreux outils manquent de retour en temps réel ou de prise en charge multilingue. Les utilisateurs avaient besoin d'un moyen rapide et accessible de convertir réunions, cours et entretiens en texte sans tout taper à la main.",
+      "solution": "J'ai construit une application de transcription vocale en temps réel avec diffusion WebSocket pour une transcription à faible latence. La prise en charge multilingue et le téléchargement de fichiers audio la rendent flexible pour de nombreux cas d'usage, et les transcriptions sont stockées de manière persistante dans MongoDB afin que les utilisateurs puissent les consulter et les réutiliser.",
+      "features": [
+        "Transcription en temps réel via diffusion WebSocket",
+        "Prise en charge multilingue pour les utilisateurs internationaux",
+        "Téléchargement de fichiers audio pour le contenu pré-enregistré",
+        "Affichage incrémental de la transcription à faible latence",
+        "Révision et modification de la transcription",
+        "Stockage persistant des transcriptions dans MongoDB"
+      ]
+    },
+    {
+      "tagline": "Simulateur éducatif d'architecture CPU 8 bits",
+      "desc": "Un simulateur de CPU 8 bits interactif, directement dans le navigateur, pour apprendre l'architecture des ordinateurs. Il comprend un jeu d'instructions personnalisé, un petit assembleur qui compile l'assembleur en mots machine 16 bits, et un CPU virtuel qui exécute les instructions étape par étape. Les utilisateurs peuvent observer les registres, la mémoire et les drapeaux du CPU se mettre à jour en temps réel, rendant les concepts de bas niveau comme la récupération/décodage/exécution des instructions, le compteur de programme et les drapeaux intuitifs et pratiques.",
+      "businessCore": "La valeur principale d'un simulateur de CPU est de rendre l'architecture des ordinateurs tangible. Il doit permettre aux utilisateurs d'écrire et d'assembler des programmes, de les exécuter sur un CPU virtuel, et de visualiser chaque changement d'état interne — registres, compteur de programme, mémoire et drapeaux — afin que les apprenants puissent relier des concepts abstraits à un comportement observable.",
+      "flow": [
+        "L'utilisateur écrit du code assembleur dans l'éditeur intégré (par ex. LOAD, ADD, INC, CMP, JNZ)",
+        "L'assembleur compile le code source en instructions machine 16 bits",
+        "L'utilisateur exécute pas à pas ou lance le programme automatiquement",
+        "Le CPU virtuel met à jour les registres, la mémoire et les drapeaux à chaque instruction",
+        "L'utilisateur observe le résultat de la somme/du programme en mémoire et l'état final du CPU",
+        "L'utilisateur peut réinitialiser et relancer pour explorer différents programmes"
+      ],
+      "problem": "L'architecture des ordinateurs est abstraite et difficile à saisir à partir des seuls manuels et cours. Les étudiants ont du mal à relier les jeux d'instructions, les registres et les drapeaux à un comportement d'exécution réel, et ils manquent d'un bac à sable sûr et interactif pour expérimenter la programmation de bas niveau.",
+      "solution": "J'ai construit un simulateur de CPU 8 bits entièrement côté client avec un jeu d'instructions personnalisé, un assembleur et une visualisation en temps réel des registres/mémoire/drapeaux. Il offre un bac à sable interactif et sûr où les apprenants peuvent écrire de l'assembleur, exécuter pas à pas, et voir exactement comment le CPU se comporte — tout cela dans le navigateur, sans installation.",
+      "features": [
+        "Jeu d'instructions 8 bits personnalisé avec 16 opcodes",
+        "Assembleur intégré qui compile l'assembleur en mots machine",
+        "Modes d'exécution pas à pas et automatique",
+        "Affichage en direct des registres (A, B, C, D) et du compteur de programme",
+        "Visualisation de la mémoire avec 256 octets",
+        "Suivi des drapeaux Zero et Carry",
+        "Boucles et sauts conditionnels (JMP, JZ, JNZ)"
+      ]
+    }
+  ],
   "credentials": {
     "tag": "// certifications",
     "title": "Certifications &",
@@ -205,6 +399,57 @@
     "note": "Remarque",
     "noteDetail": "Les taux de change sont mis à jour périodiquement et sont fournis à titre indicatif. Pour les transactions réelles, vérifiez les taux auprès des banques ou des bureaux de change.",
     "currencies": "Devises prises en charge"
+  },
+  "seoChecker": {
+    "tag": "// Outils",
+    "title": "SEO & Sécurité",
+    "titleHighlight": "Analyseur",
+    "description": "Analyse un site web à la recherche de problèmes de SEO on-page et d'en-têtes de sécurité HTTP manquants.",
+    "placeholder": "Entrez l'URL du site (https://...)",
+    "checkButton": "Vérifier",
+    "checking": "Vérification...",
+    "seoScore": "Score SEO",
+    "securityScore": "Score de sécurité",
+    "noIssues": "Aucun problème trouvé.",
+    "possiblyIncomplete": "Cette page a renvoyé très peu de contenu — elle nécessite peut-être une connexion ou son contenu réel est rendu via JavaScript. Les résultats ci-dessous peuvent ne pas refléter ce qu'un visiteur connecté ou un robot compatible JS verrait.",
+    "error": "Impossible de vérifier cette URL.",
+    "errors": {
+      "invalid_url": "URL manquante ou invalide.",
+      "fetch_failed": "Impossible de vérifier cette URL."
+    },
+    "issues": {
+      "missing_title": "Balise title manquante",
+      "missing_description": "Balise meta description manquante",
+      "description_too_long": "Description trop longue (moins de 155 caractères recommandé)",
+      "missing_keywords": "Balise meta keywords manquante",
+      "missing_h1": "Balise H1 manquante",
+      "missing_robots": "Balise meta robots manquante",
+      "images_without_alt": "{count} image(s) sans attribut alt",
+      "broken_links": "{count} lien(s) cassé(s) trouvé(s)",
+      "missing_canonical": "Balise canonical manquante",
+      "missing_og_title": "Balise Open Graph title manquante",
+      "missing_viewport": "Balise meta viewport manquante",
+      "missing_hreflang": "Balise hreflang manquante pour les versions linguistiques alternatives",
+      "not_https": "La page n'utilise pas HTTPS",
+      "missing_schema": "Balisage de données structurées (schema) manquant",
+      "content_too_short": "Contenu trop court (300 mots minimum requis)",
+      "iframes_without_title": "{count} iframe(s) sans attribut title",
+      "insufficient_internal_links": "Ajoutez plus de liens internes pour améliorer le SEO",
+      "missing_csp": "Content-Security-Policy manquante (protège contre le XSS et d'autres attaques)",
+      "missing_frame_options": "X-Frame-Options manquant (empêche le clickjacking)",
+      "missing_xss_protection": "X-XSS-Protection manquant (protège contre les attaques XSS)",
+      "missing_hsts": "Strict-Transport-Security manquant (impose HTTPS)",
+      "missing_referrer_policy": "Referrer-Policy manquante (contrôle les informations de référent envoyées)",
+      "missing_permissions_policy": "Permissions-Policy manquante (restreint l'accès aux fonctionnalités du navigateur)",
+      "missing_corp": "Cross-Origin-Resource-Policy manquante (empêche le partage de ressources indésirable)",
+      "missing_coop": "Cross-Origin-Opener-Policy manquante (aide à prévenir les attaques Spectre)",
+      "missing_coep": "Cross-Origin-Embedder-Policy manquante (protège contre les attaques par canal auxiliaire)",
+      "missing_nosniff": "X-Content-Type-Options manquant (empêche les attaques par MIME-sniffing)",
+      "missing_cache_control": "Cache-Control manquant (protège les données sensibles mises en cache)",
+      "missing_cors": "Politique CORS manquante (contrôle le partage de ressources entre origines)",
+      "server_info_exposed": "L'en-tête Server expose des informations sur le serveur (à masquer)",
+      "missing_cookie_flags": "Indicateurs Secure, HttpOnly & SameSite manquants sur le cookie (réduit les risques XSS & CSRF)"
+    }
   },
   "language": {
     "en": "EN",
@@ -265,7 +510,39 @@
       "analyticsTasks": "tâches",
       "analyticsWeek": "Tâches cette semaine",
       "analyticsPriority": "Actif par priorité",
-      "analyticsGoalProgress": "Progression des objectifs"
+      "analyticsGoalProgress": "Progression des objectifs",
+      "tabOverview": "Aperçu",
+      "import": "Importer",
+      "export": "Exporter",
+      "markAllComplete": "Tout marquer comme terminé",
+      "sortCreated": "Plus récent",
+      "sortPriority": "Priorité",
+      "sortDue": "Date d'échéance",
+      "toastAdded": "Ajouté",
+      "toastDeleted": "Supprimé",
+      "toastCleared": "Tâches terminées supprimées",
+      "toastAllDone": "Toutes les tâches marquées comme terminées",
+      "toastExported": "Données exportées",
+      "toastImported": "Données importées",
+      "toastImportError": "Fichier invalide — importation impossible",
+      "overview": {
+        "todayOverdue": "Aujourd'hui et en retard",
+        "viewAll": "Voir tout",
+        "noneToday": "Rien à faire aujourd'hui. Parfait !",
+        "upcomingEvents": "À venir",
+        "noUpcoming": "Aucun événement à venir.",
+        "overallProgress": "Progression globale"
+      },
+      "allCategories": "Toutes les catégories",
+      "searchPlaceholder": "Rechercher (/)",
+      "metaTitle": "Tableau de bord des tâches — Nguyen Bui Nhut Y",
+      "metaDescription": "Gérez vos tâches, planifiez votre travail et analysez votre productivité avec l'intégration GitHub.",
+      "categories": {
+        "Work": "Travail",
+        "Study": "Études",
+        "Personal": "Personnel",
+        "Health": "Santé"
+      }
     },
     "ycpu": {
       "title": "Info système",
@@ -326,7 +603,28 @@
       "wifiName": "Nom Wi-Fi (SSID)",
       "backgroundProcesses": "Processus en arrière-plan",
       "notAvailable": "Non disponible dans le navigateur",
-      "batteryTime": "Temps restant"
+      "batteryTime": "Temps restant",
+      "gameReq": {
+        "title": "Vérification des configurations requises",
+        "description": "Recherchez un jeu sur Steam et comparez sa configuration requise avec les caractéristiques détectées de votre appareil.",
+        "placeholder": "Entrez le nom d'un jeu...",
+        "searchButton": "Rechercher",
+        "checking": "Chargement de la configuration requise...",
+        "noResults": "Aucun jeu trouvé.",
+        "minimum": "Minimale",
+        "recommended": "Recommandée",
+        "ramOk": "Configuration RAM suffisante",
+        "ramLow": "La RAM pourrait être insuffisante",
+        "deviceSpecs": "Caractéristiques détectées",
+        "ramOnlyNote": "Remarque : seule la RAM est comparée automatiquement — les modèles de CPU/GPU ne peuvent pas être comparés de façon fiable depuis le navigateur.",
+        "error": "Impossible de récupérer les données du jeu.",
+        "errors": {
+          "missing_query": "Veuillez entrer un nom de jeu.",
+          "invalid_url": "URL de jeu Steam invalide.",
+          "no_requirements_found": "Cette page de jeu ne liste aucune configuration requise.",
+          "fetch_failed": "Impossible de récupérer les données du jeu."
+        }
+      }
     },
     "yspeech": {
       "title": "Yspeech",
@@ -347,38 +645,23 @@
       "unsupported": "Votre navigateur ne prend pas en charge l'API Web Speech. Utilisez un navigateur pris en charge (Chrome, Edge ou Safari)."
     }
   },
-  "ycpu": {
-    "title": "Simulateur YCPU",
-    "titleHighlight": "CPU 8 bits",
-    "tag": "// outils",
-    "description": "Un simulateur de CPU 8 bits pédagogique. Écrivez de l'assembleur, exécutez-le étape par étape et observez les registres, la mémoire et les drapeaux se mettre à jour en temps réel.",
-    "assembly": "Assembleur",
-    "step": "Étape",
-    "run": "Exécuter",
-    "stop": "Arrêter",
-    "reset": "Réinitialiser",
-    "registers": "Registres",
-    "memory": "Mémoire",
-    "steps": "Étapes",
-    "halted": "Arrêté",
-    "running": "En cours"
+  "commandPalette": {
+    "placeholder": "Tapez une commande ou recherchez…",
+    "noResults": "Aucun résultat."
   },
-  "yspeech": {
-    "title": "Yspeech",
-    "titleHighlight": "Discours-à-texte",
-    "tag": "// outils",
-    "description": "Transcription vocale en temps réel avec support multilingue. Utilisez votre micro ou téléversez un audio pour convertir la parole en texte.",
-    "start": "Démarrer",
-    "stop": "Arrêter",
-    "upload": "Téléverser",
-    "clear": "Effacer",
-    "transcript": "Transcription",
-    "placeholder": "Parlez maintenant ou tapez ici...",
-    "listening": "Écoute...",
-    "idle": "En attente",
-    "copy": "Copier",
-    "download": "Télécharger",
-    "words": "mots",
-    "unsupported": "Votre navigateur ne prend pas en charge l'API Web Speech. Veuillez utiliser un navigateur pris en charge (Chrome, Edge ou Safari)."
+  "credentialsData": {
+    "cert0": "Cybersécurité",
+    "cert1": "Gestion de projet (6/7 cours)",
+    "cert2": "Design UX",
+    "lang0Name": "Anglais B1",
+    "lang0Detail": "Compétence professionnelle",
+    "lang1Name": "Vietnamien",
+    "lang1Detail": "Langue maternelle",
+    "degree": "Ingénieur en technologies de l'information",
+    "highlights": [
+      "Excellente note en Analyse & Conception de systèmes d'information (2023)",
+      "Excellente note en Conception de systèmes en génie logiciel (2022)",
+      "Bourse d'étudiant talentueux + Bourse de double diplôme (TDTU & LTU — 2020)"
+    ]
   }
 }

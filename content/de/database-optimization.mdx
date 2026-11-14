@@ -1,0 +1,38 @@
+---
+title: "Deep Dive: Datenbankoptimierung für Fortgeschrittene"
+date: "2026-08-08"
+excerpt: "Datenbankoptimierung von der Page-Ebene und den B-Tree-Interna bis zur Query-Planung."
+---
+
+# Deep Dive: Datenbankoptimierung für Fortgeschrittene
+
+Datenbankoptimierung ist kein „Trial and Error“. Sie ist die Wissenschaft davon, wie Daten auf der Festplatte gespeichert, abgerufen und gesperrt (Locking) werden. Hier eine technische Tiefenanalyse.
+
+## 1. B-Tree-Interna: die Datenstruktur verstehen
+Ein Index ist nicht einfach nur eine Liste.
+- **B-Tree-Struktur:** Ein balancierter Baum, der Suchen, Einfügen und Löschen in $O(\log n)$ ermöglicht.
+- **Page Splits:** Ist ein Knoten voll, muss die Datenbank ihn aufteilen, was I/O kostet. Verwende keine zufälligen `UUID`s als Primärschlüssel, wenn es nicht nötig ist, denn sie verursachen deutlich mehr Indexfragmentierung als ein `Integer Auto-increment`.
+- **Fill Factor:** Den Füllgrad der Pages so einstellen, dass Lese- und Schreibleistung optimal sind.
+
+## 2. Query Planner & Execution Plan
+Nutze immer `EXPLAIN (ANALYZE, BUFFERS)`, um Folgendes zu sehen:
+- **Sequential Scan vs. Index Scan:** Ein Seq Scan auf einer Tabelle mit Millionen Zeilen ist eine Katastrophe.
+- **Cost Estimation:** PostgreSQL/Oracle schätzen den besten Weg anhand von Statistiken. Sind die Statistiken veraltet (stale), wählt der Planner den falschen Weg.
+- **Nested Loop vs. Hash Join:** Bei großen Datenmengen ist ein Hash Join meist schneller als ein Nested Loop, braucht aber mehr Speicher.
+
+## 3. Fortgeschrittene SQL-Techniken
+### 3.1. Große Datenmengen
+- **Pagination:** Verwende niemals `OFFSET/LIMIT` für sehr große Datenmengen (Millionen Zeilen), denn `OFFSET` muss alle vorherigen Zeilen durchlaufen. Nutze stattdessen **Keyset Pagination** (basierend auf dem Spaltenwert der letzten Zeile der vorherigen Seite).
+- **Partitioning:** Riesige Tabellen nach Zeit partitionieren (z. B. eine Partition pro Monat), um Abfragen zu beschleunigen und alte Daten zu verwalten.
+
+### 3.2. Concurrency Control
+- **Locking:** Den Unterschied zwischen `Row-level locking` und `Table-level locking` verstehen.
+- **Deadlocks:** Ressourcen immer in einer festen Reihenfolge aktualisieren, um Deadlocks in Umgebungen mit hoher Parallelität zu vermeiden.
+
+## 4. Volltextsuche (FTS)
+Verwende kein `LIKE '%keyword%'`.
+- **Warum?** Es kann keinen normalen Index (B-Tree) nutzen.
+- **Lösung:** Einen **GIN/GiST-Index** (in Postgres) verwenden oder **ElasticSearch** integrieren, wenn du massive Skalierbarkeit und komplexe Suche (Fuzzy Search, Stemming) brauchst.
+
+---
+*Dieses Wissen verbindet Informatiktheorie mit Praxiserfahrung über Millionen von Datensätzen. Wer die Interna von Datenbanken versteht, wird zu einem echten Engineer.*

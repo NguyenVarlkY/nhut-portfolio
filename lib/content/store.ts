@@ -1,5 +1,5 @@
 /* Where the owner's edits live.
- *  - production: one private file in Vercel Blob (portfolio/content.json), needs BLOB_READ_WRITE_TOKEN
+ *  - production: one private file in Vercel Blob (portfolio/content.json), needs BLOB_READ_WRITE_TOKEN or BLOB_STORE_ID (OIDC)
  *  - local development without a token: .data/content.json in the project folder (git-ignored)
  * Pages read it through Next's data cache (tag "portfolio-content"); saving clears that tag so the site updates in seconds. */
 import { unstable_cache, revalidateTag } from "next/cache";
@@ -13,7 +13,8 @@ const LOCAL_FILE = path.join(process.cwd(), ".data", "content.json");
 
 export type StorageKind = "blob" | "local" | "none";
 export function storageKind(): StorageKind {
-  if (process.env.BLOB_READ_WRITE_TOKEN) return "blob";
+  // classic token, or the newer keyless connection (store id + the deployment's OIDC identity, added by Vercel when the store is connected)
+  if (process.env.BLOB_READ_WRITE_TOKEN || process.env.BLOB_STORE_ID) return "blob";
   return process.env.NODE_ENV === "production" ? "none" : "local";
 }
 

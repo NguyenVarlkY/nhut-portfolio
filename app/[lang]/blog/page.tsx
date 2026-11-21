@@ -3,11 +3,12 @@ import { getPosts } from '@/lib/blog';
 import BlogContent from '@/components/blog/BlogContent';
 import { st } from '@/lib/i18n/server';
 import { i18n } from '@/lib/i18n/config';
+import { siteUrl } from '@/lib/seo';
 import type { Lang } from '@/lib/i18n/LanguageContext';
 
-const SITE_URL = 'https://nhuty.dev';
 
 export async function generateMetadata({ params }: { params: { lang: Lang } }): Promise<Metadata> {
+  const SITE_URL = await siteUrl();
   const url = `${SITE_URL}/${params.lang}/blog`;
   const title = st(params.lang, 'blog.metaTitle');
   const description = st(params.lang, 'blog.metaDescription');

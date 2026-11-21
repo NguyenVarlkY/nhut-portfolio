@@ -2,9 +2,10 @@ import { MetadataRoute } from "next";
 import { getPosts, getPostLangs } from "@/lib/blog";
 import { i18n } from "@/lib/i18n/config";
 
-const BASE_URL = "https://nhuty.dev";
+import { siteUrl } from "@/lib/seo";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const BASE_URL = await siteUrl();
   const posts = await getPosts();
 
   const langPages: MetadataRoute.Sitemap = i18n.locales.flatMap((lang) => [
@@ -15,8 +16,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Each post is listed once per language it has actually been written in;
   // languages without a translation would only serve the fallback original.
-  const blogPostPages: MetadataRoute.Sitemap = posts.flatMap((post) => {
-    const langs = getPostLangs(post.slug, i18n.locales);
+  const postLangs = await Promise.all(posts.map((post) => getPostLangs(post.slug, i18n.locales)));
+  const blogPostPages: MetadataRoute.Sitemap = posts.flatMap((post, i) => {
+    const langs = postLangs[i];
     const languages = Object.fromEntries(langs.map((l) => [l, `${BASE_URL}/${l}/blog/${post.slug}`]));
     return langs.map((lang) => ({
       url: `${BASE_URL}/${lang}/blog/${post.slug}`,

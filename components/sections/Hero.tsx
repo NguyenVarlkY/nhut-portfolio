@@ -53,16 +53,23 @@ export default function Hero() {
   }, []);
 
   return (
-    <header id="home" className="relative flex min-h-screen items-center justify-center px-6 pt-[110px] pb-16">
+    <header id="home" className="relative flex min-h-screen items-center justify-center overflow-hidden px-6 pt-[110px] pb-16 lg:justify-start lg:pl-[7%]">
       {/* Floating 3D sculpture (desktop only, positioned right) */}
       <Hero3D />
 
       <motion.div
-        className="max-w-[880px] text-center md:mr-[160px]"
+        className="relative z-10 max-w-[880px] text-center lg:max-w-[600px] lg:text-left xl:max-w-[660px]"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
+        {profile.avatar && (
+          <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5 }} className="mx-auto mb-6 h-28 w-28 lg:mx-0 rounded-full bg-gradient-brand p-[3px] shadow-[0_0_40px_rgba(139,92,246,0.35)] md:h-32 md:w-32">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={profile.avatar} alt={profile.name} className="h-full w-full rounded-full border-4 border-[var(--bg-base,#0b0b14)] object-cover" />
+          </motion.div>
+        )}
+
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -77,7 +84,7 @@ export default function Hero() {
         </motion.div>
 
         <motion.h1
-          className="font-display text-4xl md:text-7xl font-bold tracking-wide"
+          className="font-display text-4xl md:text-7xl lg:text-6xl xl:text-7xl font-bold tracking-wide"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.35, duration: 0.7 }}
@@ -99,7 +106,7 @@ export default function Hero() {
         </motion.p>
 
         <motion.p
-          className="mx-auto max-w-[660px] text-muted text-base md:text-lg mb-4"
+          className="mx-auto max-w-[660px] text-muted text-[1rem] md:text-lg mb-4 lg:mx-0"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.75 }}
@@ -108,7 +115,7 @@ export default function Hero() {
         </motion.p>
 
         <motion.p
-          className="mx-auto mb-8 max-w-[560px] text-sm text-muted md:text-base"
+          className="mx-auto mb-8 max-w-[560px] text-sm text-muted md:text-[1rem] lg:mx-0"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.82 }}
@@ -117,7 +124,7 @@ export default function Hero() {
         </motion.p>
 
         <motion.div
-          className="flex flex-wrap justify-center gap-4 mb-8"
+          className="flex flex-wrap justify-center gap-4 mb-8 lg:justify-start"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.9 }}
@@ -128,13 +135,13 @@ export default function Hero() {
           <Link href="#contact" className="btn-ghost">
             <Mail size={16} /> {t("hero.contactMe")}
           </Link>
-          <a href="/assets/resume.pdf" download="Nguyen-Bui-Nhut-Y-CV.pdf" target="_blank" rel="noopener" className="btn-ghost">
+          <a href={profile.cvUrl || "/assets/resume.pdf"} download="Nguyen-Bui-Nhut-Y-CV.pdf" target="_blank" rel="noopener" className="btn-ghost">
             <FileDown size={16} /> CV
           </a>
         </motion.div>
 
         <motion.div
-          className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-muted"
+          className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-muted lg:justify-start"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.05 }}

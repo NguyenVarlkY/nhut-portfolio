@@ -3,6 +3,7 @@
  * list of words → tag list, list of items → cards (add, remove, move, collapse), object → labelled fields. */
 import { useState } from "react";
 import { ArrowDown, ArrowUp, ChevronDown, ChevronRight, Copy, Plus, Trash2, X } from "lucide-react";
+import { MediaInput, MediaList } from "./Media";
 import { LONG, PROJECT_ICONS, SKILL_ICONS, SKILL_KEYS, label } from "./labels";
 
 type V = any; // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -22,6 +23,14 @@ const move = <T,>(a: T[], i: number, d: number) => { const b = [...a]; const j =
 const inputCls = "w-full rounded-lg border border-subtle bg-base px-3 py-2 text-sm text-body placeholder:text-placeholder focus:border-primary-light focus:outline-none focus:ring-2 focus:ring-primary-light/30";
 
 function Field({ k, value, onChange, context }: { k: string; value: V; onChange: (v: V) => void; context?: string }) {
+  if (/^(avatar|image|ogImage)$/.test(k)) return <MediaInput value={value ?? ""} onChange={onChange} wide={k !== "avatar"} />;
+  if (k === "cvUrl") return <MediaInput value={value ?? ""} onChange={onChange} kind="pdf" />;
+  if (typeof value === "boolean") return (
+    <button type="button" role="switch" aria-checked={value} onClick={() => onChange(!value)} className="inline-flex items-center gap-2.5 self-start rounded-lg border border-subtle bg-base px-3 py-2 text-sm">
+      <span className={`relative h-5 w-9 rounded-full transition ${value ? "bg-primary" : "bg-surface-hover"}`}><span className={`absolute top-0.5 h-4 w-4 rounded-full bg-white transition-all ${value ? "left-[18px]" : "left-0.5"}`} /></span>
+      {value ? "Bật" : "Tắt"}
+    </button>
+  );
   if (typeof value === "number") return <input type="number" className={inputCls} value={value} onChange={(e) => onChange(Number(e.target.value))} />;
   if (/^g[12]$/.test(k)) return (
     <div className="flex items-center gap-2">
@@ -122,6 +131,7 @@ function ItemList({ value, onChange, template, itemTitle, context, fieldKey }: {
 
 export default function JsonEditor({ value, onChange, template, fieldKey, itemTitle, context }: Props) {
   if (Array.isArray(value)) {
+    if (fieldKey === "gallery") return <MediaList value={value as string[]} onChange={onChange} />;
     const model = Array.isArray(template) ? template[0] : template ?? value[0];
     if (model === undefined || typeof model === "string") return <WordList value={value as string[]} onChange={onChange} long={value.some((x: V) => String(x).length > 60) || LONG.test(fieldKey ?? "") || fieldKey === "highlights" || fieldKey === "features" || fieldKey === "flow"} />;
     return <ItemList value={value} onChange={onChange} template={model} itemTitle={itemTitle} context={context} fieldKey={fieldKey} />;
@@ -132,8 +142,8 @@ export default function JsonEditor({ value, onChange, template, fieldKey, itemTi
       <div className="grid gap-3 sm:grid-cols-2">
         {keys.filter((k) => k !== "id").map((k) => {
           const v = value[k] ?? (template ? blank(template[k]) : "");
-          const wide = typeof v === "object" || LONG.test(k) || String(v).length > 60;
-          const Wrap = typeof v === "object" && v !== null ? "div" : "label"; // a label around buttons would "click" them
+          const wide = typeof v === "object" || LONG.test(k) || String(v).length > 60 || /^(image|ogImage)$/.test(k);
+          const Wrap = (typeof v === "object" && v !== null) || typeof v === "boolean" || /^(avatar|image|ogImage|cvUrl)$/.test(k) ? "div" : "label"; // a label around buttons would "click" them
           return (
             <Wrap key={k} className={`grid gap-1 ${wide ? "sm:col-span-2" : ""}`}>
               <span className="text-xs font-semibold uppercase tracking-wide text-muted">{label(k)}</span>

@@ -7,6 +7,10 @@ export const profile = {
   github: "https://github.com/NguyenNhutY",
   linkedin: "https://www.linkedin.com/in/nguyen-nhut-y/",
   facebook: "https://www.facebook.com/nguyennhuty",
+  /** photo shown in the hero (uploaded in /admin); empty = no photo */
+  avatar: "",
+  /** CV file (uploaded in /admin); empty = the bundled /assets/resume.pdf */
+  cvUrl: "",
   summary:
     "Full-stack developer focused on building production-ready web products with React, Next.js, TypeScript, Node.js, and MongoDB. I enjoy turning business requirements into secure, scalable, and user-friendly features from API to UI.",
 };
@@ -101,6 +105,10 @@ export interface Project {
   tags: string[];
   demoUrl?: string;
   githubUrl?: string;
+  /** cover screenshot (uploaded in /admin) */
+  image?: string;
+  /** more screenshots shown in the case study */
+  gallery?: string[];
 }
 
 export const projects: Project[] = [
@@ -111,6 +119,8 @@ export const projects: Project[] = [
     icon: "hotel",
     g1: "#f59e0b",
     g2: "#ef4444",
+    image: "",
+    gallery: [],
     techHighlight: ["Next.js", "Node.js (Bun)", "MongoDB", "JWT", "Cloudinary", "Brevo", "ORM"],
     tags: ["Next.js", "TailwindCSS", "Node.js(Bun)", "MongoDB", "REST", "MVC", "JWT", "Clerk", "Brevo", "Cloudinary"],
     demoUrl: "https://nhuty.dev",
@@ -123,6 +133,8 @@ export const projects: Project[] = [
     icon: "cart",
     g1: "#22c55e",
     g2: "#10b981",
+    image: "",
+    gallery: [],
     techHighlight: ["Preact", "React Query", "Node.js", "MongoDB", "Stripe", "Docker", "GraphQL"],
     tags: ["Preact", "TypeScript", "Node.js", "MongoDB", "GraphQL", "Stripe", "Docker", "JWT", "RBAC", "React Query", "Cloudinary"],
     demoUrl: "https://nhuty.dev",
@@ -135,6 +147,8 @@ export const projects: Project[] = [
     icon: "car",
     g1: "#3b82f6",
     g2: "#8b5cf6",
+    image: "",
+    gallery: [],
     techHighlight: ["ASP.NET Core", "React", "MVVM", "SQL Server", "JWT", "RBAC"],
     tags: ["React", "TypeScript", "ASP.NET Core", "MVVM", "REST", "JWT", "RBAC"],
     demoUrl: "https://nhuty.dev",
@@ -147,6 +161,8 @@ export const projects: Project[] = [
     icon: "monitor",
     g1: "#8b5cf6",
     g2: "#ec4899",
+    image: "",
+    gallery: [],
     techHighlight: ["React", "Node.js", "WebSocket", "MongoDB", "TypeScript"],
     tags: ["React", "Node.js", "WebSocket", "TypeScript", "TailwindCSS", "MongoDB"],
   },
@@ -157,6 +173,8 @@ export const projects: Project[] = [
     icon: "cpu",
     g1: "#8b5cf6",
     g2: "#6366f1",
+    image: "",
+    gallery: [],
     techHighlight: ["React", "TypeScript", "Custom Assembler", "16-bit State Machine", "Visualization"],
     tags: ["React", "TypeScript", "Assembly", "State Machine", "Next.js"],
     demoUrl: "https://nhuty.dev",
@@ -188,3 +206,14 @@ export const education = {
     "Structured paths on Udemy, Microsoft Learn & FreeCodeCamp covering React.js, Node.js/Express, TypeScript, REST APIs, GraphQL, MongoDB & Socket.IO.",
 };
 
+
+/** Search engines and link previews. Titles/descriptions per language live in the i18n "seo" section. */
+export const seo = {
+  /** public address of the site, e.g. https://nhut-y-portfolio.vercel.app (empty = detected automatically) */
+  siteUrl: "",
+  /** image shown when the link is shared on Facebook / Zalo / LinkedIn (1200×630); empty = /og-image.png */
+  ogImage: "",
+  keywords: ["Full-Stack Developer", "React", "Next.js", "Node.js", "TypeScript", "Portfolio"],
+  /** let Google index the site */
+  indexable: true,
+};

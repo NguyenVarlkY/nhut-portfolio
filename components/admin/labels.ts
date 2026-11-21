@@ -9,6 +9,8 @@ export const FIELD_LABELS: Record<string, string> = {
   tag: "Nhãn nhỏ", titleHighlight: "Tiêu đề (phần tô màu)", subtitle: "Phụ đề", whoTitle: "Tôi là ai — tiêu đề", whoDesc: "Tôi là ai — nội dung", whatTitle: "Tôi làm gì — tiêu đề", whatDesc: "Tôi làm gì — nội dung", driveTitle: "Động lực — tiêu đề", driveDesc: "Động lực — nội dung",
   years: "Năm kinh nghiệm", projects: "Dự án", clients: "Khách hàng", tech: "Công nghệ",
   desc: "Mô tả", tagline: "Câu giới thiệu", businessCore: "Giá trị kinh doanh", flow: "Luồng hoạt động", problem: "Vấn đề", solution: "Giải pháp", features: "Tính năng",
+  avatar: "Ảnh đại diện", cvUrl: "File CV (PDF)", image: "Ảnh bìa dự án", gallery: "Ảnh chụp thêm",
+  siteUrl: "Địa chỉ trang", ogImage: "Ảnh khi chia sẻ link (1200×630)", keywords: "Từ khoá", indexable: "Cho Google tìm thấy",
   question: "Câu hỏi", answer: "Trả lời", q: "Câu hỏi", a: "Trả lời",
 };
 export const label = (k: string) => FIELD_LABELS[k] ?? k.replace(/([a-z])([A-Z0-9])/g, "$1 $2").replace(/^./, (c) => c.toUpperCase());

@@ -4,6 +4,7 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { Menu, X, FileDown, Sun, Moon, Globe, ChevronDown, Command } from "lucide-react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
+import { useContent } from "@/lib/content/ContentContext";
 import { useTranslation, LANGS, LANG_LABELS, LANG_CODES, type Lang } from "@/lib/i18n/LanguageContext";
 
 const LINKS = [
@@ -27,6 +28,7 @@ export default function Navbar({ lang = "en" }: { lang?: Lang }) {
   const langRef = useRef<HTMLDivElement>(null);
   const { theme, setTheme } = useTheme();
   const { t } = useTranslation();
+  const { profile } = useContent();
   const openPalette = useCallback(() => {
     window.dispatchEvent(new CustomEvent("ny:open-palette"));
   }, []);
@@ -131,7 +133,7 @@ export default function Navbar({ lang = "en" }: { lang?: Lang }) {
           </div>
 
           <a
-            href="/assets/resume.pdf"
+            href={profile.cvUrl || "/assets/resume.pdf"}
             target="_blank"
             rel="noopener"
             className="hidden sm:inline-flex items-center gap-2 rounded-xl border border-subtle bg-surface px-4 py-2 text-xs font-semibold transition-all hover:-translate-y-0.5 hover:border-primary-light/40 hover:bg-surface-hover"

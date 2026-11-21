@@ -9,13 +9,25 @@ import { DATA_KEYS, DEFAULT_DATA, TEXT_SECTIONS, type JsonValue, type Overrides 
 export class InvalidContent extends Error {}
 const MAX_TOTAL = 900_000;
 const CTRL = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g;
-const OPTIONAL = new Set(["demoUrl", "githubUrl", "outcome"]);
+const OPTIONAL = new Set(["demoUrl", "githubUrl", "outcome", "image", "gallery", "avatar", "cvUrl"]);
 const empty = (m: unknown): JsonValue => (typeof m === "string" ? "" : typeof m === "number" ? 0 : typeof m === "boolean" ? false : Array.isArray(m) ? [] : {});
 const LINK_KEY = /(url|github|linkedin|facebook|href|link)$/i;
+/** pictures/files: a full https link, or a file uploaded to this site (/api/media/…, /assets/…) */
+const MEDIA_KEY = /^(avatar|image|gallery|ogImage|cvUrl)$/;
 
 function cleanString(v: string, path: string, key: string): string {
   const s = v.replace(CTRL, "").slice(0, 8000);
-  if (LINK_KEY.test(key) && s && !/^(https?:\/\/|mailto:)/i.test(s.trim())) throw new InvalidContent(`Link không hợp lệ ở ${path}: phải bắt đầu bằng https://`);
+  const t = s.trim();
+  if (!t) return s;
+  if (MEDIA_KEY.test(key)) {
+    if (!/^https:\/\//i.test(t) && !/^\/(api\/media|assets)\/[\w./-]+$/.test(t) || t.includes("..")) throw new InvalidContent(`Ảnh/file không hợp lệ ở ${path}: tải lên trong trang quản lý hoặc dùng link https://`);
+    return t;
+  }
+  if (key === "siteUrl") {
+    if (!/^https:\/\/[a-z0-9.-]+(:\d+)?\/?$/i.test(t)) throw new InvalidContent(`Địa chỉ trang không hợp lệ: dạng https://ten-mien.com`);
+    return t.replace(/\/$/, "");
+  }
+  if (LINK_KEY.test(key) && !/^(https?:\/\/|mailto:)/i.test(t)) throw new InvalidContent(`Link không hợp lệ ở ${path}: phải bắt đầu bằng https://`);
   return s;
 }
 

@@ -1,5 +1,4 @@
 import ThemeProvider from "@/components/ui/ThemeProvider";
-import { LanguageProvider } from "@/lib/i18n/LanguageContext";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import BackToTop from "@/components/layout/BackToTop";
@@ -10,7 +9,8 @@ import Toast from "@/components/ui/Toast";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Lang } from "@/lib/i18n/LanguageContext";
-import { ContentProvider } from "@/lib/content/ContentContext";
+import SiteProviders from "@/lib/content/SiteProviders";
+import Tracker from "@/components/ui/Tracker";
 import { getOverrides } from "@/lib/content/store";
 import { mergeData } from "@/lib/content/types";
 
@@ -25,8 +25,7 @@ export default async function LangLayout({
   const o = await getOverrides().catch(() => ({}) as Awaited<ReturnType<typeof getOverrides>>);
   return (
     <ThemeProvider>
-      <ContentProvider data={mergeData(o)}>
-      <LanguageProvider lang={params.lang} overrides={o.i18n?.[params.lang]}>
+      <SiteProviders data={mergeData(o)} lang={params.lang} overrides={o.i18n?.[params.lang] as Record<string, unknown> | undefined}>
         <ScrollProgress />
         <CommandPalette />
         <Navbar lang={params.lang} />
@@ -37,8 +36,8 @@ export default async function LangLayout({
         <ChatBot />
         <Analytics />
         <SpeedInsights />
-      </LanguageProvider>
-      </ContentProvider>
+        <Tracker lang={params.lang} />
+      </SiteProviders>
     </ThemeProvider>
   );
 }

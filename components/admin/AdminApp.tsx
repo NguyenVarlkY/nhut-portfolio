@@ -2,14 +2,33 @@
 /* /admin — chủ portfolio tự sửa thông tin: hồ sơ, kỹ năng, kinh nghiệm, dự án, chứng chỉ, học vấn (dùng chung mọi ngôn ngữ)
  * và chữ hiển thị của từng mục theo 7 ngôn ngữ. Lưu một lần là trang web cập nhật sau vài giây. */
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { AlertTriangle, Briefcase, Check, Download, ExternalLink, FileText, FolderGit2, GraduationCap, Award, Languages, Loader2, Lock, LogOut, Menu, RotateCcw, Save, Sparkles, Undo2, Upload, User, Wrench, X, Eye, EyeOff } from "lucide-react";
+import { AlertTriangle, BarChart3, Briefcase, Check, Download, ExternalLink, FileText, FolderGit2, GraduationCap, Award, History as HistoryIcon, ImageIcon, Inbox as InboxIcon, Languages, Loader2, Lock, LogOut, Menu, MonitorPlay, Newspaper, RotateCcw, Save, Search, Sparkles, Undo2, Upload, User, Wand2, Wrench, X, Eye, EyeOff } from "lucide-react";
 import JsonEditor from "./JsonEditor";
+import { Section, ToolCard, api } from "./ui";
+import { MediaLibrary } from "./Media";
+import Inbox from "./Inbox";
+import Stats from "./Stats";
+import History from "./History";
+import BlogAdmin from "./BlogAdmin";
+import SeoPanel from "./SeoPanel";
+import LivePreview from "./LivePreview";
 import { DATA_SECTIONS, LANG_NAMES, LANG_ORDER, TEXT_SECTION_INFO } from "./labels";
 
 type V = any; // eslint-disable-line @typescript-eslint/no-explicit-any
 interface Overrides { data?: Record<string, V>; i18n?: Record<string, Record<string, V>>; updatedAt?: number }
 interface Loaded { defaults: { data: Record<string, V>; i18n: Record<string, Record<string, V>> }; overrides: Overrides; storage: "blob" | "local" | "none" }
-type Sel = { kind: "data"; key: string } | { kind: "text"; key: string } | { kind: "tools" };
+type Page = "tools" | "seo" | "inbox" | "stats" | "blog" | "media" | "history";
+type Sel = { kind: "data"; key: string } | { kind: "text"; key: string } | { kind: Page };
+const PAGES: { kind: Page; title: string; hint: string; icon: React.ReactNode }[] = [
+  { kind: "inbox", title: "Hộp thư", hint: "Tin nhắn khách gửi qua form Liên hệ.", icon: <InboxIcon size={16} /> },
+  { kind: "stats", title: "Thống kê", hint: "Ai vào trang, xem gì, bấm gì — không dùng cookie, không lưu IP.", icon: <BarChart3 size={16} /> },
+  { kind: "blog", title: "Blog", hint: "Viết và đăng bài, 7 ngôn ngữ.", icon: <Newspaper size={16} /> },
+  { kind: "media", title: "Thư viện ảnh & file", hint: "Ảnh đại diện, ảnh dự án, CV, ảnh bài viết. Chọn lại được ở mọi ô ảnh.", icon: <ImageIcon size={16} /> },
+  { kind: "seo", title: "SEO & chia sẻ link", hint: "Tiêu đề, mô tả và ảnh hiện trên Google, Facebook, Zalo.", icon: <Search size={16} /> },
+  { kind: "history", title: "Lịch sử chỉnh sửa", hint: "Mỗi lần Lưu được giữ lại một bản. Chọn bản cũ để khôi phục.", icon: <HistoryIcon size={16} /> },
+  { kind: "tools", title: "Sao lưu & khôi phục", hint: "Tải về toàn bộ phần bạn đã chỉnh để cất giữ, hoặc nạp lại từ file sao lưu.", icon: <Download size={16} /> },
+];
+const PREVIEWABLE = (s: Sel) => s.kind === "data" || s.kind === "text" || s.kind === "seo";
 
 const ICON: Record<string, React.ReactNode> = {
   profile: <User size={16} />, roleRotator: <Sparkles size={16} />, skills: <Wrench size={16} />, experience: <Briefcase size={16} />, projects: <FolderGit2 size={16} />,
@@ -88,7 +107,17 @@ function Editor({ onSignOut }: { onSignOut: () => void }) {
   const [busy, setBusy] = useState(false);
   const [toast, setToast] = useState<{ ok: boolean; text: string } | null>(null);
   const [menu, setMenu] = useState(false);
-  const flash = (ok: boolean, text: string) => { setToast({ ok, text }); window.setTimeout(() => setToast(null), 3500) };
+  const [preview, setPreview] = useState(false);
+  const [unread, setUnread] = useState(0);
+  const [canTranslate, setCanTranslate] = useState(false);
+  const [translating, setTranslating] = useState("");
+  const flash = useCallback((ok: boolean, text: string) => { setToast({ ok, text }); window.setTimeout(() => setToast(null), 3500) }, []);
+  useEffect(() => {
+    api<{ configured: boolean }>("/api/admin/translate").then((j) => setCanTranslate(j.configured)).catch(() => {});
+    api<{ messages: { read: boolean }[] }>("/api/admin/inbox").then((j) => setUnread(j.messages.filter((m) => !m.read).length)).catch(() => {});
+    try { setPreview(localStorage.getItem("ny-admin-preview") === "1" && window.innerWidth >= 1280) } catch { /* ignore */ }
+  }, []);
+  const togglePreview = () => setPreview((x) => { try { localStorage.setItem("ny-admin-preview", x ? "0" : "1") } catch { /* ignore */ } return !x });
 
   const load = useCallback(async () => {
     const r = await fetch("/api/admin/content", { cache: "no-store" });
@@ -117,7 +146,7 @@ function Editor({ onSignOut }: { onSignOut: () => void }) {
       setSaved(clone(next)); setDraft(clone(next));
       flash(true, "Đã lưu. Trang web cập nhật sau vài giây.");
     } catch { flash(false, "Mất kết nối, thử lại nhé.") } finally { setBusy(false) }
-  }, [busy, draft, onSignOut]);
+  }, [busy, draft, onSignOut, flash]);
   useEffect(() => {
     const k = (e: KeyboardEvent) => { if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") { e.preventDefault(); if (dirty) void save() } };
     window.addEventListener("keydown", k);
@@ -141,6 +170,21 @@ function Editor({ onSignOut }: { onSignOut: () => void }) {
   // item titles for text lists that follow the data lists (experienceData[i] ↔ experience id i)
   const jobs: V[] = dataVal("experience"), projects: V[] = dataVal("projects");
   const textItemTitle = (key: string) => (item: V, i: number) => key === "experienceData" ? `${jobs.find((j) => j.id === i)?.company ?? `#${i}`}${item?.title ? ` — ${item.title}` : ""}` : key === "projectsData" ? (projects.find((p) => p.id === i)?.title ?? `#${i}`) : "";
+
+  /** Translate a text section from `from` into each target language (result goes into the draft; owner reviews, then saves). */
+  async function translateText(key: string, from: string, targets: string[]) {
+    const value = textVal(from, key);
+    if (value == null) return;
+    if (!confirm(`Dịch mục này từ ${LANG_NAMES[from]} sang ${targets.map((l) => LANG_NAMES[l]).join(", ")}? Chữ hiện có ở ngôn ngữ đích sẽ được thay (chưa lên web cho tới khi bạn bấm Lưu).`)) return;
+    let ok = 0;
+    for (const to of targets) {
+      setTranslating(`${LANG_NAMES[to]} (${ok + 1}/${targets.length})`);
+      try { const j = await api<{ result: V }>("/api/admin/translate", { method: "POST", json: { from, to, value } }); setText(to, key, j.result); ok++ }
+      catch (e) { flash(false, `${LANG_NAMES[to]}: ${(e as Error).message}`); break }
+    }
+    setTranslating("");
+    if (ok) flash(true, `Đã dịch ${ok} ngôn ngữ. Xem lại rồi bấm Lưu.`);
+  }
 
   async function signOut() {
     if (dirty && !confirm("Còn thay đổi chưa lưu. Vẫn đăng xuất?")) return;
@@ -181,14 +225,21 @@ function Editor({ onSignOut }: { onSignOut: () => void }) {
         ))}
       </div>
       <div>
-        <p className="mb-2 px-3 text-[11px] font-bold uppercase tracking-[0.15em] text-muted">Khác</p>
-        <button type="button" className={navBtn(sel.kind === "tools")} onClick={() => pick({ kind: "tools" })}><Download size={16} /><span className="flex-1">Sao lưu & khôi phục</span></button>
+        <p className="mb-2 px-3 text-[11px] font-bold uppercase tracking-[0.15em] text-muted">Công cụ</p>
+        {PAGES.map((pg) => (
+          <button key={pg.kind} type="button" className={navBtn(sel.kind === pg.kind)} onClick={() => pick({ kind: pg.kind })}>
+            {pg.icon}<span className="flex-1">{pg.title}</span>
+            {pg.kind === "inbox" && unread > 0 && <span className="rounded-full bg-primary px-1.5 text-[11px] font-bold text-white">{unread}</span>}
+            {pg.kind === "seo" && (dataEdited("seo") || LANG_ORDER.some((l) => textEdited(l, "seo"))) && <Dot />}
+          </button>
+        ))}
       </div>
     </nav>
   );
 
   const dataInfo = sel.kind === "data" ? DATA_SECTIONS.find((s) => s.key === sel.key)! : null;
   const textInfo = sel.kind === "text" ? TEXT_SECTION_INFO.find((s) => s.key === sel.key)! : null;
+  const pageInfo = PAGES.find((pg) => pg.kind === sel.kind) ?? null;
 
   return (
     <div className="min-h-screen bg-base text-body">
@@ -197,13 +248,14 @@ function Editor({ onSignOut }: { onSignOut: () => void }) {
           <button type="button" className="rounded-lg p-2 text-muted hover:bg-surface-hover lg:hidden" onClick={() => setMenu(true)} aria-label="Mở menu"><Menu size={20} /></button>
           <span className="hidden h-9 w-9 items-center justify-center rounded-xl bg-gradient-brand font-display text-sm font-bold text-white sm:flex">NY</span>
           <div className="min-w-0 flex-1">
-            <h1 className="truncate font-display text-base font-bold text-body sm:text-lg" style={{ color: "var(--text-body)" }}>Quản lý Portfolio</h1>
+            <h1 className="truncate font-display text-[1rem] font-bold text-body sm:text-lg" style={{ color: "var(--text-body)" }}>Quản lý Portfolio</h1>
             <p className="truncate text-xs text-muted">
               {dirty ? <span className="text-amber-400">● Có thay đổi chưa lưu</span> : saved.updatedAt ? <>Đã lưu lúc {when(saved.updatedAt)}</> : "Đang dùng nội dung gốc trong code"}
               {editedCount > 0 && <> · {editedCount} mục đã chỉnh</>}
             </p>
           </div>
-          <a href={`/${lang}`} target="_blank" rel="noopener" className="btn-ghost hidden !px-3 !py-2 text-sm md:inline-flex"><ExternalLink size={16} /> Xem trang</a>
+          <button type="button" onClick={togglePreview} className={`btn-ghost hidden !px-3 !py-2 text-sm xl:inline-flex ${preview ? "!border-primary-light !bg-primary/15" : ""}`} title="Xem trang thay đổi ngay khi sửa"><MonitorPlay size={16} /> Xem trực tiếp</button>
+          <a href={`/${lang}`} target="_blank" rel="noopener" className="btn-ghost hidden !px-3 !py-2 text-sm md:inline-flex xl:hidden"><ExternalLink size={16} /> Xem trang</a>
           <button type="button" className="btn-ghost !px-3 !py-2 text-sm disabled:opacity-40" disabled={!dirty || busy} onClick={() => { if (confirm("Bỏ mọi thay đổi chưa lưu?")) setDraft(clone(saved)) }} title="Bỏ thay đổi chưa lưu"><Undo2 size={16} /><span className="hidden sm:inline">Hoàn tác</span></button>
           <button type="button" className="btn-primary !px-4 !py-2 text-sm disabled:opacity-50" disabled={!dirty || busy || loaded.storage === "none"} onClick={() => void save()} title="Lưu (Ctrl+S)">{busy ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />} Lưu</button>
           <button type="button" className="rounded-lg p-2 text-muted hover:bg-surface-hover hover:text-body" onClick={() => void signOut()} aria-label="Đăng xuất" title="Đăng xuất"><LogOut size={18} /></button>
@@ -217,7 +269,7 @@ function Editor({ onSignOut }: { onSignOut: () => void }) {
         )}
       </header>
 
-      <div className="mx-auto flex max-w-[1400px] gap-6 px-4 py-6">
+      <div className={`mx-auto flex gap-6 px-4 py-6 ${preview && PREVIEWABLE(sel) ? "max-w-[1900px]" : "max-w-[1400px]"}`}>
         <aside className="sticky top-24 hidden h-[calc(100vh-7rem)] w-64 shrink-0 overflow-y-auto pr-2 lg:block">{sidebar}</aside>
         {menu && (
           <div className="fixed inset-0 z-40 bg-black/60 lg:hidden" onClick={() => setMenu(false)}>
@@ -229,6 +281,7 @@ function Editor({ onSignOut }: { onSignOut: () => void }) {
         )}
 
         <main className="min-w-0 flex-1">
+          {translating && <p className="mb-3 flex items-center gap-2 rounded-lg border border-primary-light/40 bg-primary/10 px-3 py-2 text-sm"><Loader2 size={15} className="animate-spin" /> Đang dịch sang {translating}…</p>}
           {dataInfo && sel.kind === "data" && (
             <Section title={dataInfo.title} hint={dataInfo.hint} edited={dataEdited(sel.key)} onReset={() => resetData(sel.key)} icon={ICON[sel.key]}>
               <JsonEditor value={dataVal(sel.key)} template={D.data[sel.key]} fieldKey={sel.key} context={sel.key} onChange={(v) => setData(sel.key, v)} />
@@ -245,12 +298,29 @@ function Editor({ onSignOut }: { onSignOut: () => void }) {
                       {LANG_NAMES[l]}{textEdited(l, sel.key) && <span className="absolute -right-1 -top-1 h-2.5 w-2.5 rounded-full bg-amber-400" />}
                     </button>
                   ))}
-                  {lang !== "en" && <button type="button" className="ml-auto inline-flex items-center gap-1.5 rounded-lg border border-subtle px-3 py-1.5 text-sm text-muted hover:text-body" onClick={() => { if (confirm(`Chép toàn bộ chữ tiếng Anh của mục này sang ${LANG_NAMES[lang]}?`)) setText(lang, sel.key, clone(textVal("en", sel.key))) }}><Languages size={15} /> Chép từ English</button>}
+                  {canTranslate && lang !== "vi" && <button type="button" disabled={!!translating} className="ml-auto inline-flex items-center gap-1.5 rounded-lg border border-primary-light/40 bg-primary/10 px-3 py-1.5 text-sm text-primary-light hover:bg-primary/20 disabled:opacity-50" onClick={() => void translateText(sel.key, "vi", [lang])}><Wand2 size={15} /> Dịch từ Tiếng Việt</button>}
+                  {canTranslate && lang === "vi" && <button type="button" disabled={!!translating} className="ml-auto inline-flex items-center gap-1.5 rounded-lg border border-primary-light/40 bg-primary/10 px-3 py-1.5 text-sm text-primary-light hover:bg-primary/20 disabled:opacity-50" onClick={() => void translateText(sel.key, "vi", LANG_ORDER.filter((l) => l !== "vi"))}><Wand2 size={15} /> Dịch sang 6 ngôn ngữ</button>}
+                  {lang !== "en" && <button type="button" className={`${canTranslate ? "" : "ml-auto "}inline-flex items-center gap-1.5 rounded-lg border border-subtle px-3 py-1.5 text-sm text-muted hover:text-body`} onClick={() => { if (confirm(`Chép toàn bộ chữ tiếng Anh của mục này sang ${LANG_NAMES[lang]}?`)) setText(lang, sel.key, clone(textVal("en", sel.key))) }}><Languages size={15} /> Chép từ English</button>}
                 </div>
               }>
               {textVal(lang, sel.key) == null
                 ? <p className="text-sm text-muted">Mục này không có chữ cho ngôn ngữ này.</p>
                 : <JsonEditor key={`${sel.key}-${lang}`} value={textVal(lang, sel.key)} template={D.i18n.en?.[sel.key]} fieldKey={sel.key} itemTitle={textItemTitle(sel.key)} onChange={(v) => setText(lang, sel.key, v)} />}
+            </Section>
+          )}
+
+          {pageInfo && sel.kind === "seo" && (
+            <Section title={pageInfo.title} hint={pageInfo.hint} icon={pageInfo.icon} edited={dataEdited("seo") || textEdited(lang, "seo")} onReset={() => { resetData("seo"); resetText(lang, "seo") }}>
+              <SeoPanel data={dataVal("seo")} template={D.data.seo} onData={(v) => setData("seo", v)} text={textVal(lang, "seo") ?? {}} onText={(v) => setText(lang, "seo", v)} lang={lang} setLang={setLang} edited={(l) => textEdited(l, "seo")} siteUrl={typeof window !== "undefined" ? window.location.origin : ""} />
+            </Section>
+          )}
+          {pageInfo && sel.kind === "inbox" && <Section title={pageInfo.title} hint={pageInfo.hint} icon={pageInfo.icon}><Inbox flash={flash} onUnread={setUnread} /></Section>}
+          {pageInfo && sel.kind === "stats" && <Section title={pageInfo.title} hint={pageInfo.hint} icon={pageInfo.icon}><Stats flash={flash} /></Section>}
+          {pageInfo && sel.kind === "blog" && <Section title={pageInfo.title} hint={pageInfo.hint} icon={pageInfo.icon}><BlogAdmin flash={flash} canTranslate={canTranslate} /></Section>}
+          {pageInfo && sel.kind === "media" && <Section title={pageInfo.title} hint={pageInfo.hint} icon={pageInfo.icon}><MediaLibrary flash={flash} /></Section>}
+          {pageInfo && sel.kind === "history" && (
+            <Section title={pageInfo.title} hint={pageInfo.hint} icon={pageInfo.icon}>
+              <History current={strip(saved)} flash={flash} onRestore={(o) => { setDraft(clone(o)); flash(true, "Đã nạp bản cũ. Kiểm tra rồi bấm Lưu."); pick({ kind: "data", key: "profile" }) }} />
             </Section>
           )}
 
@@ -270,6 +340,11 @@ function Editor({ onSignOut }: { onSignOut: () => void }) {
             </Section>
           )}
         </main>
+        {preview && PREVIEWABLE(sel) && (
+          <aside className="sticky top-24 hidden h-[calc(100vh-7rem)] w-[44%] max-w-[820px] shrink-0 xl:block">
+            <LivePreview overrides={strip(draft)} lang={lang} section={"key" in sel ? sel.key : undefined} onClose={togglePreview} />
+          </aside>
+        )}
       </div>
 
       {toast && (
@@ -291,30 +366,3 @@ function strip(o: Overrides): Overrides {
 }
 
 const Dot = () => <span className="h-2 w-2 rounded-full bg-amber-400" title="Đã chỉnh" />;
-
-function Section({ title, hint, edited, onReset, icon, extra, children }: { title: string; hint: string; edited?: boolean; onReset?: () => void; icon?: React.ReactNode; extra?: React.ReactNode; children: React.ReactNode }) {
-  return (
-    <section className="card p-5 sm:p-6">
-      <div className="mb-5 flex flex-wrap items-start gap-3">
-        <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/15 text-primary-light">{icon}</span>
-        <div className="min-w-0 flex-1">
-          <h2 className="flex items-center gap-2 font-display text-xl font-bold">{title}{edited && <span className="rounded-full bg-amber-400/15 px-2 py-0.5 text-xs font-semibold text-amber-300">Đã chỉnh</span>}</h2>
-          <p className="mt-0.5 text-sm text-muted">{hint}</p>
-        </div>
-        {edited && onReset && <button type="button" className="inline-flex items-center gap-1.5 rounded-lg border border-subtle px-3 py-1.5 text-sm text-muted hover:text-body" onClick={() => { if (confirm("Đưa mục này về nội dung gốc?")) onReset() }}><RotateCcw size={15} /> Về gốc</button>}
-      </div>
-      {extra}
-      {children}
-    </section>
-  );
-}
-
-function ToolCard({ icon, title, text, children }: { icon: React.ReactNode; title: string; text: string; children: React.ReactNode }) {
-  return (
-    <div className="flex flex-col gap-3 rounded-xl border border-subtle bg-surface p-4">
-      <span className="text-primary-light">{icon}</span>
-      <div><b className="font-display">{title}</b><p className="mt-1 text-sm text-muted">{text}</p></div>
-      <div className="mt-auto">{children}</div>
-    </div>
-  );
-}

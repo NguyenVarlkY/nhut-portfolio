@@ -170,7 +170,7 @@ export default function Hero3D() {
   return (
     <div
       ref={containerRef}
-      className="pointer-events-none absolute right-[4%] top-1/2 hidden h-[460px] w-[460px] -translate-y-1/2 md:block lg:right-[7%] lg:h-[540px] lg:w-[540px]"
+      className="pointer-events-none absolute right-[2%] top-1/2 hidden h-[440px] w-[440px] -translate-y-1/2 lg:block xl:right-[6%] xl:h-[540px] xl:w-[540px]"
       aria-hidden="true"
     />
   );

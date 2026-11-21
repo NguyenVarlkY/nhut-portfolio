@@ -70,7 +70,7 @@ export default function Credentials() {
             <h3 className="mb-4 flex items-center gap-3 font-display text-xl">
               <GraduationCap size={20} className="text-primary-light" /> {t("credentials.education")}
             </h3>
-            <h4 className="font-display text-base text-body">{tf("credentialsData.degree", education.degree)}</h4>
+            <h4 className="font-display text-[1rem] text-body">{tf("credentialsData.degree", education.degree)}</h4>
             <p className="text-sm text-muted">
               {education.school} — <span className="font-mono text-xs">{education.period}</span>
             </p>

@@ -2,19 +2,20 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import Giscus from '@/components/blog/Giscus';
-import { getPostSync, getPostLangs, getSlugs } from '@/lib/blog';
+import { getPost, getPostLangs, getSlugs } from '@/lib/blog';
 import { ArrowLeft, Clock, Languages } from 'lucide-react';
 import Link from 'next/link';
 import { st } from '@/lib/i18n/server';
 import { i18n } from '@/lib/i18n/config';
+import { siteUrl } from '@/lib/seo';
 import type { Lang } from '@/lib/i18n/LanguageContext';
 
-const SITE_URL = 'https://nhuty.dev';
 
 type Params = { lang: Lang; slug: string };
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
-  const post = getPostSync(params.slug, params.lang);
+  const SITE_URL = await siteUrl();
+  const post = await getPost(params.slug, params.lang);
   if (!post) return {};
   const { frontmatter } = post;
   const url = `${SITE_URL}/${params.lang}/blog/${params.slug}`;
@@ -23,7 +24,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 
   // Only advertise language versions that really exist; a fallback page
   // points its canonical at the original so it isn't indexed as a duplicate.
-  const available = getPostLangs(params.slug, i18n.locales);
+  const available = await getPostLangs(params.slug, i18n.locales);
   const languages = Object.fromEntries(available.map((l) => [l, `${SITE_URL}/${l}/blog/${params.slug}`]));
   const canonical = post.isFallback ? `${SITE_URL}/${post.lang}/blog/${params.slug}` : url;
 
@@ -38,9 +39,10 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 
 export default async function PostPage({ params }: { params: Params }) {
   const { lang } = params;
-  const post = getPostSync(params.slug, lang);
+  const post = await getPost(params.slug, lang);
   if (!post) notFound();
   const { frontmatter, content, readingTime } = post;
+  const SITE_URL = await siteUrl();
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -77,7 +79,15 @@ export default async function PostPage({ params }: { params: Params }) {
         </p>
       )}
 
+      {post.cover && (
+        // eslint-disable-next-line @next/next/no-img-element -- uploaded in /admin, served by /api/media
+        <img src={post.cover} alt="" className="mb-8 aspect-[1200/630] w-full rounded-xl border border-subtle object-cover" />
+      )}
+
       <h1 className="text-4xl font-bold mb-4" lang={post.lang}>{frontmatter.title}</h1>
+      {!!post.tags?.length && (
+        <div className="mb-4 flex flex-wrap gap-2">{post.tags.map((t) => <span key={t} className="chip">{t}</span>)}</div>
+      )}
 
       <div className="flex items-center gap-4 text-sm text-muted mb-8">
         <span>{frontmatter.date}</span>
@@ -92,7 +102,10 @@ export default async function PostPage({ params }: { params: Params }) {
         <MDXRemote
           source={content}
           options={{
-            parseFrontmatter: false
+            parseFrontmatter: false,
+            // posts can be written in /admin: never run code from them
+            blockJS: true,
+            blockDangerousJS: true,
           }}
         />
       </div>

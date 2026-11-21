@@ -5,6 +5,7 @@ import { readOverrides, storageKind, writeOverrides } from "@/lib/content/store"
 import { DEFAULT_DATA, TEXT_SECTIONS } from "@/lib/content/types";
 import { InvalidContent, validateOverrides } from "@/lib/content/validate";
 import { i18n } from "@/lib/i18n/config";
+import { seoDefaults } from "@/lib/seo";
 const LANGS = i18n.locales;
 import en from "@/lib/i18n/en.json";
 import vi from "@/lib/i18n/vi.json";
@@ -21,7 +22,7 @@ const deny = () => NextResponse.json({ error: "Phiên đăng nhập đã hết, 
 
 export async function GET() {
   if (!isAdmin()) return deny();
-  const texts = Object.fromEntries(LANGS.map((l) => [l, Object.fromEntries(TEXT_SECTIONS.map((s) => [s, DICTS[l][s] ?? null]))]));
+  const texts = Object.fromEntries(LANGS.map((l) => [l, Object.fromEntries(TEXT_SECTIONS.map((s) => [s, s === "seo" ? seoDefaults(l) : DICTS[l][s] ?? null]))]));
   return NextResponse.json({ defaults: { data: DEFAULT_DATA, i18n: texts }, overrides: await readOverrides(), storage: storageKind() }, { headers: noStore });
 }
 
@@ -29,8 +30,9 @@ export async function PUT(req: Request) {
   if (!sameOrigin(req)) return NextResponse.json({ error: "Không được phép" }, { status: 403 });
   if (!isAdmin()) return deny();
   try {
-    const clean = validateOverrides(await req.json());
-    await writeOverrides(clean);
+    const body = await req.json();
+    const clean = validateOverrides(body);
+    await writeOverrides(clean, typeof body?.note === "string" ? body.note : "");
     return NextResponse.json({ ok: true, updatedAt: clean.updatedAt }, { headers: noStore });
   } catch (err) {
     if (err instanceof InvalidContent || (err instanceof Error && /kho lưu/.test(err.message))) return NextResponse.json({ error: err.message }, { status: 400 });

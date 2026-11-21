@@ -9,6 +9,7 @@ Hotel, ShoppingCart, Car, Github, X, ExternalLink, Calendar, Tag,
   BarChart3, PieChart, Lightbulb, Target, ArrowRight, Sparkles
 } from "lucide-react";
 import { useContent } from "@/lib/content/ContentContext";
+import { track } from "@/components/ui/Tracker";
 import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 const ICONS: Record<string, any> = {
@@ -133,20 +134,28 @@ export default function Projects() {
                 animate={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.5 }}
-                onClick={() => setActiveProj(proj.title)}
+                onClick={() => (setActiveProj(proj.title), track("project", proj.title))}
                 onKeyDown={(event) => {
                   if (event.key === "Enter" || event.key === " ") {
                     event.preventDefault();
-                    setActiveProj(proj.title);
+                    (setActiveProj(proj.title), track("project", proj.title));
                   }
                 }}
               >
-                <div
-                  className="flex h-[130px] items-center justify-center text-white text-4xl"
-                  style={{ background: `linear-gradient(135deg, ${proj.g1}, ${proj.g2})` }}
-                >
-                  <Icon size={42} />
-                </div>
+                {proj.image ? (
+                  <div className="relative h-[170px] overflow-hidden" style={{ background: `linear-gradient(135deg, ${proj.g1}, ${proj.g2})` }}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={proj.image} alt={proj.title} loading="lazy" decoding="async" className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105" />
+                    <span className="absolute left-3 top-3 flex h-9 w-9 items-center justify-center rounded-lg text-white shadow-lg" style={{ background: `linear-gradient(135deg, ${proj.g1}, ${proj.g2})` }}><Icon size={18} /></span>
+                  </div>
+                ) : (
+                  <div
+                    className="flex h-[130px] items-center justify-center text-white text-4xl"
+                    style={{ background: `linear-gradient(135deg, ${proj.g1}, ${proj.g2})` }}
+                  >
+                    <Icon size={42} />
+                  </div>
+                )}
 
                 <div className="flex flex-1 flex-col p-6">
                   <h3 className="font-display text-xl">{proj.title}</h3>
@@ -216,12 +225,27 @@ export default function Projects() {
                 const Icon = ICONS[proj.icon] ?? Hotel;
                 return (
                   <>
-                    <div
-                      className="flex h-[110px] items-center justify-center rounded-xl text-white text-4xl"
-                      style={{ background: `linear-gradient(135deg, ${proj.g1}, ${proj.g2})` }}
-                    >
-                      <Icon size={40} />
-                    </div>
+                    {proj.image ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={proj.image} alt={proj.title} className="max-h-[320px] w-full rounded-xl border border-subtle object-cover object-top" />
+                    ) : (
+                      <div
+                        className="flex h-[110px] items-center justify-center rounded-xl text-white text-4xl"
+                        style={{ background: `linear-gradient(135deg, ${proj.g1}, ${proj.g2})` }}
+                      >
+                        <Icon size={40} />
+                      </div>
+                    )}
+                    {!!proj.gallery?.filter(Boolean).length && (
+                      <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
+                        {proj.gallery.filter(Boolean).map((src) => (
+                          <a key={src} href={src} target="_blank" rel="noopener" className="shrink-0">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={src} alt="" loading="lazy" className="h-24 w-40 rounded-lg border border-subtle object-cover transition hover:border-primary-light" />
+                          </a>
+                        ))}
+                      </div>
+                    )}
 
                     <h3 className="mt-5 font-display text-2xl font-bold">{proj.title}</h3>
                     <div className="mt-1.5 flex flex-wrap items-center gap-3 font-mono text-xs text-muted">

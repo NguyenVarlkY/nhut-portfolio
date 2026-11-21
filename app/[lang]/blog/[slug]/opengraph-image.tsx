@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import { getPostSync } from "@/lib/blog";
+import { getPost } from "@/lib/blog";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
@@ -28,7 +28,7 @@ async function loadTitleFont(text: string, family: string): Promise<ArrayBuffer 
 }
 
 export default async function OgImage({ params }: { params: { slug: string; lang: string } }) {
-  const post = getPostSync(params.slug, params.lang);
+  const post = await getPost(params.slug, params.lang);
   const title: string = post?.frontmatter.title || "Untitled";
   const family = FONT_BY_LANG[post?.lang ?? ""] ?? "Inter";
   const fontData = await loadTitleFont(title + "NGUYENBUIYMG· Blog0123456789", family);

@@ -383,7 +383,7 @@ export default function TestTodo() {
           ].map(card => (
             <div key={card.label} className="glass flex items-center gap-2.5 p-2.5">
               <span className={card.color}>{card.icon}</span>
-              <div><p className="font-mono text-base font-bold text-body leading-tight">{card.value}</p><p className="text-[10px] text-muted leading-tight">{card.label}</p></div>
+              <div><p className="font-mono text-[1rem] font-bold text-body leading-tight">{card.value}</p><p className="text-[10px] text-muted leading-tight">{card.label}</p></div>
             </div>
           ))}
         </div>

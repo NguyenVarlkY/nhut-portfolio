@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { sanitizeInput, validateEmail } from "@/lib/sanitize";
 import { Resend } from "resend";
+import { saveMessage } from "@/lib/content/inbox";
+import { storageKind } from "@/lib/content/storage";
 
 // ─────────────────────────────────────────────────────────────
 //  POST /api/contact
@@ -51,11 +53,16 @@ export async function POST(request: Request) {
   }
 
   // 2) Parse body
-  let body: { name?: string; email?: string; message?: string };
+  let body: { name?: string; email?: string; message?: string; website?: string; lang?: string; page?: string; startedAt?: number };
   try {
     body = await request.json();
   } catch {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
+  }
+
+  // bots fill the hidden "website" field, or submit faster than a person can type: pretend it worked, keep nothing
+  if (body.website || (typeof body.startedAt === "number" && Date.now() - body.startedAt < 2500)) {
+    return NextResponse.json({ ok: true }, { status: 200 });
   }
 
   const name = body.name ?? "";
@@ -99,12 +106,25 @@ export async function POST(request: Request) {
   const cleanName = nameResult.sanitized;
   const cleanMessage = msgResult.sanitized;
 
-  // 4) Kiểm tra cấu hình Resend (lazy-init, không crash khi thiếu key)
+  // 4) Lưu vào hộp thư (/admin → Hộp thư)
+  const lang = typeof body.lang === "string" && /^[a-z]{2}$/.test(body.lang) ? body.lang : "";
+  const page = typeof body.page === "string" ? body.page.slice(0, 200) : "";
+  const country = (request.headers.get("x-vercel-ip-country") ?? "").slice(0, 2);
   const resend = getResend();
   const toEmail = process.env.CONTACT_TO_EMAIL ?? "y2002bt@gmail.com";
+  let stored = false;
+  if (storageKind() !== "none") {
+    try {
+      await saveMessage({ name: cleanName, email, message: cleanMessage, lang, country, page, emailed: !!resend });
+      stored = true;
+    } catch (err) {
+      console.error("inbox save", err);
+    }
+  }
 
   if (!resend) {
-    // Chưa cấu hình → báo client fallback về mailto:
+    if (stored) return NextResponse.json({ ok: true, stored }, { status: 200 });
+    // Không lưu được và chưa cấu hình email → báo client fallback về mailto:
     return NextResponse.json(
       { error: "NOT_CONFIGURED", message: "Email service not configured yet" },
       { status: 501 },
@@ -127,22 +147,24 @@ export async function POST(request: Request) {
           <p><strong>Message:</strong></p>
           <p style="white-space:pre-wrap;background:#f9fafb;padding:16px;border-radius:8px;">${escapeHtml(cleanMessage)}</p>
           <hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0;" />
-          <p style="color:#6b7280;font-size:12px;">Sent from nhut-portfolio contact form.</p>
+          <p style="color:#6b7280;font-size:12px;">Sent from the portfolio contact form. Every message is also kept in /admin → Hộp thư.</p>
         </div>
       `,
     });
 
     if (error) {
       console.error("Resend error:", error);
+      if (stored) return NextResponse.json({ ok: true, stored }, { status: 200 });
       return NextResponse.json(
         { error: "Failed to send email. Please try again." },
         { status: 500 },
       );
     }
 
-    return NextResponse.json({ ok: true, id: data?.id }, { status: 200 });
+    return NextResponse.json({ ok: true, id: data?.id, stored }, { status: 200 });
   } catch (err) {
     console.error("Resend network error:", err);
+    if (stored) return NextResponse.json({ ok: true, stored }, { status: 200 });
     return NextResponse.json(
       { error: "Email service unreachable. Please try again." },
       { status: 500 },

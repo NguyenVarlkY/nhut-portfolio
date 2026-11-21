@@ -1,12 +1,12 @@
- import { MetadataRoute } from "next";
+import { MetadataRoute } from "next";
+import { seoSettings } from "@/lib/seo";
 
-export default function robots(): MetadataRoute.Robots {
+export default async function robots(): Promise<MetadataRoute.Robots> {
+  const s = await seoSettings("en");
   return {
-    rules: {
-      userAgent: "*",
-      allow: "/",
-      disallow: ["/api/", "/admin"],
-    },
-    sitemap: "https://nhuty.dev/sitemap.xml",
+    rules: s.indexable
+      ? { userAgent: "*", allow: ["/", "/api/media/"], disallow: ["/api/", "/admin"] }
+      : { userAgent: "*", disallow: "/" },
+    sitemap: `${s.url}/sitemap.xml`,
   };
 }

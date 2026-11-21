@@ -1,19 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, Phone, Github, Linkedin, Facebook, Copy, Check, AlertTriangle } from "lucide-react";
 import { useContent } from "@/lib/content/ContentContext";
 import { useTranslation } from "@/lib/i18n/LanguageContext";
 import { sanitizeInput, validateEmail, sanitizeForm } from "@/lib/sanitize";
 import { showToast } from "@/lib/toast";
+import { track } from "@/components/ui/Tracker";
 
 const inputCls =
   "w-full rounded-xl border border-subtle bg-surface px-4 py-3 text-sm text-body placeholder-placeholder outline-none transition-all focus:border-primary-light focus:ring-2 focus:ring-primary-light/20";
 
 export default function Contact() {
   const { profile } = useContent();
-  const { t } = useTranslation();
+  const { t, lang } = useTranslation();
+  const startedAt = useRef(Date.now());
+  const [website, setWebsite] = useState(""); // hidden field only bots fill in
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [copied, setCopied] = useState(false);
@@ -80,10 +83,15 @@ export default function Contact() {
           name: sanitized.name,
           email: sanitized.email,
           message: sanitized.message,
+          website,
+          lang,
+          page: window.location.pathname,
+          startedAt: startedAt.current,
         }),
       });
 
       if (res.ok) {
+        track("click", "contact_sent");
         setStatus("success");
         setForm({ name: "", email: "", message: "" });
         showToast(t("contact.formSuccess"), "success");
@@ -170,7 +178,10 @@ export default function Contact() {
           </div>
 
           {/* Contact form */}
-          <form onSubmit={handleSubmit} className="mt-8 text-left" noValidate>
+          <form onSubmit={handleSubmit} className="relative mt-8 text-left" noValidate>
+            <div aria-hidden="true" className="absolute -left-[9999px] top-0 h-px w-px overflow-hidden">
+              <label>Website<input tabIndex={-1} autoComplete="off" value={website} onChange={(e) => setWebsite(e.target.value)} name="website" /></label>
+            </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
                 <label htmlFor="c-name" className="mb-1.5 block text-sm font-medium text-muted">

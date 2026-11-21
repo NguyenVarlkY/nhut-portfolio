@@ -1,52 +1,48 @@
-/* Where the owner's edits live.
- *  - production: one private file in Vercel Blob (portfolio/content.json), needs BLOB_READ_WRITE_TOKEN or BLOB_STORE_ID (OIDC)
- *  - local development without a token: .data/content.json in the project folder (git-ignored)
- * Pages read it through Next's data cache (tag "portfolio-content"); saving clears that tag so the site updates in seconds. */
+/* The owner's edits: portfolio/content.json in the store (see storage.ts), plus a copy of every saved version
+ * in portfolio/history/ so a bad save can be undone. Pages read it through Next's data cache (tag "portfolio-content");
+ * saving clears that tag so the site updates in seconds. */
 import { unstable_cache, revalidateTag } from "next/cache";
-import { promises as fs } from "node:fs";
-import path from "node:path";
 import type { Overrides } from "./types";
+import { listFiles, readJson, remove, storageKind, writeJson } from "./storage";
 
+export { storageKind } from "./storage";
+export type { StorageKind } from "./storage";
 export const CONTENT_TAG = "portfolio-content";
-const BLOB_PATH = "portfolio/content.json";
-const LOCAL_FILE = path.join(process.cwd(), ".data", "content.json");
-
-export type StorageKind = "blob" | "local" | "none";
-export function storageKind(): StorageKind {
-  // classic token, or the newer keyless connection (store id + the deployment's OIDC identity, added by Vercel when the store is connected)
-  if (process.env.BLOB_READ_WRITE_TOKEN || process.env.BLOB_STORE_ID) return "blob";
-  return process.env.NODE_ENV === "production" ? "none" : "local";
-}
+const CONTENT = "portfolio/content.json";
+const HISTORY = "portfolio/history/";
+const KEEP_VERSIONS = 60;
 
 export async function readOverrides(): Promise<Overrides> {
-  const kind = storageKind();
-  try {
-    if (kind === "blob") {
-      const { get } = await import("@vercel/blob");
-      const res = await get(BLOB_PATH, { access: "private", useCache: false });
-      if (!res || res.statusCode !== 200) return {};
-      return JSON.parse(await new Response(res.stream).text()) as Overrides;
-    }
-    if (kind === "local") return JSON.parse(await fs.readFile(LOCAL_FILE, "utf8")) as Overrides;
-  } catch (err) {
-    if ((err as NodeJS.ErrnoException)?.code !== "ENOENT") console.error("readOverrides", err);
-  }
-  return {};
+  if (storageKind() === "none") return {};
+  return (await readJson<Overrides>(CONTENT)) ?? {};
 }
 
-export async function writeOverrides(o: Overrides) {
-  const kind = storageKind();
-  const body = JSON.stringify(o);
-  if (kind === "blob") {
-    const { put } = await import("@vercel/blob");
-    await put(BLOB_PATH, body, { access: "private", contentType: "application/json", addRandomSuffix: false, allowOverwrite: true, cacheControlMaxAge: 60 });
-  } else if (kind === "local") {
-    await fs.mkdir(path.dirname(LOCAL_FILE), { recursive: true });
-    await fs.writeFile(LOCAL_FILE, body, "utf8");
-  } else {
-    throw new Error("Chưa có kho lưu: tạo Vercel Blob cho dự án rồi deploy lại.");
-  }
+export interface VersionInfo { id: string; savedAt: number; size: number }
+
+/** Save, keep a copy in the history, and drop the oldest copies past KEEP_VERSIONS. */
+export async function writeOverrides(o: Overrides, note = "") {
+  await writeJson(CONTENT, o);
   revalidateTag(CONTENT_TAG);
+  try {
+    const at = o.updatedAt ?? Date.now();
+    await writeJson(`${HISTORY}${at}.json`, { ...o, note: note.slice(0, 120) });
+    const all = await listVersions();
+    if (all.length > KEEP_VERSIONS) await remove(all.slice(KEEP_VERSIONS).map((v) => `${HISTORY}${v.id}.json`));
+  } catch (err) { console.error("history", err) } // history is a bonus; the save itself already succeeded
+}
+
+export async function listVersions(): Promise<VersionInfo[]> {
+  const files = await listFiles(HISTORY, 500);
+  return files
+    .map((f) => ({ id: f.path.slice(HISTORY.length).replace(/\.json$/, ""), savedAt: 0, size: f.size }))
+    .filter((v) => /^\d{10,14}$/.test(v.id))
+    .map((v) => ({ ...v, savedAt: Number(v.id) }))
+    .sort((a, b) => b.savedAt - a.savedAt);
+}
+
+export async function readVersion(id: string): Promise<(Overrides & { note?: string }) | null> {
+  if (!/^\d{10,14}$/.test(id)) return null;
+  return readJson(`${HISTORY}${id}.json`);
 }
 
 /** Cached read for pages (one storage read per change, not per visitor). Falls back to the code defaults on any error. */

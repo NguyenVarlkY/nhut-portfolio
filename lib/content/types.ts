@@ -14,6 +14,7 @@ export type BaseData = {
   certifications: typeof base.certifications;
   languages: typeof base.languages;
   education: typeof base.education;
+  seo: typeof base.seo;
 };
 export type DataKey = keyof BaseData;
 
@@ -26,11 +27,12 @@ export const DEFAULT_DATA: BaseData = {
   certifications: base.certifications,
   languages: base.languages,
   education: base.education,
+  seo: base.seo,
 };
 export const DATA_KEYS = Object.keys(DEFAULT_DATA) as DataKey[];
 
 /** Text sections of the dictionaries the owner may edit (UI chrome like menus and tools stays in code). */
-export const TEXT_SECTIONS = ["hero", "about", "stats", "services", "experienceData", "projectsData", "credentialsData", "faq", "contact", "footer"] as const;
+export const TEXT_SECTIONS = ["hero", "about", "stats", "services", "experienceData", "projectsData", "credentialsData", "faq", "contact", "footer", "seo"] as const;
 export type TextSection = (typeof TEXT_SECTIONS)[number];
 
 export type JsonValue = string | number | boolean | null | JsonValue[] | { [k: string]: JsonValue };

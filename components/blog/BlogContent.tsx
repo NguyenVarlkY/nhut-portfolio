@@ -12,6 +12,7 @@ interface BlogPostFrontmatter {
 
 interface BlogPost {
   slug: string;
+  cover?: string;
   frontmatter: BlogPostFrontmatter;
   lang: string;
   isFallback: boolean;
@@ -115,7 +116,7 @@ export default function BlogContent({ posts, lang }: Props) {
             <Link href={`/${lang}/blog/${post.slug}`} className="block aspect-[1200/630] w-full overflow-hidden bg-base-alt">
               {/* eslint-disable-next-line @next/next/no-img-element -- generated per-post, not a static asset Next/Image can optimize */}
               <img
-                src={`/${lang}/blog/${post.slug}/opengraph-image`}
+                src={post.cover || `/${lang}/blog/${post.slug}/opengraph-image`}
                 alt={post.frontmatter.title}
                 loading="lazy"
                 className="h-full w-full object-cover"

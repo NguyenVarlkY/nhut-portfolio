@@ -1,11 +1,12 @@
 "use client";
 
 import { Github, Mail, Linkedin, Facebook } from "lucide-react";
-import { profile } from "@/lib/data";
+import { useContent } from "@/lib/content/ContentContext";
 import { useTranslation } from "@/lib/i18n/LanguageContext";
 import ViewCounter from "@/components/ui/ViewCounter";
 
 export default function Footer() {
+  const { profile } = useContent();
   const { t } = useTranslation();
   return (
     <footer className="border-t border-subtle bg-base-alt py-9 px-6">

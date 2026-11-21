@@ -8,7 +8,7 @@ Hotel, ShoppingCart, Car, Github, X, ExternalLink, Calendar, Tag,
   AlertTriangle, CheckCircle, TrendingUp, Settings, Activity, Layout,
   BarChart3, PieChart, Lightbulb, Target, ArrowRight, Sparkles
 } from "lucide-react";
-import { projects, profile } from "@/lib/data";
+import { useContent } from "@/lib/content/ContentContext";
 import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 const ICONS: Record<string, any> = {
@@ -34,7 +34,8 @@ monitor: Monitor,
 };
 
 export default function Projects() {
-  const { t, tList } = useTranslation();
+  const { projects, profile } = useContent();
+  const { t, tList, tf } = useTranslation();
   const [activeProj, setActiveProj] = useState<string | null>(null);
   const [filter, setFilter] = useState<string | null>(null);
 
@@ -154,11 +155,11 @@ export default function Projects() {
                   {/* Business Core Badge */}
                   <div className="mt-2">
                     <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium rounded-full bg-primary-light/10 text-primary-light">
-                      <Database size={12} /> {t(`projectsData.${proj.id}.tagline`)}
+                      <Database size={12} /> {tf(`projectsData.${proj.id}.tagline`)}
                     </span>
                   </div>
 
-                  <p className="mt-3 flex-1 text-sm leading-relaxed text-muted line-clamp-4">{t(`projectsData.${proj.id}.desc`)}</p>
+                  <p className="mt-3 flex-1 text-sm leading-relaxed text-muted line-clamp-4">{tf(`projectsData.${proj.id}.desc`)}</p>
 
                   <div className="mt-4 flex flex-wrap gap-2">
                     {proj.tags.slice(0, 3).map((tag) => (
@@ -228,7 +229,7 @@ export default function Projects() {
                         <Calendar size={13} /> {proj.date}
                       </span>
                       <span className="inline-flex items-center gap-1">
-                        <Sparkles size={13} /> {t(`projectsData.${proj.id}.tagline`)}
+                        <Sparkles size={13} /> {tf(`projectsData.${proj.id}.tagline`)}
                       </span>
                     </div>
 
@@ -237,7 +238,7 @@ export default function Projects() {
                       <h4 className="font-semibold text-sm text-body mb-1 flex items-center gap-2">
                         <Target size={15} className="text-primary-light" /> {t("projects.businessCore")}
                       </h4>
-                      <p className="text-sm leading-relaxed text-muted">{t(`projectsData.${proj.id}.businessCore`)}</p>
+                      <p className="text-sm leading-relaxed text-muted">{tf(`projectsData.${proj.id}.businessCore`)}</p>
                     </div>
 
                     {/* Flow Section */}
@@ -265,7 +266,7 @@ export default function Projects() {
                       <h4 className="font-semibold text-sm text-body mb-1 flex items-center gap-2">
                         <AlertTriangle size={15} className="text-red-400" /> {t("projects.problem")}
                       </h4>
-                      <p className="text-sm leading-relaxed text-muted">{t(`projectsData.${proj.id}.problem`)}</p>
+                      <p className="text-sm leading-relaxed text-muted">{tf(`projectsData.${proj.id}.problem`)}</p>
                     </div>
 
                     {/* Solution Section */}
@@ -273,7 +274,7 @@ export default function Projects() {
                       <h4 className="font-semibold text-sm text-body mb-1 flex items-center gap-2">
                         <CheckCircle size={15} className="text-green-400" /> {t("projects.solution")}
                       </h4>
-                      <p className="text-sm leading-relaxed text-muted">{t(`projectsData.${proj.id}.solution`)}</p>
+                      <p className="text-sm leading-relaxed text-muted">{tf(`projectsData.${proj.id}.solution`)}</p>
                     </div>
 
                     {/* Detailed description */}
@@ -281,7 +282,7 @@ export default function Projects() {
                       <h4 className="font-semibold text-sm text-body mb-1 flex items-center gap-2">
                         <Lightbulb size={15} className="text-amber-400" /> {t("projects.overview")}
                       </h4>
-                      <p className="text-sm leading-relaxed text-muted">{t(`projectsData.${proj.id}.desc`)}</p>
+                      <p className="text-sm leading-relaxed text-muted">{tf(`projectsData.${proj.id}.desc`)}</p>
                     </div>
 
                     <div className="mt-5 flex flex-wrap gap-3">

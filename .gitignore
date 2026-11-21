@@ -33,5 +33,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-</content>
 
+
+# portfolio admin edits saved locally in development
+/.data/

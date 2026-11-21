@@ -5,13 +5,14 @@ import { motion } from "framer-motion";
 import { Briefcase, Mail, MapPin, Phone, FileDown } from "lucide-react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { profile, roleRotator } from "@/lib/data";
+import { useContent } from "@/lib/content/ContentContext";
 import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 // Client-only Three.js sculpture → lazy load to keep initial bundle small
 const Hero3D = dynamic(() => import("@/components/sections/Hero3D"), { ssr: false });
 
 export default function Hero() {
+  const { profile, roleRotator } = useContent();
   const { t, tList } = useTranslation();
   const localizedRoles = tList("hero.roles");
   // The typing loop below runs once; read roles through a ref so a language

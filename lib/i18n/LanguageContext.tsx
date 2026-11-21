@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useCallback, useEffect, ReactNode } from "react";
+import { createContext, useContext, useState, useCallback, useEffect, useMemo, ReactNode } from "react";
 import en from "./en.json";
 import vi from "./vi.json";
 import ko from "./ko.json";
@@ -240,6 +240,8 @@ interface LanguageContextValue {
   setLang: (l: Lang) => void;
   t: (path: string) => string;
   tList: (path: string) => string[];
+  /** like t(), but returns `fallback` instead of the key when the text does not exist (items added in /admin) */
+  tf: (path: string, fallback?: string) => string;
 }
 
 const LanguageContext = createContext<LanguageContextValue | null>(null);
@@ -248,8 +250,10 @@ function isLang(v: string | null): v is Lang {
   return v !== null && LANGS.includes(v as Lang);
 }
 
-export function LanguageProvider({ children, lang: initialLang }: { children: ReactNode, lang: Lang }) {
+export function LanguageProvider({ children, lang: initialLang, overrides }: { children: ReactNode, lang: Lang, overrides?: Record<string, any> }) {
   const [lang, setLang] = useState<Lang>(initialLang);
+  // sections edited in /admin for this language replace the built-in ones (whole sections, nothing half-merged)
+  const dict = useMemo(() => (overrides && lang === initialLang ? { ...TRANSLATIONS[lang], ...overrides } : TRANSLATIONS[lang]), [lang, initialLang, overrides]);
 
   // Keep the <html lang="..."> attribute in sync — it lives on the root
   // layout's <html> tag, which this nested provider doesn't render itself.
@@ -268,7 +272,7 @@ export function LanguageProvider({ children, lang: initialLang }: { children: Re
       if (override) return override;
 
       const keys = path.split(".");
-      let result: any = TRANSLATIONS[lang];
+      let result: any = dict;
       for (const k of keys) {
         if (result == null) return path;
         result = result[k];
@@ -282,14 +286,14 @@ export function LanguageProvider({ children, lang: initialLang }: { children: Re
       }
       return typeof fallback === "string" ? fallback : path;
     },
-    [lang]
+    [lang, dict]
   );
 
   const tList = useCallback(
     (path: string): string[] => {
       const keys = path.split(".");
 
-      let result: any = TRANSLATIONS[lang];
+      let result: any = dict;
       for (const k of keys) {
         if (result == null) break;
         result = result[k];
@@ -303,11 +307,13 @@ export function LanguageProvider({ children, lang: initialLang }: { children: Re
       }
       return Array.isArray(fallback) ? fallback : [];
     },
-    [lang]
+    [lang, dict]
   );
 
+  const tf = useCallback((path: string, fallback = "") => { const v = t(path); return v === path ? fallback : v; }, [t]);
+
   return (
-    <LanguageContext.Provider value={{ lang, setLang: changeLang, t, tList }}>
+    <LanguageContext.Provider value={{ lang, setLang: changeLang, t, tList, tf }}>
       {children}
     </LanguageContext.Provider>
   );

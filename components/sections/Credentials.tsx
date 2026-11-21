@@ -2,11 +2,12 @@
 
 import { motion } from "framer-motion";
 import { Award, Languages, GraduationCap, BookOpen } from "lucide-react";
-import { certifications, languages, education } from "@/lib/data";
+import { useContent } from "@/lib/content/ContentContext";
 import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 export default function Credentials() {
-  const { t, tList } = useTranslation();
+  const { certifications, languages, education } = useContent();
+  const { t, tList, tf } = useTranslation();
   return (
     <section id="education" className="section-pad">
       <div className="container-port">
@@ -38,7 +39,7 @@ export default function Credentials() {
             <ul className="space-y-3">
               {certifications.map((c, ci) => (
                 <li key={c.title} className="flex flex-wrap items-baseline gap-x-2 text-sm">
-                  <span className="text-body font-medium">▹ {t(`credentialsData.cert${ci}`)}</span>
+                  <span className="text-body font-medium">▹ {tf(`credentialsData.cert${ci}`, c.title)}</span>
                   <span className="text-muted">— {c.issuer}</span>
                   <span className="ml-auto font-mono text-xs text-muted">{c.date}</span>
                 </li>
@@ -51,8 +52,8 @@ export default function Credentials() {
             <ul className="space-y-3">
               {languages.map((l, li) => (
                 <li key={l.name} className="text-sm">
-                  <span className="text-body font-medium">▹ {t(`credentialsData.lang${li}Name`)}</span>
-                  <span className="ml-2 text-muted">{t(`credentialsData.lang${li}Detail`)}</span>
+                  <span className="text-body font-medium">▹ {tf(`credentialsData.lang${li}Name`, l.name)}</span>
+                  <span className="ml-2 text-muted">{tf(`credentialsData.lang${li}Detail`, l.detail)}</span>
                 </li>
               ))}
             </ul>
@@ -69,7 +70,7 @@ export default function Credentials() {
             <h3 className="mb-4 flex items-center gap-3 font-display text-xl">
               <GraduationCap size={20} className="text-primary-light" /> {t("credentials.education")}
             </h3>
-            <h4 className="font-display text-base text-body">{t("credentialsData.degree")}</h4>
+            <h4 className="font-display text-base text-body">{tf("credentialsData.degree", education.degree)}</h4>
             <p className="text-sm text-muted">
               {education.school} — <span className="font-mono text-xs">{education.period}</span>
             </p>

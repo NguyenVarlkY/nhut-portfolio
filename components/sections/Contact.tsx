@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, Phone, Github, Linkedin, Facebook, Copy, Check, AlertTriangle } from "lucide-react";
-import { profile } from "@/lib/data";
+import { useContent } from "@/lib/content/ContentContext";
 import { useTranslation } from "@/lib/i18n/LanguageContext";
 import { sanitizeInput, validateEmail, sanitizeForm } from "@/lib/sanitize";
 import { showToast } from "@/lib/toast";
@@ -12,6 +12,7 @@ const inputCls =
   "w-full rounded-xl border border-subtle bg-surface px-4 py-3 text-sm text-body placeholder-placeholder outline-none transition-all focus:border-primary-light focus:ring-2 focus:ring-primary-light/20";
 
 export default function Contact() {
+  const { profile } = useContent();
   const { t } = useTranslation();
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");

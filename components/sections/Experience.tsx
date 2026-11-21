@@ -1,11 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { experience } from "@/lib/data";
+import { useContent } from "@/lib/content/ContentContext";
 import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 export default function Experience() {
-  const { t, tList } = useTranslation();
+  const { experience } = useContent();
+  const { t, tList, tf } = useTranslation();
   return (
     <section id="experience" className="section-pad">
       <div className="container-port">
@@ -40,7 +41,7 @@ export default function Experience() {
 
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
-                  <h3 className="font-display text-lg">{t(`experienceData.${job.id}.title`)}</h3>
+                  <h3 className="font-display text-lg">{tf(`experienceData.${job.id}.title`, job.company)}</h3>
                   <div className="font-mono text-sm text-primary-light">{job.company}</div>
                 </div>
                 <span className="whitespace-nowrap rounded-full border border-subtle bg-surface px-4 py-1 font-mono text-xs text-muted">

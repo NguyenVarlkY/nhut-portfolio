@@ -2,12 +2,13 @@
 
 import { motion } from "framer-motion";
 import { Monitor, Server, Cloud, Brain } from "lucide-react";
-import { skills } from "@/lib/data";
+import { useContent } from "@/lib/content/ContentContext";
 import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 const ICONS: Record<string, any> = { display: Monitor, server: Server, cloud: Cloud, brain: Brain };
 
 export default function Skills() {
+  const { skills } = useContent();
   const { t } = useTranslation();
   return (
     <section id="skills" className="section-pad border-y border-subtle bg-base-alt">

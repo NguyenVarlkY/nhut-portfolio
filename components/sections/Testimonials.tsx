@@ -60,7 +60,7 @@ export default function Testimonials() {
           {items.map((item, i) => (
             <motion.figure
               key={item.nameKey}
-              className="group relative flex flex-col rounded-xl border border-subtle bg-surface p-7 backdrop-blur-xl transition-all hover:-translate-y-1.5 hover:border-primary-light/45 hover:shadow-card"
+              className="group relative flex flex-col rounded-xl border border-subtle bg-surface p-7 backdrop-blur-xl transition-all hover:border-primary-light/45"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
@@ -82,7 +82,7 @@ export default function Testimonials() {
               </blockquote>
 
               <figcaption className="mt-6 flex items-center gap-3 border-t border-subtle pt-5">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-brand font-display text-sm font-bold text-white shadow-glow">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary/15 font-display text-sm font-bold text-primary-light">
                   {item.initials}
                 </div>
                 <div>

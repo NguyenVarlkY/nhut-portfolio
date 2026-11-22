@@ -43,7 +43,7 @@
     "subDescription": "我从 API 设计到精致界面构建可扩展的 Web 产品，注重业务价值、整洁代码和实际可用性。"
   },
   "about": {
-    "tag": "// 关于我",
+    "tag": "关于我",
     "title": "交付真实产品的开发者",
     "titleHighlight": "实际产品",
     "whoTitle": "我是谁",
@@ -52,7 +52,7 @@
     "whatDesc": "我开发现代 Web 应用，使用 React / Next.js、Node.js / NestJS、REST API、认证与 RBAC，以及 MongoDB / PostgreSQL。我重视代码质量、可维护性，以及交付真正被用户依赖的功能。",
     "driveTitle": "是什么驱动着我",
     "driveDesc": "我被解决真实业务问题所驱动，并通过简洁、可扩展的系统来实现。我重视干净架构、细致的用户体验，以及快速、安全、可靠的功能交付。",
-    "availabilityTag": "// 可用性",
+    "availabilityTag": "可用性",
     "availabilityTitle": "接受全职与自由职业机会",
     "availabilityDesc": "我帮助团队构建现代 Web 产品、内部工具、管理后台和 MVP，并专注于清晰架构、良好用户体验和生产环境可靠性。",
     "availabilityAction": "交流一下",
@@ -67,7 +67,7 @@
     "help4Desc": "快速验证产品、管理后台、运营系统和以转化为核心的 Web 应用。"
   },
   "skills": {
-    "tag": "// 技能",
+    "tag": "技能",
     "title": "我的",
     "titleHighlight": "技术栈",
     "groups": {
@@ -84,7 +84,7 @@
     "tech": "技术"
   },
   "testimonials": {
-    "tag": "// 评价",
+    "tag": "评价",
     "title": "人们怎么说",
     "titleHighlight": "关于我",
     "t1Quote": "Nhut Y是一个快速可靠的开发者。他提前交付了我们的落地页，并且设计在每个设备上都像素级完美。",
@@ -98,7 +98,7 @@
     "t3Role": "E-PARTNER高级工程师"
   },
   "faq": {
-    "tag": "// 常见问题",
+    "tag": "常见问题",
     "title": "常见问题",
     "titleHighlight": "",
     "q1": "你能多快开始？",
@@ -111,7 +111,7 @@
     "a4": "当然可以。我很乐意加入现有的代码库，遵循你的约定，并通过GitHub/GitLab进行协作。"
   },
   "services": {
-    "tag": "// 服务",
+    "tag": "服务",
     "title": "自由职业",
     "titleHighlight": "服务 & 定价",
     "hourlyTitle": "时薪",
@@ -148,7 +148,7 @@
     "note": "请通过电子邮件发送项目详细信息以获得定制报价。每个新项目提供免费的30分钟咨询。"
   },
   "experience": {
-    "tag": "// 经验",
+    "tag": "经验",
     "title": "我在哪里工作过",
     "titleHighlight": ""
   },
@@ -189,7 +189,7 @@
     }
   ],
   "projects": {
-    "tag": "// 项目",
+    "tag": "项目",
     "title": "特色",
     "titleHighlight": "项目",
     "subtitle": "精选作品聚焦于真实产品的交付、面向用户的界面，以及支持业务增长和运营的工作流程。",
@@ -330,7 +330,7 @@
     }
   ],
   "credentials": {
-    "tag": "// 资质",
+    "tag": "资质",
     "title": "资质 &",
     "titleHighlight": "教育",
     "certifications": "资质",
@@ -340,7 +340,7 @@
     "selfDirectedDesc": "Udemy、Microsoft Learn & FreeCodeCamp上的结构化学习路径，涵盖React.js、Node.js/Express、TypeScript、REST API、GraphQL、MongoDB & Socket.IO。"
   },
   "contact": {
-    "tag": "// 联系",
+    "tag": "联系",
     "title": "让我们一起建造一些东西",
     "titleHighlight": "伟大的",
     "titleEnd": "一起",
@@ -400,7 +400,7 @@
   "tools": {
     "title": "工具",
     "todo": {
-      "tag": "// 工具",
+      "tag": "工具",
       "title": "待办事项看板",
       "titleHighlight": "任务管理器",
       "description": "管理您的任务，跟踪进度，并通过持久存储保持组织有序",
@@ -484,7 +484,7 @@
     "ycpu": {
       "title": "系统信息",
       "titleHighlight": "查看器",
-      "tag": "// 工具",
+      "tag": "工具",
       "description": "直接在浏览器中实时查看电脑规格，包括 CPU、内存、存储、电池等信息。",
       "os": "操作系统",
       "platform": "平台",
@@ -566,7 +566,7 @@
     "yspeech": {
       "title": "Yspeech",
       "titleHighlight": "语音转文字",
-      "tag": "// 工具",
+      "tag": "工具",
       "description": "支持多种语言的实时语音转写。使用麦克风或上传音频，将语音转换为文字。",
       "start": "开始",
       "stop": "停止",
@@ -583,7 +583,7 @@
     }
   },
   "seoChecker": {
-    "tag": "// 工具",
+    "tag": "工具",
     "title": "SEO & 安全",
     "titleHighlight": "检测工具",
     "description": "扫描网站，查找页面SEO问题和缺失的HTTP安全响应头。",

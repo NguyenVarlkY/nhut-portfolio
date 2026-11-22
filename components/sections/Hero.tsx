@@ -1,70 +1,30 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Briefcase, Mail, MapPin, Phone, FileDown } from "lucide-react";
 import Link from "next/link";
-import dynamic from "next/dynamic";
 import { useContent } from "@/lib/content/ContentContext";
 import { useTranslation } from "@/lib/i18n/LanguageContext";
 
-// Client-only Three.js sculpture → lazy load to keep initial bundle small
-const Hero3D = dynamic(() => import("@/components/sections/Hero3D"), { ssr: false });
 
 export default function Hero() {
   const { profile, roleRotator } = useContent();
   const { t, tList } = useTranslation();
   const localizedRoles = tList("hero.roles");
-  // The typing loop below runs once; read roles through a ref so a language
-  // switch is picked up on the next word without restarting the animation.
-  const rolesRef = useRef<string[]>(roleRotator);
-  rolesRef.current = localizedRoles.length ? localizedRoles : roleRotator;
-  const [text, setText] = useState("");
-  const roleIdx = useRef(0);
-  const charIdx = useRef(0);
-  const deleting = useRef(false);
-
-  useEffect(() => {
-    let timer: ReturnType<typeof setTimeout>;
-
-    const tick = () => {
-      const roles = rolesRef.current;
-      const current = roles[roleIdx.current % roles.length];
-      const displayed = deleting.current
-        ? current.slice(0, charIdx.current--)
-        : current.slice(0, ++charIdx.current);
-
-      setText(displayed);
-
-      let speed = deleting.current ? 28 : 60;
-      if (!deleting.current && charIdx.current === current.length) {
-        speed = 1800;
-        deleting.current = true;
-      } else if (deleting.current && charIdx.current === 0) {
-        deleting.current = false;
-        roleIdx.current = (roleIdx.current + 1) % rolesRef.current.length;
-        speed = 420;
-      }
-      timer = setTimeout(tick, speed);
-    };
-
-    timer = setTimeout(tick, 400);
-    return () => clearTimeout(timer);
-  }, []);
+  // roles are written out, not typed letter by letter
+  const roles = (localizedRoles.length ? localizedRoles : roleRotator).slice(0, 3).join(" · ");
 
   return (
-    <header id="home" className="relative flex min-h-screen items-center justify-center overflow-hidden px-6 pt-[110px] pb-16 lg:justify-start lg:pl-[7%]">
-      {/* Floating 3D sculpture (desktop only, positioned right) */}
-      <Hero3D />
-
+    <header id="home" className="relative flex min-h-[88vh] items-center pt-[110px] pb-16">
+      <div className="container-port w-full">
       <motion.div
-        className="relative z-10 max-w-[880px] text-center lg:max-w-[600px] lg:text-left xl:max-w-[660px]"
+        className="relative max-w-[760px] text-left"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
         {profile.avatar && (
-          <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5 }} className="mx-auto mb-6 h-28 w-28 lg:mx-0 rounded-full bg-gradient-brand p-[3px] shadow-[0_0_40px_rgba(139,92,246,0.35)] md:h-32 md:w-32">
+          <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5 }} className="mb-6 h-28 w-28 rounded-full border border-subtle p-[3px] md:h-32 md:w-32">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={profile.avatar} alt={profile.name} className="h-full w-full rounded-full border-4 border-[var(--bg-base,#0b0b14)] object-cover" />
           </motion.div>
@@ -84,7 +44,7 @@ export default function Hero() {
         </motion.div>
 
         <motion.h1
-          className="font-display text-4xl md:text-7xl lg:text-6xl xl:text-7xl font-bold tracking-wide"
+          className="font-display text-4xl md:text-7xl lg:text-6xl xl:text-7xl font-bold tracking-wide [text-wrap:balance]"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.35, duration: 0.7 }}
@@ -96,17 +56,16 @@ export default function Hero() {
         </motion.h1>
 
         <motion.p
-          className="font-mono text-accent text-lg md:text-2xl min-h-[2.2em] mt-4 mb-2"
+          className="text-accent text-lg md:text-xl mt-4 mb-4 font-medium"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
         >
-          {text}
-          <span className="caret">|</span>
+          {roles}
         </motion.p>
 
         <motion.p
-          className="mx-auto max-w-[660px] text-muted text-[1rem] md:text-lg mb-4 lg:mx-0"
+          className="max-w-[640px] text-muted text-[1rem] md:text-lg mb-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.75 }}
@@ -115,7 +74,7 @@ export default function Hero() {
         </motion.p>
 
         <motion.p
-          className="mx-auto mb-8 max-w-[560px] text-sm text-muted md:text-[1rem] lg:mx-0"
+          className="mb-8 max-w-[560px] text-sm text-muted md:text-[1rem]"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.82 }}
@@ -124,7 +83,7 @@ export default function Hero() {
         </motion.p>
 
         <motion.div
-          className="flex flex-wrap justify-center gap-4 mb-8 lg:justify-start"
+          className="flex flex-wrap gap-3 mb-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.9 }}
@@ -141,7 +100,7 @@ export default function Hero() {
         </motion.div>
 
         <motion.div
-          className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-muted lg:justify-start"
+          className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.05 }}
@@ -158,15 +117,7 @@ export default function Hero() {
         </motion.div>
       </motion.div>
 
-      <a
-        href="#about"
-        aria-label="Scroll down"
-        className="absolute bottom-7 left-1/2 -translate-x-1/2 text-[#9a9ab0] animate-bounce text-lg"
-      >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M6 9l6 6 6-6" />
-        </svg>
-      </a>
+      </div>
     </header>
   );
 }

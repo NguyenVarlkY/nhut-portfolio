@@ -22,13 +22,13 @@ export default function Stats() {
             return (
               <motion.div
                 key={s.key}
-                className="glass flex items-center gap-4 p-6 transition-all hover:-translate-y-1 hover:border-primary-light/40"
+                className="glass flex items-center gap-4 p-6 transition-all hover:border-primary-light/40"
                 initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
               >
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary-light text-white shadow-glow">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/15 text-primary-light">
                   <Icon size={22} />
                 </div>
                 <div>

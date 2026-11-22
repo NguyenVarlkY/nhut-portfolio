@@ -1,4 +1,3 @@
-import dynamic from "next/dynamic";
 import type { Metadata } from "next";
 import Hero from "@/components/sections/Hero";
 import Stats from "@/components/sections/Stats";
@@ -34,26 +33,6 @@ export async function generateMetadata({ params }: { params: { lang: Lang } }): 
   };
 }
 
-// Three.js layers are client-only → dynamic import with ssr:false
-const ThreeBackground = dynamic(() => import("@/components/ui/ThreeBackground"), {
-  ssr: false,
-});
-
-// Background FX layers (fixed, behind content)
-function BackgroundFX() {
-  return (
-    <>
-      <div className="pointer-events-none fixed  inset-0 -z-10 overflow-hidden">
-        {/* 3D particle starfield */}
-        <ThreeBackground />
-        <div className="absolute -top-36 -left-32 h-[520px] w-[520px] rounded-full bg-primary opacity-45 blur-[90px] animate-float" />
-        <div className="absolute -bottom-32 -right-28 h-[420px] w-[420px] rounded-full bg-primary-light opacity-45 blur-[90px] animate-float-slow" />
-        <div className="absolute top-[45%] left-[55%] h-[300px] w-[300px] rounded-full bg-accent opacity-20 blur-[90px] animate-float" />
-      </div>
-      <div className="grid-overlay" />
-    </>
-  );
-}
 
 export default async function Home({ params }: { params: { lang: Lang } }) {
   const s = await seoSettings(params.lang);
@@ -74,7 +53,6 @@ export default async function Home({ params }: { params: { lang: Lang } }) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
       />
-      <BackgroundFX />
       <main>
         <Hero />
         <About />

@@ -43,7 +43,7 @@
     ]
   },
   "about": {
-    "tag": "// à propos",
+    "tag": "à propos",
     "title": "Un développeur qui livre de",
     "titleHighlight": "vrais produits",
     "whoTitle": "Qui je suis",
@@ -52,7 +52,7 @@
     "whatDesc": "Développement web full-stack : fronts React / Next.js, backends Node.js / NestJS, API REST & GraphQL, authentification & RBAC, bases de données MongoDB & SQL, déployés avec Docker & AWS.",
     "driveTitle": "Ce qui me motive",
     "driveDesc": "Construire des outils que les gens utilisent vraiment. Je tiens à une architecture propre, des parcours orientés UX, et la livraison de fonctionnalités rapides, sécurisées et fiables.",
-    "availabilityTag": "// disponibilité",
+    "availabilityTag": "disponibilité",
     "availabilityTitle": "Ouvert aux opportunités freelance et à temps plein",
     "availabilityDesc": "J'aide les équipes à créer des produits web modernes, des outils internes, des tableaux de bord et des MVP, avec un focus sur l'architecture, l'UX et la fiabilité en production.",
     "availabilityAction": "Échangeons",
@@ -67,7 +67,7 @@
     "help4Desc": "Validation rapide de produits, tableaux de bord, systèmes opérationnels et applications web orientées conversion."
   },
   "skills": {
-    "tag": "// compétences",
+    "tag": "compétences",
     "title": "Ma",
     "titleHighlight": "stack technique",
     "groups": {
@@ -84,7 +84,7 @@
     "tech": "Technologies"
   },
   "testimonials": {
-    "tag": "// témoignages",
+    "tag": "témoignages",
     "title": "Ce que les gens disent",
     "titleHighlight": "de moi",
     "t1Quote": "Nhut Y est un développeur rapide et fiable. Il a livré notre landing page en avance et le design était pixel-perfect sur tous les appareils.",
@@ -98,7 +98,7 @@
     "t3Role": "Senior Engineer, E-PARTNER"
   },
   "faq": {
-    "tag": "// faq",
+    "tag": "faq",
     "title": "Questions",
     "titleHighlight": "fréquentes",
     "q1": "À quelle vitesse pouvez-vous démarrer ?",
@@ -111,7 +111,7 @@
     "a4": "Absolument. Je peux rejoindre une base de code existante, suivre vos conventions et collaborer via GitHub/GitLab."
   },
   "services": {
-    "tag": "// services",
+    "tag": "services",
     "title": "Freelance",
     "titleHighlight": "Services & Tarifs",
     "hourlyTitle": "Tarif horaire",
@@ -160,7 +160,7 @@
     "note": "Veuillez envoyer les détails du projet par e-mail pour un devis personnalisé. Consultation gratuite de 30 minutes pour chaque nouveau projet. Tarifs basés sur le marché vietnamien 2026 — forfaits à prix fixe pour les clients internationaux."
   },
   "experience": {
-    "tag": "// expérience",
+    "tag": "expérience",
     "title": "Où j'ai",
     "titleHighlight": "travaillé"
   },
@@ -201,7 +201,7 @@
     }
   ],
   "projects": {
-    "tag": "// projets",
+    "tag": "projets",
     "title": "Projets",
     "titleHighlight": "sélectionnés",
     "subtitle": "Travaux sélectionnés axés sur la livraison de produits réels, des interfaces orientées utilisateur, et des workflows métier qui soutiennent la croissance et les opérations.",
@@ -342,7 +342,7 @@
     }
   ],
   "credentials": {
-    "tag": "// certifications",
+    "tag": "certifications",
     "title": "Certifications &",
     "titleHighlight": "Formation",
     "certifications": "Certifications",
@@ -352,7 +352,7 @@
     "selfDirectedDesc": "Parcours d'apprentissage structurés sur Udemy, Microsoft Learn & FreeCodeCamp couvrant React.js, Node.js/Express, TypeScript, les API REST, GraphQL, MongoDB & Socket.IO."
   },
   "contact": {
-    "tag": "// contact",
+    "tag": "contact",
     "title": "Construisons quelque chose de",
     "titleHighlight": "formidable",
     "titleEnd": "ensemble",
@@ -401,7 +401,7 @@
     "currencies": "Devises prises en charge"
   },
   "seoChecker": {
-    "tag": "// Outils",
+    "tag": "Outils",
     "title": "SEO & Sécurité",
     "titleHighlight": "Analyseur",
     "description": "Analyse un site web à la recherche de problèmes de SEO on-page et d'en-têtes de sécurité HTTP manquants.",
@@ -463,7 +463,7 @@
   "tools": {
     "title": "Outils",
     "todo": {
-      "tag": "// outils",
+      "tag": "outils",
       "title": "Tableau de bord Todo",
       "titleHighlight": "Gestionnaire de tâches",
       "description": "Gérez vos tâches, suivez vos progrès et restez organisé avec un stockage persistant",
@@ -547,7 +547,7 @@
     "ycpu": {
       "title": "Info système",
       "titleHighlight": "Visionneuse",
-      "tag": "// outils",
+      "tag": "outils",
       "description": "Affichez les spécifications en temps réel de votre ordinateur — CPU, mémoire, stockage, batterie et plus — directement dans le navigateur.",
       "os": "Système d'exploitation",
       "platform": "Plateforme",
@@ -629,7 +629,7 @@
     "yspeech": {
       "title": "Yspeech",
       "titleHighlight": "Dictée vocale",
-      "tag": "// outils",
+      "tag": "outils",
       "description": "Transcription vocale en temps réel avec prise en charge multilingue. Utilisez votre microphone ou téléversez un audio pour convertir la parole en texte.",
       "start": "Démarrer",
       "stop": "Arrêter",

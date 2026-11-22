@@ -43,7 +43,7 @@
     ]
   },
   "about": {
-    "tag": "// 自己紹介",
+    "tag": "自己紹介",
     "title": "実際の製品を作る開発者",
     "titleHighlight": "実績",
     "whoTitle": "私は誰ですか",
@@ -52,7 +52,7 @@
     "whatDesc": "フルスタックウェブ開発：React / Next.js フロントエンド、Node.js / NestJS バックエンド、REST & GraphQL API、認証 & RBAC、MongoDB & SQL データベース、Docker & AWS でのデプロイ。",
     "driveTitle": "何が私を駆り立てるか",
     "driveDesc": "人々が実際に使用するツールを構築すること。クリーンなアーキテクチャ、ユーザー中心のUXフロー、そして高速で安全かつ信頼性の高い機能の提供に重点を置いています。",
-    "availabilityTag": "// 対応状況",
+    "availabilityTag": "対応状況",
     "availabilityTitle": "正社員・フリーランスの機会を募集中",
     "availabilityDesc": "クリーンなアーキテクチャ、ユーザー体験、本番環境での信頼性を重視し、モダンなWebプロダクト、社内ツール、管理ダッシュボード、MVPの構築を支援します。",
     "availabilityAction": "相談する",
@@ -67,7 +67,7 @@
     "help4Desc": "迅速なプロダクト検証、管理ダッシュボード、業務システム、コンバージョン重視のWebアプリ。"
   },
   "skills": {
-    "tag": "// スキル",
+    "tag": "スキル",
     "title": "私の",
     "titleHighlight": "テックスタック",
     "groups": {
@@ -84,7 +84,7 @@
     "tech": "テクノロジー"
   },
   "testimonials": {
-    "tag": "// テスティモニアル",
+    "tag": "テスティモニアル",
     "title": "人々の声",
     "titleHighlight": "私について",
     "t1Quote": "Nhut Yは素早く信頼できる開発者です。彼は私たちのランディングページを予定より早く納品し、デザインはあらゆるデバイスでピクセルパーフェクトでした。",
@@ -98,7 +98,7 @@
     "t3Role": "E-PARTNERシニアエンジニア"
   },
   "faq": {
-    "tag": "// よくある質問",
+    "tag": "よくある質問",
     "title": "よくある質問",
     "titleHighlight": "",
     "q1": "どれくらいで開始できますか？",
@@ -111,7 +111,7 @@
     "a4": "もちろんです。既存のコードベースに参加し、あなたの規則に従い、GitHub/GitLabを通じて協力することに慣れています。"
   },
   "services": {
-    "tag": "// サービス",
+    "tag": "サービス",
     "title": "フリーランス",
     "titleHighlight": "サービスと価格",
     "hourlyTitle": "時間単価",
@@ -160,7 +160,7 @@
     "note": "プロジェクト詳細とカスタム見積はメールでお問い合わせください。すべての新規プロジェクトに30分無料相談。2026年ベトナム市場基準の価格——国際顧客向け固定価格パッケージあり。"
   },
   "experience": {
-    "tag": "// 経験",
+    "tag": "経験",
     "title": "どこで",
     "titleHighlight": "働いたか"
   },
@@ -201,7 +201,7 @@
     }
   ],
   "projects": {
-    "tag": "// プロジェクト",
+    "tag": "プロジェクト",
     "title": "特集",
     "titleHighlight": "プロジェクト",
     "subtitle": "実際のプロダクト提供、ユーザー向けインターフェース、成長と運営を支える業務ワークフローに重点を置いた代表的な作品です。",
@@ -342,7 +342,7 @@
     }
   ],
   "credentials": {
-    "tag": "// 資格",
+    "tag": "資格",
     "title": "資格 &",
     "titleHighlight": "教育",
     "certifications": "資格",
@@ -352,7 +352,7 @@
     "selfDirectedDesc": "Udemy、Microsoft Learn & FreeCodeCampの構造化された学習パスで、React.js、Node.js/Express、TypeScript、REST API、GraphQL、MongoDB & Socket.IOをカバー。"
   },
   "contact": {
-    "tag": "// コンタクト",
+    "tag": "コンタクト",
     "title": "何かを一緒に作りましょう",
     "titleHighlight": "素晴らしい",
     "titleEnd": "一緒に",
@@ -401,7 +401,7 @@
     "currencies": "対応通貨"
   },
   "seoChecker": {
-    "tag": "// ツール",
+    "tag": "ツール",
     "title": "SEO & セキュリティ",
     "titleHighlight": "チェッカー",
     "description": "ウェブサイトのオンページSEOの問題と不足しているHTTPセキュリティヘッダーをスキャンします。",
@@ -463,7 +463,7 @@
   "tools": {
     "title": "ツール",
     "todo": {
-      "tag": "// ツール",
+      "tag": "ツール",
       "title": "Todo ダッシュボード",
       "titleHighlight": "タスクマネージャー",
       "description": "タスクを管理し、進捗を追跡し、永続ストレージで整理整頓を保ちます",
@@ -547,7 +547,7 @@
     "ycpu": {
       "title": "システム情報",
       "titleHighlight": "ビューア",
-      "tag": "// ツール",
+      "tag": "ツール",
       "description": "ブラウザでCPU、メモリ、ストレージ、バッテリーなどコンピュータのリアルタイム仕様を表示します。",
       "os": "オペレーティングシステム",
       "platform": "プラットフォーム",
@@ -629,7 +629,7 @@
     "yspeech": {
       "title": "Yspeech",
       "titleHighlight": "音声テキスト変換",
-      "tag": "// ツール",
+      "tag": "ツール",
       "description": "多言語対応のリアルタイム音声テキスト変換。マイクを使用するか音声をアップロードして、音声をテキストに変換します。",
       "start": "開始",
       "stop": "停止",

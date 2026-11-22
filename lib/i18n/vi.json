@@ -43,7 +43,7 @@
     ]
   },
   "about": {
-    "tag": "// về tôi",
+    "tag": "về tôi",
     "title": "Một lập trình viên tạo ra",
     "titleHighlight": "sản phẩm thực tế",
     "whoTitle": "Tôi là ai",
@@ -52,7 +52,7 @@
     "whatDesc": "Tôi xây dựng các ứng dụng web hiện đại với React / Next.js, Node.js / NestJS, REST API, authentication, RBAC và MongoDB / PostgreSQL. Tôi quan tâm tới chất lượng code, khả năng bảo trì và việc giao các tính năng mà người dùng thực sự tin cậy.",
     "driveTitle": "Điều thúc đẩy tôi",
     "driveDesc": "Tôi được thúc đẩy bởi việc giải quyết các vấn đề thực tế của doanh nghiệp bằng những hệ thống đơn giản nhưng có khả năng mở rộng. Tôi đặt trọng tâm vào kiến trúc sạch, trải nghiệm người dùng được quan tâm và tính năng nhanh, an toàn, đáng tin cậy.",
-    "availabilityTag": "// sẵn sàng",
+    "availabilityTag": "sẵn sàng",
     "availabilityTitle": "Mở để nhận việc full-time và freelance",
     "availabilityDesc": "Tôi hỗ trợ đội ngũ xây dựng sản phẩm web hiện đại, công cụ nội bộ, dashboard quản trị và MVP với trọng tâm vào kiến trúc sạch, trải nghiệm người dùng và độ tin cậy khi triển khai.",
     "availabilityAction": "Hãy nói chuyện",
@@ -67,7 +67,7 @@
     "help4Desc": "Xác thực sản phẩm nhanh, dashboard quản trị, hệ thống vận hành và ứng dụng web tập trung vào chuyển đổi."
   },
   "skills": {
-    "tag": "// kỹ năng",
+    "tag": "kỹ năng",
     "title": "Công nghệ",
     "titleHighlight": "của tôi",
     "groups": {
@@ -84,7 +84,7 @@
     "tech": "Công nghệ"
   },
   "testimonials": {
-    "tag": "// nhận xét",
+    "tag": "nhận xét",
     "title": "Mọi người",
     "titleHighlight": "nói về tôi",
     "t1Quote": "Nhut Y là một lập trình viên nhanh và đáng tin cậy. Anh ấy bàn giao landing page trước thời hạn và thiết kế hoàn hảo trên mọi thiết bị.",
@@ -98,7 +98,7 @@
     "t3Role": "Senior Engineer, E-PARTNER"
   },
   "faq": {
-    "tag": "// hỏi đáp",
+    "tag": "hỏi đáp",
     "title": "Câu hỏi thường",
     "titleHighlight": "gặp",
     "q1": "Bạn có thể bắt đầu nhanh đến mức nào?",
@@ -111,7 +111,7 @@
     "a4": "Chắc chắn. Tôi thoải mái tham gia codebase hiện có, tuân theo convention của bạn và cộng tác qua GitHub/GitLab."
   },
   "services": {
-    "tag": "// dịch vụ",
+    "tag": "dịch vụ",
     "title": "Dịch vụ",
     "titleHighlight": "Freelance & Bảng giá",
     "hourlyTitle": "Giá thuê theo giờ",
@@ -160,7 +160,7 @@
     "note": "Bạn nên gửi email với chi tiết dự án để nhận báo giá phù hợp. Tư vấn 30 phút miễn phí cho mỗi dự án mới. Giá dựa trên thị trường Việt Nam 2026 — có gói giá cố định cho khách quốc tế."
   },
   "experience": {
-    "tag": "// kinh nghiệm",
+    "tag": "kinh nghiệm",
     "title": "Nơi tôi đã",
     "titleHighlight": "làm việc"
   },
@@ -201,7 +201,7 @@
     }
   ],
   "projects": {
-    "tag": "// dự án",
+    "tag": "dự án",
     "title": "Dự án",
     "titleHighlight": "nổi bật",
     "subtitle": "Các dự án tiêu biểu tập trung vào việc triển khai sản phẩm thực tế, giao diện hướng tới người dùng, và các luồng nghiệp vụ hỗ trợ tăng trưởng và vận hành.",
@@ -342,7 +342,7 @@
     }
   ],
   "credentials": {
-    "tag": "// chứng chỉ",
+    "tag": "chứng chỉ",
     "title": "Chứng chỉ &",
     "titleHighlight": "Học vấn",
     "certifications": "Chứng chỉ",
@@ -352,7 +352,7 @@
     "selfDirectedDesc": "Lộ trình có cấu trúc trên Udemy, Microsoft Learn & FreeCodeCamp bao gồm React.js, Node.js/Express, TypeScript, REST APIs, GraphQL, MongoDB & Socket.IO."
   },
   "contact": {
-    "tag": "// liên hệ",
+    "tag": "liên hệ",
     "title": "Hãy cùng xây dựng",
     "titleHighlight": "điều tuyệt vời",
     "titleEnd": "",
@@ -401,7 +401,7 @@
     "currencies": "Các loại tiền tệ hỗ trợ"
   },
   "seoChecker": {
-    "tag": "// công cụ",
+    "tag": "công cụ",
     "title": "Kiểm tra SEO &",
     "titleHighlight": "Bảo mật",
     "description": "Quét một website để tìm lỗi SEO on-page và các header bảo mật HTTP bị thiếu.",
@@ -463,7 +463,7 @@
   "tools": {
     "title": "Công cụ",
     "todo": {
-      "tag": "// công cụ",
+      "tag": "công cụ",
       "title": "Bảng điều khiển công việc",
       "titleHighlight": "Quản lý nhiệm vụ",
       "description": "Quản lý công việc của bạn, theo dõi tiến độ và giữ trật tự với lưu trữ bền vững",
@@ -547,7 +547,7 @@
     "ycpu": {
       "title": "Thông tin hệ thống",
       "titleHighlight": "Hiển thị",
-      "tag": "// công cụ",
+      "tag": "công cụ",
       "description": "Hiển thị thông số máy tính của bạn theo thời gian thực — CPU, bộ nhớ, ổ đĩa, pin và nhiều hơn nữa — ngay trong trình duyệt.",
       "os": "Hệ điều hành",
       "platform": "Nền tảng",
@@ -629,7 +629,7 @@
     "yspeech": {
       "title": "Yspeech",
       "titleHighlight": "Chuyển giọng nói thành văn bản",
-      "tag": "// công cụ",
+      "tag": "công cụ",
       "description": "Chuyển giọng nói thành văn bản theo thời gian thực với hỗ trợ đa ngôn ngữ. Dùng micro hoặc tải lên tệp âm thanh để chuyển lời nói thành văn bản.",
       "start": "Bắt đầu",
       "stop": "Dừng",

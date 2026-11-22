@@ -94,7 +94,7 @@ const packages: Pkg[] = [
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.55 }}
         >
-          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-brand text-white shadow-glow">
+          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-primary/15 text-primary-light">
             <Clock size={26} />
           </div>
           <div>
@@ -111,10 +111,10 @@ const packages: Pkg[] = [
           {packages.map((pkg, pi) => (
             <motion.div
               key={pkg.titleKey}
-              className={`group relative flex flex-col rounded-xl border bg-surface p-7 backdrop-blur-xl transition-all hover:-translate-y-1.5 ${
+              className={`group relative flex flex-col rounded-xl border bg-surface p-7 backdrop-blur-xl transition-all ${
                 pkg.popular
-                  ? "border-primary-light/60 shadow-card ring-1 ring-primary-light/30"
-                  : "border-subtle hover:border-primary-light/45 hover:shadow-card"
+                  ? "border-primary-light/60 ring-1 ring-primary-light/30"
+                  : "border-subtle hover:border-primary-light/45"
               }`}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -122,7 +122,7 @@ const packages: Pkg[] = [
               transition={{ duration: 0.55, delay: pi * 0.1 }}
             >
               {pkg.popular && (
-                <span className="absolute -top-3 right-5 rounded-full bg-gradient-brand px-3 py-1 font-mono text-[11px] font-bold text-white shadow-glow">
+                <span className="absolute -top-3 right-5 rounded-full border border-primary-light/50 bg-base px-3 py-1 font-mono text-[11px] font-bold text-primary-light">
                   ★ Popular
                 </span>
               )}

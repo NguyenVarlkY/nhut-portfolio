@@ -43,7 +43,7 @@
     ]
   },
   "about": {
-    "tag": "// about",
+    "tag": "about",
     "title": "A developer who ships",
     "titleHighlight": "real products",
     "whoTitle": "Who I am",
@@ -52,7 +52,7 @@
     "whatDesc": "I build modern web applications with React / Next.js, Node.js / NestJS, REST APIs, authentication, RBAC, and MongoDB / PostgreSQL. I care about code quality, maintainability, and shipping features users actually rely on.",
     "driveTitle": "What drives me",
     "driveDesc": "I’m motivated by solving real business problems with simple, scalable systems. I value clean architecture, thoughtful UX, and delivering features that are fast, secure, and reliable.",
-    "availabilityTag": "// availability",
+    "availabilityTag": "availability",
     "availabilityTitle": "Open to full-time and freelance opportunities",
     "availabilityDesc": "I help teams build modern web products, internal tools, admin dashboards, and MVPs with a strong focus on clean architecture, user experience, and production reliability.",
     "availabilityAction": "Let's talk",
@@ -67,7 +67,7 @@
     "help4Desc": "Rapid product validation, admin dashboards, operational systems, and conversion-focused web apps."
   },
   "skills": {
-    "tag": "// skills",
+    "tag": "skills",
     "title": "My",
     "titleHighlight": "tech stack",
     "groups": {
@@ -84,7 +84,7 @@
     "tech": "Technologies"
   },
   "testimonials": {
-    "tag": "// testimonials",
+    "tag": "testimonials",
     "title": "What people say",
     "titleHighlight": "about me",
     "t1Quote": "Nhut Y is a fast and reliable developer. He delivered our landing page ahead of schedule and the design was pixel-perfect on every device.",
@@ -98,7 +98,7 @@
     "t3Role": "Senior Engineer, E-PARTNER"
   },
   "faq": {
-    "tag": "// faq",
+    "tag": "faq",
     "title": "Frequently asked",
     "titleHighlight": "questions",
     "q1": "How fast can you start?",
@@ -111,7 +111,7 @@
     "a4": "Absolutely. I'm comfortable joining existing codebases, following your conventions, and collaborating over GitHub/GitLab."
   },
   "services": {
-    "tag": "// services",
+    "tag": "services",
     "title": "Freelance",
     "titleHighlight": "Services & Pricing",
     "hourlyTitle": "Hourly Rate",
@@ -160,7 +160,7 @@
     "note": "Prefer email for project details and a tailored quote. Free 30-minute consultation for every new project. Rates based on 2026 Vietnam market — fixed-price packages available for international clients."
   },
   "experience": {
-    "tag": "// experience",
+    "tag": "experience",
     "title": "Where I've",
     "titleHighlight": "worked"
   },
@@ -201,7 +201,7 @@
     }
   ],
   "projects": {
-    "tag": "// projects",
+    "tag": "projects",
     "title": "Featured",
     "titleHighlight": "projects",
     "subtitle": "Selected work focused on real-world product delivery, user-facing interfaces, and business workflows that support growth and operations.",
@@ -342,7 +342,7 @@
     }
   ],
   "credentials": {
-    "tag": "// credentials",
+    "tag": "credentials",
     "title": "Certifications &",
     "titleHighlight": "Education",
     "certifications": "Certifications",
@@ -352,7 +352,7 @@
     "selfDirectedDesc": "Structured paths on Udemy, Microsoft Learn & FreeCodeCamp covering React.js, Node.js/Express, TypeScript, REST APIs, GraphQL, MongoDB & Socket.IO."
   },
   "contact": {
-    "tag": "// contact",
+    "tag": "contact",
     "title": "Let's build something",
     "titleHighlight": "great",
     "titleEnd": "together",
@@ -401,7 +401,7 @@
     "currencies": "Supported Currencies"
   },
   "seoChecker": {
-    "tag": "// tools",
+    "tag": "tools",
     "title": "SEO & Security",
     "titleHighlight": "Checker",
     "description": "Scan any website for on-page SEO issues and missing HTTP security headers.",
@@ -463,7 +463,7 @@
   "tools": {
     "title": "Tools",
     "todo": {
-      "tag": "// tools",
+      "tag": "tools",
       "title": "Todo Dashboard",
       "titleHighlight": "Task Manager",
       "description": "Manage your tasks, track progress, and stay organized with persistent storage",
@@ -547,7 +547,7 @@
     "ycpu": {
       "title": "System Info",
       "titleHighlight": "Viewer",
-      "tag": "// tools",
+      "tag": "tools",
       "description": "Display your computer's real-time specifications — CPU, memory, storage, battery, and more — directly in your browser.",
       "os": "Operating System",
       "platform": "Platform",
@@ -629,7 +629,7 @@
     "yspeech": {
       "title": "Yspeech",
       "titleHighlight": "Speech-to-Text",
-      "tag": "// tools",
+      "tag": "tools",
       "description": "Real-time speech-to-text transcription with multi-language support. Use your microphone or upload audio to convert speech into text.",
       "start": "Start",
       "stop": "Stop",

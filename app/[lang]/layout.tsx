@@ -3,7 +3,6 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import BackToTop from "@/components/layout/BackToTop";
 import ChatBot from "@/components/ui/ChatBot";
-import ScrollProgress from "@/components/layout/ScrollProgress";
 import CommandPalette from "@/components/ui/CommandPalette";
 import Toast from "@/components/ui/Toast";
 import { Analytics } from "@vercel/analytics/react";
@@ -26,7 +25,6 @@ export default async function LangLayout({
   return (
     <ThemeProvider>
       <SiteProviders data={mergeData(o)} lang={params.lang} overrides={o.i18n?.[params.lang] as Record<string, unknown> | undefined}>
-        <ScrollProgress />
         <CommandPalette />
         <Navbar lang={params.lang} />
         {children}

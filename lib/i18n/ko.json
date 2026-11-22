@@ -43,7 +43,7 @@
     ]
   },
   "about": {
-    "tag": "// 소개",
+    "tag": "소개",
     "title": "실용적인 제품을 만드는",
     "titleHighlight": "개발자",
     "whoTitle": "저는 누구인가",
@@ -52,7 +52,7 @@
     "whatDesc": "풀스택 웹 개발: React/Next.js 프론트엔드, Node.js/NestJS 백엔드, REST 및 GraphQL API, 인증 및 RBAC, MongoDB 및 SQL 데이터베이스, Docker 및 AWS로 배포.",
     "driveTitle": "무엇이 저를 움직이나",
     "driveDesc": "사람들이 실제로 사용하는 도구를 만드는 것. 깔끔한 아키텍처, UX 중심의 흐름, 빠르고 안전하며 안정적인 기능을 출시하는 것을 중요하게 생각합니다.",
-    "availabilityTag": "// 가능 여부",
+    "availabilityTag": "가능 여부",
     "availabilityTitle": "정규직 및 프리랜서 기회에 열려 있습니다",
     "availabilityDesc": "깔끔한 아키텍처, 사용자 경험, 프로덕션 안정성에 중점을 두고 팀이 최신 웹 제품, 내부 도구, 관리자 대시보드, MVP를 구축하도록 돕습니다.",
     "availabilityAction": "이야기해요",
@@ -67,7 +67,7 @@
     "help4Desc": "빠른 제품 검증, 관리자 대시보드, 운영 시스템, 전환 중심 웹 앱."
   },
   "skills": {
-    "tag": "// 기술",
+    "tag": "기술",
     "title": "제",
     "titleHighlight": "기술 스택",
     "groups": {
@@ -84,7 +84,7 @@
     "tech": "기술"
   },
   "testimonials": {
-    "tag": "// 추천사",
+    "tag": "추천사",
     "title": "사람들이",
     "titleHighlight": "말하는 것",
     "t1Quote": "Nhut Y는 빠르고 신뢰할 수 있는 개발자입니다. 예정보다 일찍 랜딩 페이지를 전달했고 모든 기기에서 완벽한 디자인이었습니다.",
@@ -98,7 +98,7 @@
     "t3Role": "E-PARTNER 시니어 엔지니어"
   },
   "faq": {
-    "tag": "// 자주 묻는 질문",
+    "tag": "자주 묻는 질문",
     "title": "자주 묻는",
     "titleHighlight": "질문",
     "q1": "얼마나 빨리 시작할 수 있나요?",
@@ -111,7 +111,7 @@
     "a4": "물론입니다. 기존 코드베이스에 합류하고, 팀 컨벤션을 따르며 GitHub/GitLab에서 협업하는 것을 환영합니다."
   },
   "services": {
-    "tag": "// 서비스",
+    "tag": "서비스",
     "title": "프리랜서",
     "titleHighlight": "서비스 및 가격",
     "hourlyTitle": "시간당 요금",
@@ -160,7 +160,7 @@
     "note": "프로젝트 세부 사항과 맞춤 견적은 이메일로 문의하세요. 모든 새 프로젝트에 30분 무료 상담. 2026년 베트남 시장 기준 가격 — 국제 고객을 위한 고정 가격 패키지 제공."
   },
   "experience": {
-    "tag": "// 경력",
+    "tag": "경력",
     "title": "제가 일했던",
     "titleHighlight": "곳"
   },
@@ -201,7 +201,7 @@
     }
   ],
   "projects": {
-    "tag": "// 프로젝트",
+    "tag": "프로젝트",
     "title": "주요",
     "titleHighlight": "프로젝트",
     "subtitle": "실제 제품 제공, 사용자 대상 인터페이스, 성장과 운영을 지원하는 비즈니스 워크플로우에 중점을 둔 주요 작업들입니다.",
@@ -342,7 +342,7 @@
     }
   ],
   "credentials": {
-    "tag": "// 자격증",
+    "tag": "자격증",
     "title": "자격증 &",
     "titleHighlight": "학력",
     "certifications": "자격증",
@@ -352,7 +352,7 @@
     "selfDirectedDesc": "Udemy, Microsoft Learn 및 FreeCodeCamp에서 React.js, Node.js/Express, TypeScript, REST API, GraphQL, MongoDB 및 Socket.IO를 다루는 체계적인 학습 경로."
   },
   "contact": {
-    "tag": "// 연락처",
+    "tag": "연락처",
     "title": "함께 만들어 봅시다",
     "titleHighlight": "멋진",
     "titleEnd": "것을",
@@ -401,7 +401,7 @@
     "currencies": "지원 통화"
   },
   "seoChecker": {
-    "tag": "// 도구",
+    "tag": "도구",
     "title": "SEO & 보안",
     "titleHighlight": "검사기",
     "description": "웹사이트의 온페이지 SEO 문제와 누락된 HTTP 보안 헤더를 검사합니다.",
@@ -463,7 +463,7 @@
   "tools": {
     "title": "도구",
     "todo": {
-      "tag": "// 도구",
+      "tag": "도구",
       "title": "할 일 대시보드",
       "titleHighlight": "작업 관리자",
       "description": "작업을 관리하고 진행 상황을 추적하며 영구 저장소로 정리 상태를 유지하세요",
@@ -547,7 +547,7 @@
     "ycpu": {
       "title": "시스템 정보",
       "titleHighlight": "뷰어",
-      "tag": "// 도구",
+      "tag": "도구",
       "description": "브라우저에서 CPU, 메모리, 저장소, 배터리 등 컴퓨터의 실시간 사양을 표시합니다.",
       "os": "운영 체제",
       "platform": "플랫폼",
@@ -629,7 +629,7 @@
     "yspeech": {
       "title": "Yspeech",
       "titleHighlight": "음성 텍스트 변환",
-      "tag": "// 도구",
+      "tag": "도구",
       "description": "다국어 지원이 포함된 실시간 음성 텍스트 변환. 마이크를 사용하거나 오디오를 업로드하여 음성을 텍스트로 변환하세요.",
       "start": "시작",
       "stop": "중지",

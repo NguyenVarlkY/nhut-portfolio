@@ -153,7 +153,7 @@ export default function Contact() {
               target="_blank"
               rel="noopener"
               aria-label="GitHub"
-              className="flex h-11 w-11 items-center justify-center rounded-xl border border-subtle bg-surface text-muted transition-all hover:border-primary-light hover:text-body hover:-translate-y-0.5"
+              className="flex h-11 w-11 items-center justify-center rounded-xl border border-subtle bg-surface text-muted transition-all hover:border-primary-light hover:text-body"
             >
               <Github size={18} />
             </a>
@@ -162,7 +162,7 @@ export default function Contact() {
               target="_blank"
               rel="noopener"
               aria-label="LinkedIn"
-              className="flex h-11 w-11 items-center justify-center rounded-xl border border-subtle bg-surface text-muted transition-all hover:border-primary-light hover:text-body hover:-translate-y-0.5"
+              className="flex h-11 w-11 items-center justify-center rounded-xl border border-subtle bg-surface text-muted transition-all hover:border-primary-light hover:text-body"
             >
               <Linkedin size={18} />
             </a>
@@ -171,7 +171,7 @@ export default function Contact() {
               target="_blank"
               rel="noopener"
               aria-label="Facebook"
-              className="flex h-11 w-11 items-center justify-center rounded-xl border border-subtle bg-surface text-muted transition-all hover:border-primary-light hover:text-body hover:-translate-y-0.5"
+              className="flex h-11 w-11 items-center justify-center rounded-xl border border-subtle bg-surface text-muted transition-all hover:border-primary-light hover:text-body"
             >
               <Facebook size={18} />
             </a>

@@ -68,13 +68,13 @@ export default function About() {
           {CARDS.map((card, i) => (
             <motion.div
               key={card.title}
-              className="glass p-8 transition-all hover:-translate-y-1.5 hover:border-primary-light/40"
+              className="glass p-8 transition-all hover:border-primary-light/40"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.6, delay: i * 0.12 }}
             >
-              <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary-light text-white text-xl shadow-glow">
+              <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/15 text-primary-light text-xl">
                 <card.icon size={24} />
               </div>
               <h3 className="mb-3 font-display text-xl">{card.title}</h3>
@@ -88,7 +88,7 @@ export default function About() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="mt-12 rounded-2xl border border-primary-light/30 bg-gradient-to-r from-primary/10 via-surface to-primary-light/10 p-6 md:p-8"
+          className="mt-12 rounded-2xl border border-primary-light/30 bg-surface p-6 md:p-8"
         >
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
@@ -106,13 +106,13 @@ export default function About() {
             {HELP_CARDS.map((card, i) => (
               <motion.div
                 key={card.title}
-                className="glass p-6 transition-all hover:-translate-y-1.5 hover:border-primary-light/40"
+                className="glass p-6 transition-all hover:border-primary-light/40"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
               >
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary-light text-white shadow-glow">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/15 text-primary-light">
                   <card.icon size={20} />
                 </div>
                 <h4 className="mb-2 font-display text-lg">{card.title}</h4>

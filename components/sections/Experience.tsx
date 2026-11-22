@@ -25,7 +25,7 @@ export default function Experience() {
 
         <div className="relative max-w-[820px] mx-auto pl-9">
           {/* timeline line */}
-          <div className="absolute left-[8px] top-2 bottom-2 w-[2px] rounded bg-gradient-to-b from-primary to-accent opacity-50" />
+          <div className="absolute left-[8px] top-2 bottom-2 w-[2px] rounded bg-[var(--border)]" />
 
           {experience.map((job, ji) => (
             <motion.div

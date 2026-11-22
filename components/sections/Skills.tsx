@@ -32,7 +32,7 @@ export default function Skills() {
             return (
               <motion.div
                 key={group.title}
-                className="glass p-7 transition-all hover:-translate-y-1 hover:border-accent/40"
+                className="glass p-7 transition-all hover:border-accent/40"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-60px" }}

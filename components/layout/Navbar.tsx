@@ -79,7 +79,7 @@ export default function Navbar({ lang = "en" }: { lang?: Lang }) {
               onClick={openPalette}
               aria-label="Command palette (Ctrl+K)"
               title="Command palette (Ctrl+K)"
-              className="hidden sm:flex h-9 w-9 items-center justify-center rounded-xl border border-subtle bg-surface text-muted transition-all hover:border-primary-light hover:text-body hover:-translate-y-0.5"
+              className="hidden sm:flex h-9 w-9 items-center justify-center rounded-xl border border-subtle bg-surface text-muted transition-all hover:border-primary-light hover:text-body"
             >
               <Command size={15} />
             </button>
@@ -90,7 +90,7 @@ export default function Navbar({ lang = "en" }: { lang?: Lang }) {
             <button
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
               aria-label={theme === "dark" ? t("theme.light") : t("theme.dark")}
-              className="flex h-9 w-9 items-center justify-center rounded-xl border border-subtle bg-surface text-muted transition-all hover:border-primary-light hover:text-body hover:-translate-y-0.5"
+              className="flex h-9 w-9 items-center justify-center rounded-xl border border-subtle bg-surface text-muted transition-all hover:border-primary-light hover:text-body"
             >
               {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
             </button>
@@ -103,7 +103,7 @@ export default function Navbar({ lang = "en" }: { lang?: Lang }) {
               aria-label="Change language"
               aria-haspopup="true"
               aria-expanded={langOpen}
-              className="flex h-9 items-center justify-center gap-1 rounded-xl border border-subtle bg-surface px-2.5 text-xs font-bold text-muted transition-all hover:border-primary-light hover:text-body hover:-translate-y-0.5"
+              className="flex h-9 items-center justify-center gap-1 rounded-xl border border-subtle bg-surface px-2.5 text-xs font-bold text-muted transition-all hover:border-primary-light hover:text-body"
             >
               <Globe size={14} />
               <span>{LANG_CODES[lang]}</span>
@@ -136,7 +136,7 @@ export default function Navbar({ lang = "en" }: { lang?: Lang }) {
             href={profile.cvUrl || "/assets/resume.pdf"}
             target="_blank"
             rel="noopener"
-            className="hidden sm:inline-flex items-center gap-2 rounded-xl border border-subtle bg-surface px-4 py-2 text-xs font-semibold transition-all hover:-translate-y-0.5 hover:border-primary-light/40 hover:bg-surface-hover"
+            className="hidden sm:inline-flex items-center gap-2 rounded-xl border border-subtle bg-surface px-4 py-2 text-xs font-semibold transition-all hover:border-primary-light/40 hover:bg-surface-hover"
           >
             <FileDown size={14} /> {t("nav.resume")}
           </a>

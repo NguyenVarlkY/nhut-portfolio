@@ -88,7 +88,7 @@ export default function ChatBot() {
       <button
         onClick={() => setOpen(!open)}
         aria-label="Toggle chatbot"
-        className="fixed bottom-6 left-6 z-50 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary-light text-white shadow-glow transition-all duration-300 hover:-translate-y-1 hover:shadow-glow-lg"
+        className="fixed bottom-6 left-6 z-50 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/15 text-primary-light transition-all duration-300"
       >
         {open ? <X size={22} /> : <MessageSquare size={22} />}
       </button>
@@ -105,7 +105,7 @@ export default function ChatBot() {
           >
             {/* Header */}
             <div className="flex items-center gap-3 border-b border-subtle px-5 py-4">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary-light text-white">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/15 text-primary-light">
                 <Bot size={18} />
               </div>
               <div className="flex-1">
@@ -133,7 +133,7 @@ export default function ChatBot() {
                   <div
                     className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-xl ${
                       m.role === "bot"
-                        ? "bg-gradient-to-br from-primary to-primary-light text-white"
+                        ? "bg-primary/15 text-primary-light"
                         : "bg-surface text-muted"
                     }`}
                   >
@@ -143,7 +143,7 @@ export default function ChatBot() {
                     className={`max-w-[80%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
                       m.role === "bot"
                         ? "bg-surface border border-subtle text-body"
-                        : "bg-gradient-to-br from-primary to-primary-light text-white"
+                        : "bg-primary/15 text-primary-light"
                     }`}
                   >
                     {m.text}
@@ -152,7 +152,7 @@ export default function ChatBot() {
               ))}
               {sending && (
                 <div className="flex gap-3">
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary-light text-white">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-primary/15 text-primary-light">
                     <Bot size={14} />
                   </div>
                   <div className="rounded-2xl bg-surface border border-subtle px-4 py-2.5">
@@ -180,7 +180,7 @@ export default function ChatBot() {
                 <button
                   onClick={handleSend}
                   disabled={!input.trim() || sending}
-                  className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary-light text-white shadow-glow transition-all hover:-translate-y-0.5 hover:shadow-glow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/15 text-primary-light transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Send size={16} />
                 </button>

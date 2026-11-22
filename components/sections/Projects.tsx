@@ -92,10 +92,10 @@ export default function Projects() {
             {t("projects.subtitle")}
           </p>
 
-          <div className="mt-8 flex flex-wrap gap-2">
+          <div className="mt-8 -mx-6 flex gap-2 overflow-x-auto px-6 pb-2 [scrollbar-width:thin]">
             <button
               onClick={() => setFilter(null)}
-              className={`rounded-lg border px-3 py-1 font-mono text-xs transition-all ${
+              className={`shrink-0 whitespace-nowrap rounded-lg border px-3 py-1 font-mono text-xs transition-colors ${
                 !filter
                   ? "border-primary-light bg-primary-light/10 text-primary-light"
                   : "border-subtle bg-surface text-muted hover:border-primary-light hover:text-body"
@@ -107,7 +107,7 @@ export default function Projects() {
               <button
                 key={tag}
                 onClick={() => setFilter(tag)}
-                className={`rounded-lg border px-3 py-1 font-mono text-xs transition-all ${
+                className={`shrink-0 whitespace-nowrap rounded-lg border px-3 py-1 font-mono text-xs transition-colors ${
                   filter === tag
                     ? "border-primary-light bg-primary-light/10 text-primary-light"
                     : "border-subtle bg-surface text-muted hover:border-primary-light hover:text-body"
@@ -129,7 +129,7 @@ export default function Projects() {
                 role="button"
                 tabIndex={0}
                 aria-label={`Open case study: ${proj.title}`}
-                className="group flex cursor-pointer flex-col overflow-hidden rounded-xl border border-subtle bg-surface backdrop-blur-xl transition-all hover:-translate-y-1.5 hover:border-primary-light/45 hover:shadow-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light"
+                className="group flex cursor-pointer flex-col overflow-hidden rounded-xl border border-subtle bg-surface backdrop-blur-xl transition-all hover:border-primary-light/45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-60px" }}
@@ -143,15 +143,15 @@ export default function Projects() {
                 }}
               >
                 {proj.image ? (
-                  <div className="relative h-[170px] overflow-hidden" style={{ background: `linear-gradient(135deg, ${proj.g1}, ${proj.g2})` }}>
+                  <div className="relative h-[170px] overflow-hidden" style={{ background: `color-mix(in srgb, ${proj.g1} 16%, var(--bg-alt))` }}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={proj.image} alt={proj.title} loading="lazy" decoding="async" className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105" />
-                    <span className="absolute left-3 top-3 flex h-9 w-9 items-center justify-center rounded-lg text-white shadow-lg" style={{ background: `linear-gradient(135deg, ${proj.g1}, ${proj.g2})` }}><Icon size={18} /></span>
+                    <span className="absolute left-3 top-3 flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--bg-base)]/85" style={{ color: proj.g1 }}><Icon size={18} /></span>
                   </div>
                 ) : (
                   <div
-                    className="flex h-[130px] items-center justify-center text-white text-4xl"
-                    style={{ background: `linear-gradient(135deg, ${proj.g1}, ${proj.g2})` }}
+                    className="flex h-[130px] items-center justify-center text-4xl"
+                    style={{ background: `color-mix(in srgb, ${proj.g1} 16%, var(--bg-alt))`, color: proj.g1 }}
                   >
                     <Icon size={42} />
                   </div>
@@ -163,7 +163,7 @@ export default function Projects() {
 
                   {/* Business Core Badge */}
                   <div className="mt-2">
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium rounded-full bg-primary-light/10 text-primary-light">
+                    <span className="inline-flex items-center gap-1.5 text-sm text-muted">
                       <Database size={12} /> {tf(`projectsData.${proj.id}.tagline`)}
                     </span>
                   </div>
@@ -230,8 +230,8 @@ export default function Projects() {
                       <img src={proj.image} alt={proj.title} className="max-h-[320px] w-full rounded-xl border border-subtle object-cover object-top" />
                     ) : (
                       <div
-                        className="flex h-[110px] items-center justify-center rounded-xl text-white text-4xl"
-                        style={{ background: `linear-gradient(135deg, ${proj.g1}, ${proj.g2})` }}
+                        className="flex h-[110px] items-center justify-center rounded-xl text-4xl"
+                        style={{ background: `color-mix(in srgb, ${proj.g1} 16%, var(--bg-alt))`, color: proj.g1 }}
                       >
                         <Icon size={40} />
                       </div>

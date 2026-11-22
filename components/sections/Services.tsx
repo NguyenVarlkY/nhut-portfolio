@@ -1,12 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Clock, Package, Rocket, Store, Check } from "lucide-react";
+import { Check } from "lucide-react";
 import { useTranslation } from "@/lib/i18n/LanguageContext";
 import CurrencyConverter from "@/components/tools/CurrencyConverter";
 
 interface Pkg {
-  icon: React.ReactNode;
   titleKey: string;
   priceKey: string;
   timeKey: string;
@@ -19,7 +18,6 @@ export default function Services() {
 
 const packages: Pkg[] = [
     {
-      icon: <Rocket size={24} />,
       titleKey: "services.package1Title",
       priceKey: "services.package1Price",
       timeKey: "services.package1Time",
@@ -35,7 +33,6 @@ const packages: Pkg[] = [
       ],
     },
     {
-      icon: <Store size={24} />,
       titleKey: "services.package2Title",
       priceKey: "services.package2Price",
       timeKey: "services.package2Time",
@@ -52,7 +49,6 @@ const packages: Pkg[] = [
       popular: true,
     },
     {
-      icon: <Package size={24} />,
       titleKey: "services.package3Title",
       priceKey: "services.package3Price",
       timeKey: "services.package3Time",
@@ -86,25 +82,11 @@ const packages: Pkg[] = [
           </h2>
         </motion.div>
 
-        {/* Hourly rate card */}
-        <motion.div
-          className="glass mx-auto mb-12 flex max-w-[680px] flex-col items-center gap-4 p-8 text-center sm:flex-row sm:text-left"
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.55 }}
-        >
-          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-primary/15 text-primary-light">
-            <Clock size={26} />
-          </div>
-          <div>
-            <div className="font-display text-lg font-semibold">
-              {t("services.hourlyTitle")}
-              <span className="ml-2 grad-text text-xl font-bold">{t("services.hourlyPrice")}</span>
-            </div>
-            <p className="mt-1 text-sm leading-relaxed text-muted">{t("services.hourlyDesc")}</p>
-          </div>
-        </motion.div>
+        {/* Hourly rate: one line, not a box */}
+        <p className="mb-10 max-w-2xl text-muted">
+          <span className="font-semibold text-body">{t("services.hourlyTitle")} {t("services.hourlyPrice")}</span>
+          {" — "}{t("services.hourlyDesc")}
+        </p>
 
         {/* Packages */}
         <div className="grid gap-7 md:grid-cols-2 lg:grid-cols-3">
@@ -121,22 +103,12 @@ const packages: Pkg[] = [
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.55, delay: pi * 0.1 }}
             >
-              {pkg.popular && (
-                <span className="absolute -top-3 right-5 rounded-full border border-primary-light/50 bg-base px-3 py-1 font-mono text-[11px] font-bold text-primary-light">
-                  ★ Popular
-                </span>
-              )}
-
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-surface text-accent transition-colors group-hover:text-primary-light">
-                {pkg.icon}
-              </div>
-
               <h3 className="font-display text-xl">{t(pkg.titleKey)}</h3>
               <div className="mt-1 font-mono text-sm text-muted">{t(pkg.timeKey)}</div>
 
               <div className="my-4 border-t border-subtle" />
 
-              <div className="font-display text-2xl font-bold grad-text">{t(pkg.priceKey)}</div>
+              <div className="font-display text-2xl font-bold">{t(pkg.priceKey)}</div>
 
               <ul className="mt-5 flex-1 space-y-2.5">
                 {pkg.featuresKey.map((fk) => (

@@ -64,21 +64,21 @@ export default function About() {
           </h2>
         </motion.div>
 
-        <div className="grid gap-6 md:grid-cols-3">
+        <div className="grid gap-x-10 gap-y-8 md:grid-cols-3">
           {CARDS.map((card, i) => (
             <motion.div
               key={card.title}
-              className="glass p-8 transition-all hover:border-primary-light/40"
+              className="border-t border-subtle pt-6"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.6, delay: i * 0.12 }}
             >
-              <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/15 text-primary-light text-xl">
-                <card.icon size={24} />
-              </div>
-              <h3 className="mb-3 font-display text-xl">{card.title}</h3>
-              <p className="text-sm leading-relaxed text-muted">{card.desc}</p>
+              <h3 className="mb-3 flex items-center gap-2.5 font-display text-xl">
+                <card.icon size={18} className="shrink-0 text-primary-light" aria-hidden />
+                {card.title}
+              </h3>
+              <p className="text-[0.95rem] leading-relaxed text-muted">{card.desc}</p>
             </motion.div>
           ))}
         </div>
@@ -88,7 +88,7 @@ export default function About() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="mt-12 rounded-2xl border border-primary-light/30 bg-surface p-6 md:p-8"
+          className="mt-16 rounded-2xl border border-subtle bg-surface p-6 md:p-8"
         >
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
@@ -102,24 +102,24 @@ export default function About() {
 
         <div className="mt-12">
           <h3 className="mb-6 font-display text-2xl md:text-3xl font-bold">{t("about.helpTitle")}</h3>
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+          <ol className="grid gap-x-10 md:grid-cols-2">
             {HELP_CARDS.map((card, i) => (
-              <motion.div
+              <motion.li
                 key={card.title}
-                className="glass p-6 transition-all hover:border-primary-light/40"
+                className="grid grid-cols-[2.5rem_1fr] border-t border-subtle py-5"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
               >
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/15 text-primary-light">
-                  <card.icon size={20} />
+                <span className="font-mono text-sm text-primary-light tabular-nums">{String(i + 1).padStart(2, "0")}</span>
+                <div>
+                  <h4 className="mb-1.5 font-display text-lg">{card.title}</h4>
+                  <p className="text-[0.95rem] leading-relaxed text-muted">{card.desc}</p>
                 </div>
-                <h4 className="mb-2 font-display text-lg">{card.title}</h4>
-                <p className="text-sm leading-relaxed text-muted">{card.desc}</p>
-              </motion.div>
+              </motion.li>
             ))}
-          </div>
+          </ol>
         </div>
       </div>
     </section>

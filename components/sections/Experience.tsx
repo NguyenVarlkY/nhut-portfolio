@@ -23,21 +23,21 @@ export default function Experience() {
           </h2>
         </motion.div>
 
-        <div className="relative max-w-[820px] mx-auto pl-9">
+        <div className="relative max-w-[860px] pl-9">
           {/* timeline line */}
           <div className="absolute left-[8px] top-2 bottom-2 w-[2px] rounded bg-[var(--border)]" />
 
           {experience.map((job, ji) => (
             <motion.div
               key={ji}
-              className="relative mb-8 rounded-xl border border-subtle bg-surface p-7 backdrop-blur-xl transition-all hover:translate-x-1.5 hover:border-primary-light/40"
+              className="relative mb-12 last:mb-0"
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.55, delay: ji * 0.08 }}
             >
               {/* dot */}
-              <span className="absolute -left-[34px] top-8 h-[18px] w-[18px] rounded-full border-[3px] border-primary-light bg-base" />
+              <span className="absolute -left-[34px] top-1.5 h-[18px] w-[18px] rounded-full border-[3px] border-primary-light bg-base" />
 
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>

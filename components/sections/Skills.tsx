@@ -26,20 +26,20 @@ export default function Skills() {
           </h2>
         </motion.div>
 
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="border-b border-subtle">
           {skills.map((group, gi) => {
             const Icon = ICONS[group.icon] ?? Monitor;
             return (
               <motion.div
                 key={group.title}
-                className="glass p-7 transition-all hover:border-accent/40"
+                className="grid gap-3 border-t border-subtle py-6 md:grid-cols-[240px_1fr] md:gap-8"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.55, delay: gi * 0.1 }}
               >
-                <h3 className="mb-4 flex items-center gap-3 font-display text-lg">
-                  <Icon size={20} className="text-accent" />
+                <h3 className="flex items-center gap-3 font-display text-lg">
+                  <Icon size={18} className="shrink-0 text-accent" aria-hidden />
                   {t(`skills.groups.${group.key}`)}
                 </h3>
                 <div className="flex flex-wrap gap-2">
